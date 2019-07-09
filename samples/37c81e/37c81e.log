@@ -1,0 +1,2950 @@
+ + Analyzing 37c81e/37c81e ...
+-> Capstone disassembler elapsed: 6914ms
+-> Exporting to .capstone-asm file ...
+-> Executing 0 : push {r4,lr} 
+-> Executing 4 : bl #0x44 
+	-> Direct Jump to 68 if null 
+	-> Start Jumping from 4 --> 68
+-> Executing 68 : ldr r3,[pc,#0x14] 
+-> Executing 72 : ldr r2,[pc,#0x14] 
+-> Executing 76 : add r3,pc,r3 
+-> Executing 80 : ldr r1,[r3,r2] 
+-> Executing 84 : cmp r1,#0 
+-> Executing 88 : bx lr 
+	-> Indirect Jump to lr if EQ 
+	-> Checking path constrains by Z3 (= (bvsub #x00000000 #x00000000) #x00000000) ... SAT
+	-> Checking path constrains by Z3 (= (bvsub #x00000000 #x00000000) #x00000000) ... SAT
+	-> Start Jumping from 88 --> 4
+-> Executing 4 : bl #0x44 
+	-> Direct Jump to 68 if null 
+	-> Start Jumping from 4 --> 68
+-> Executing 68 : ldr r3,[pc,#0x14] 
+-> Executing 72 : ldr r2,[pc,#0x14] 
+-> Executing 76 : add r3,pc,r3 
+-> Executing 80 : ldr r1,[r3,r2] 
+-> Executing 84 : cmp r1,#0 
+-> Executing 88 : bx lr 
+	-> Indirect Jump to lr if EQ 
+	-> Checking path constrains by Z3 (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x00000000) #x00000000)) ... SAT
+	-> Checking path constrains by Z3 (and (= (bvsub #x00000000 #x00000000) #x00000000) (not (= (bvsub #x00000000 #x00000000) #x00000000)) ... UNSAT
+	-> Start Jumping from 88 --> 4
+-> Executing 4 : bl #0x44 
+	-> Direct Jump to 68 if null 
+	-> Start Jumping from 4 --> 68
+-> Executing 68 : ldr r3,[pc,#0x14] 
+-> Executing 72 : ldr r2,[pc,#0x14] 
+-> Executing 76 : add r3,pc,r3 
+-> Executing 80 : ldr r1,[r3,r2] 
+-> Executing 84 : cmp r1,#0 
+-> Executing 88 : bx lr 
+	-> Indirect Jump to lr if EQ 
+	-> Checking path constrains by Z3 (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x00000000) #x00000000)) ... SAT
+	-> Checking path constrains by Z3 (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x00000000) #x00000000)) ... UNSAT
+	-> Start Jumping from 88 --> 4
+-> Executing 4 : bl #0x44 
+	-> Direct Jump to 68 if null 
+	-> Start Jumping from 4 --> 68
+-> Executing 68 : ldr r3,[pc,#0x14] 
+-> Executing 72 : ldr r2,[pc,#0x14] 
+-> Executing 76 : add r3,pc,r3 
+-> Executing 80 : ldr r1,[r3,r2] 
+-> Executing 84 : cmp r1,#0 
+-> Executing 88 : bx lr 
+	-> Indirect Jump to lr if EQ 
+	-> Checking path constrains by Z3 (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x00000000) #x00000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x00000000) #x00000 ... UNSAT
+	-> Start Jumping from 88 --> 4
+-> Executing 4 : bl #0x44 
+	-> Direct Jump to 68 if null 
+	-> Start Jumping from 4 --> 68
+-> Executing 68 : ldr r3,[pc,#0x14] 
+-> Executing 72 : ldr r2,[pc,#0x14] 
+-> Executing 76 : add r3,pc,r3 
+-> Executing 80 : ldr r1,[r3,r2] 
+-> Executing 84 : cmp r1,#0 
+-> Executing 88 : bx lr 
+	-> Indirect Jump to lr if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x00000000) #x ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x00000000) #x ... UNSAT
+	-> Start Jumping from 88 --> 4
+-> Executing 4 : bl #0x44 
+	-> Direct Jump to 68 if null 
+	-> Start Jumping from 4 --> 68
+	-> Loop limitation exceeded, break.
+-> Executing 8 : pop {r4,pc} 
+-> Executing 12 : ldr ip,[pc,#0x24] 
+-> Executing 16 : mov fp,#0 
+-> Executing 20 : pop {r1} 
+Error: Stack is empty !
+-> Executing 24 : mov r2,sp 
+-> Executing 28 : str r2,[sp,#-4]! 
+-> Executing 32 : str r0,[sp,#-4]! 
+-> Executing 36 : ldr r0,[pc,#0x10] 
+-> Executing 40 : ldr r3,[pc,#0x10] 
+-> Executing 44 : str ip,[sp,#-4]! 
+-> Executing 48 : bl #0x3763c 
+	-> Direct Jump to 226876 if null 
+	-> Start Jumping from 48 --> 226876
+-> Executing 226876 : ldr r3,[pc,#0x160] 
+-> Executing 226880 : cmp r5,r1 
+-> Executing 226884 : str r2,[r3] 
+-> Executing 226888 : b #0x37658 
+	-> Direct Jump to 226904 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x0000000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x0000000 ... SAT
+	-> Start Jumping from 226888 --> 226904
+-> Executing 226904 : ldr r3,[pc,#0x138] 
+-> Executing 226908 : ldr r0,[sp,#8] 
+-> Executing 226912 : ldr r2,[r3] 
+-> Executing 226916 : ldr r1,[sp,#4] 
+-> Executing 226920 : bl #0x5c764 
+	-> Direct Jump to 378724 if null 
+	-> Start Jumping from 226920 --> 378724
+-> Executing 378724 : bl #0x65f34 
+	-> Direct Jump to 417588 if null 
+	-> Start Jumping from 378724 --> 417588
+-> Executing 417588 : push {r4,r5,r6} 
+-> Executing 417592 : ldm r3,{r5,r6} 
+-> Executing 417596 : and r3,r5,r1 
+-> Executing 417600 : and r4,r6,r2 
+-> Executing 417604 : orr r2,r3,r4 
+-> Executing 417608 : b #0x65f68 
+	-> Direct Jump to 417640 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x00 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x00 ... SAT
+	-> Start Jumping from 417608 --> 417640
+-> Executing 417640 : pop {r4,r5,r6} 
+-> Executing 417644 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 378724
+	-> Start Jumping from 417644 --> 378724
+-> Executing 378724 : bl #0x65f34 
+	-> Direct Jump to 417588 if null 
+	-> Start Jumping from 378724 --> 417588
+-> Executing 417588 : push {r4,r5,r6} 
+-> Executing 417592 : ldm r3,{r5,r6} 
+-> Executing 417596 : and r3,r5,r1 
+-> Executing 417600 : and r4,r6,r2 
+-> Executing 417604 : orr r2,r3,r4 
+-> Executing 417608 : b #0x65f68 
+	-> Direct Jump to 417640 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 ... UNSAT
+	-> Start Jumping from 417608 --> 417640
+-> Executing 417640 : pop {r4,r5,r6} 
+-> Executing 417644 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 378724
+	-> Start Jumping from 417644 --> 378724
+-> Executing 378724 : bl #0x65f34 
+	-> Direct Jump to 417588 if null 
+	-> Start Jumping from 378724 --> 417588
+-> Executing 417588 : push {r4,r5,r6} 
+-> Executing 417592 : ldm r3,{r5,r6} 
+-> Executing 417596 : and r3,r5,r1 
+-> Executing 417600 : and r4,r6,r2 
+-> Executing 417604 : orr r2,r3,r4 
+-> Executing 417608 : b #0x65f68 
+	-> Direct Jump to 417640 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x000 ... UNSAT
+	-> Start Jumping from 417608 --> 417640
+-> Executing 417640 : pop {r4,r5,r6} 
+-> Executing 417644 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 378724
+	-> Start Jumping from 417644 --> 378724
+-> Executing 378724 : bl #0x65f34 
+	-> Direct Jump to 417588 if null 
+	-> Start Jumping from 378724 --> 417588
+-> Executing 417588 : push {r4,r5,r6} 
+-> Executing 417592 : ldm r3,{r5,r6} 
+-> Executing 417596 : and r3,r5,r1 
+-> Executing 417600 : and r4,r6,r2 
+-> Executing 417604 : orr r2,r3,r4 
+-> Executing 417608 : b #0x65f68 
+	-> Direct Jump to 417640 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub  ... UNSAT
+	-> Start Jumping from 417608 --> 417640
+-> Executing 417640 : pop {r4,r5,r6} 
+-> Executing 417644 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 378724
+	-> Start Jumping from 417644 --> 378724
+-> Executing 378724 : bl #0x65f34 
+	-> Direct Jump to 417588 if null 
+	-> Start Jumping from 378724 --> 417588
+-> Executing 417588 : push {r4,r5,r6} 
+-> Executing 417592 : ldm r3,{r5,r6} 
+-> Executing 417596 : and r3,r5,r1 
+-> Executing 417600 : and r4,r6,r2 
+-> Executing 417604 : orr r2,r3,r4 
+-> Executing 417608 : b #0x65f68 
+	-> Direct Jump to 417640 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (b ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (b ... UNSAT
+	-> Start Jumping from 417608 --> 417640
+-> Executing 417640 : pop {r4,r5,r6} 
+-> Executing 417644 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 378724
+	-> Start Jumping from 417644 --> 378724
+-> Executing 378724 : bl #0x65f34 
+	-> Direct Jump to 417588 if null 
+	-> Start Jumping from 378724 --> 417588
+	-> Loop limitation exceeded, break.
+-> Executing 378728 : ldr r3,[pc,#0x54] 
+-> Executing 378732 : ldr r2,[pc,#0x54] 
+-> Executing 378736 : str r6,[r3] 
+-> Executing 378740 : ldr r3,[pc,#0x50] 
+-> Executing 378744 : str r4,[r2] 
+-> Executing 378748 : str r5,[r3] 
+-> Executing 378752 : bl #0x5c308 
+	-> Direct Jump to 377608 if null 
+	-> Start Jumping from 378752 --> 377608
+-> Executing 377608 : ldr r3,[pc,#0x4c] 
+-> Executing 377612 : push {r4,r5,r6,lr} 
+-> Executing 377616 : ldr r5,[r3] 
+-> Executing 377620 : cmp r5,#0 
+-> Executing 377624 : b 377624-2 
+	-> Direct Jump to 377624-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000)  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000)  ... SAT
+	-> Start Jumping from 377624 --> 377628
+-> Executing 377628 : bl #0x54818 
+	-> Direct Jump to 346136 if null 
+	-> Start Jumping from 377628 --> 346136
+-> Executing 346136 : mov r7,ip 
+-> Executing 346140 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377628
+	-> Start Jumping from 346140 --> 377628
+-> Executing 377628 : bl #0x54818 
+	-> Direct Jump to 346136 if null 
+	-> Start Jumping from 377628 --> 346136
+-> Executing 346136 : mov r7,ip 
+-> Executing 346140 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377628
+	-> Start Jumping from 346140 --> 377628
+-> Executing 377628 : bl #0x54818 
+	-> Direct Jump to 346136 if null 
+	-> Start Jumping from 377628 --> 346136
+-> Executing 346136 : mov r7,ip 
+-> Executing 346140 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377628
+	-> Start Jumping from 346140 --> 377628
+-> Executing 377628 : bl #0x54818 
+	-> Direct Jump to 346136 if null 
+	-> Start Jumping from 377628 --> 346136
+-> Executing 346136 : mov r7,ip 
+-> Executing 346140 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377628
+	-> Start Jumping from 346140 --> 377628
+-> Executing 377628 : bl #0x54818 
+	-> Direct Jump to 346136 if null 
+	-> Start Jumping from 377628 --> 346136
+-> Executing 346136 : mov r7,ip 
+-> Executing 346140 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377628
+	-> Start Jumping from 346140 --> 377628
+-> Executing 377628 : bl #0x54818 
+	-> Direct Jump to 346136 if null 
+	-> Start Jumping from 377628 --> 346136
+	-> Loop limitation exceeded, break.
+-> Executing 377632 : mov r4,r0 
+-> Executing 377636 : bl #0x80984 
+	-> Direct Jump to 526724 if null 
+	-> Start Jumping from 377636 --> 526724
+-> Executing 526724 : ldm sp!,{r7} 
+-> Executing 526728 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377636
+	-> Start Jumping from 526728 --> 377636
+-> Executing 377636 : bl #0x80984 
+	-> Direct Jump to 526724 if null 
+	-> Start Jumping from 377636 --> 526724
+-> Executing 526724 : ldm sp!,{r7} 
+-> Executing 526728 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377636
+	-> Start Jumping from 526728 --> 377636
+-> Executing 377636 : bl #0x80984 
+	-> Direct Jump to 526724 if null 
+	-> Start Jumping from 377636 --> 526724
+-> Executing 526724 : ldm sp!,{r7} 
+-> Executing 526728 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377636
+	-> Start Jumping from 526728 --> 377636
+-> Executing 377636 : bl #0x80984 
+	-> Direct Jump to 526724 if null 
+	-> Start Jumping from 377636 --> 526724
+-> Executing 526724 : ldm sp!,{r7} 
+-> Executing 526728 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377636
+	-> Start Jumping from 526728 --> 377636
+-> Executing 377636 : bl #0x80984 
+	-> Direct Jump to 526724 if null 
+	-> Start Jumping from 377636 --> 526724
+-> Executing 526724 : ldm sp!,{r7} 
+-> Executing 526728 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377636
+	-> Start Jumping from 526728 --> 377636
+-> Executing 377636 : bl #0x80984 
+	-> Direct Jump to 526724 if null 
+	-> Start Jumping from 377636 --> 526724
+	-> Loop limitation exceeded, break.
+-> Executing 377640 : cmp r4,r0 
+-> Executing 377644 : b #0x5c340 
+	-> Direct Jump to 377664 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000 ... UNSAT
+	-> Start Jumping from 377644 --> 377664
+-> Executing 377664 : bl #0x809ac 
+	-> Direct Jump to 526764 if null 
+	-> Start Jumping from 377664 --> 526764
+-> Executing 526764 : mov r7,#0x21 
+-> Executing 526768 : b 526768-2 
+	-> Direct Jump to 526768-2 if VC 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x ... UNSAT
+	-> Start Jumping from 526768 --> 526768-2
+-> Executing 526768-2 :  #0 
+-> Executing 526768+2 : b 0x809b4 
+	-> Direct Jump to 526772 if null 
+	-> Start Jumping from 526768+2 --> 526772
+-> Executing 526772 : mov r7,ip 
+-> Executing 526776 : cmn r0,#0x1000 
+-> Executing 526780 : bx lr 
+	-> Indirect Jump to lr if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x0000000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x0000000 ... UNSAT
+	-> Start Jumping from 526780 --> 377664
+-> Executing 377664 : bl #0x809ac 
+	-> Direct Jump to 526764 if null 
+	-> Start Jumping from 377664 --> 526764
+-> Executing 526764 : mov r7,#0x21 
+-> Executing 526768 : b 526768-2 
+	-> Direct Jump to 526768-2 if VC 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00 ... UNSAT
+	-> Start Jumping from 526768 --> 526768-2
+-> Executing 526768-2 :  #0 
+-> Executing 526768+2 : b 0x809b4 
+	-> Direct Jump to 526772 if null 
+	-> Start Jumping from 526768+2 --> 526772
+-> Executing 526772 : mov r7,ip 
+-> Executing 526776 : cmn r0,#0x1000 
+-> Executing 526780 : bx lr 
+	-> Indirect Jump to lr if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 ... UNSAT
+	-> Start Jumping from 526780 --> 377664
+-> Executing 377664 : bl #0x809ac 
+	-> Direct Jump to 526764 if null 
+	-> Start Jumping from 377664 --> 526764
+-> Executing 526764 : mov r7,#0x21 
+-> Executing 526768 : b 526768-2 
+	-> Direct Jump to 526768-2 if VC 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x000 ... UNSAT
+	-> Start Jumping from 526768 --> 526768-2
+-> Executing 526768-2 :  #0 
+-> Executing 526768+2 : b 0x809b4 
+	-> Direct Jump to 526772 if null 
+	-> Start Jumping from 526768+2 --> 526772
+-> Executing 526772 : mov r7,ip 
+-> Executing 526776 : cmn r0,#0x1000 
+-> Executing 526780 : bx lr 
+	-> Indirect Jump to lr if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub  ... UNSAT
+	-> Start Jumping from 526780 --> 377664
+-> Executing 377664 : bl #0x809ac 
+	-> Direct Jump to 526764 if null 
+	-> Start Jumping from 377664 --> 526764
+-> Executing 526764 : mov r7,#0x21 
+-> Executing 526768 : b 526768-2 
+	-> Direct Jump to 526768-2 if VC 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (b ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (b ... UNSAT
+	-> Start Jumping from 526768 --> 526768-2
+-> Executing 526768-2 :  #0 
+-> Executing 526768+2 : b 0x809b4 
+	-> Direct Jump to 526772 if null 
+	-> Start Jumping from 526768+2 --> 526772
+-> Executing 526772 : mov r7,ip 
+-> Executing 526776 : cmn r0,#0x1000 
+-> Executing 526780 : bx lr 
+	-> Indirect Jump to lr if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 526780 --> 377664
+-> Executing 377664 : bl #0x809ac 
+	-> Direct Jump to 526764 if null 
+	-> Start Jumping from 377664 --> 526764
+-> Executing 526764 : mov r7,#0x21 
+-> Executing 526768 : b 526768-2 
+	-> Direct Jump to 526768-2 if VC 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 526768 --> 526768-2
+-> Executing 526768-2 :  #0 
+-> Executing 526768+2 : b 0x809b4 
+	-> Direct Jump to 526772 if null 
+	-> Start Jumping from 526768+2 --> 526772
+-> Executing 526772 : mov r7,ip 
+-> Executing 526776 : cmn r0,#0x1000 
+-> Executing 526780 : bx lr 
+	-> Indirect Jump to lr if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 526780 --> 377664
+-> Executing 377664 : bl #0x809ac 
+	-> Direct Jump to 526764 if null 
+	-> Start Jumping from 377664 --> 526764
+	-> Loop limitation exceeded, break.
+-> Executing 377668 : mov r4,r0 
+-> Executing 377672 : bl #0x80998 
+	-> Direct Jump to 526744 if null 
+	-> Start Jumping from 377672 --> 526744
+-> Executing 526744 : ldm sp!,{r7} 
+-> Executing 526748 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377672
+	-> Start Jumping from 526748 --> 377672
+-> Executing 377672 : bl #0x80998 
+	-> Direct Jump to 526744 if null 
+	-> Start Jumping from 377672 --> 526744
+-> Executing 526744 : ldm sp!,{r7} 
+-> Executing 526748 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377672
+	-> Start Jumping from 526748 --> 377672
+-> Executing 377672 : bl #0x80998 
+	-> Direct Jump to 526744 if null 
+	-> Start Jumping from 377672 --> 526744
+-> Executing 526744 : ldm sp!,{r7} 
+-> Executing 526748 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377672
+	-> Start Jumping from 526748 --> 377672
+-> Executing 377672 : bl #0x80998 
+	-> Direct Jump to 526744 if null 
+	-> Start Jumping from 377672 --> 526744
+-> Executing 526744 : ldm sp!,{r7} 
+-> Executing 526748 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377672
+	-> Start Jumping from 526748 --> 377672
+-> Executing 377672 : bl #0x80998 
+	-> Direct Jump to 526744 if null 
+	-> Start Jumping from 377672 --> 526744
+-> Executing 526744 : ldm sp!,{r7} 
+-> Executing 526748 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 377672
+	-> Start Jumping from 526748 --> 377672
+-> Executing 377672 : bl #0x80998 
+	-> Direct Jump to 526744 if null 
+	-> Start Jumping from 377672 --> 526744
+	-> Loop limitation exceeded, break.
+-> Executing 377676 : cmp r4,r0 
+-> Executing 377680 : b 377680-2 
+	-> Direct Jump to 377680-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 377680 --> 377680-2
+-> Executing 377680-2 : mov r2,r5 
+-> Executing 377680+2 : b 0x5c354 
+	-> Direct Jump to 377684 if null 
+	-> Start Jumping from 377680+2 --> 377684
+-> Executing 377684 : b #0x5c330 
+	-> Direct Jump to 377648 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 377684 --> 377688
+-> Executing 377688 : b #0x5c334 
+	-> Direct Jump to 377652 if null 
+	-> Start Jumping from 377688 --> 377652
+-> Executing 377652 : ldr r3,[pc,#0x24] 
+-> Executing 377656 : str r2,[r3] 
+-> Executing 377660 : pop {r4,r5,r6,pc} 
+-> Executing 377664 : bl #0x809ac 
+	-> Direct Jump to 526764 if null 
+	-> Start Jumping from 377664 --> 526764
+	-> Loop limitation exceeded, break.
+-> Executing 377668 : mov r4,r0 
+-> Executing 377672 : bl #0x80998 
+	-> Direct Jump to 526744 if null 
+	-> Start Jumping from 377672 --> 526744
+	-> Loop limitation exceeded, break.
+-> Executing 377676 : cmp r4,r0 
+-> Executing 377680 : b 377680-2 
+	-> Direct Jump to 377680-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 377680 --> 377680-2
+-> Executing 377680-2 : mov r2,r5 
+-> Executing 377680+2 : b 0x5c354 
+	-> Direct Jump to 377684 if null 
+	-> Start Jumping from 377680+2 --> 377684
+-> Executing 377684 : b #0x5c330 
+	-> Direct Jump to 377648 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 377684 --> 377688
+-> Executing 377688 : b #0x5c334 
+	-> Direct Jump to 377652 if null 
+	-> Start Jumping from 377688 --> 377652
+-> Executing 377652 : ldr r3,[pc,#0x24] 
+-> Executing 377656 : str r2,[r3] 
+-> Executing 377660 : pop {r4,r5,r6,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 377664 : bl #0x809ac 
+	-> Direct Jump to 526764 if null 
+	-> Start Jumping from 377664 --> 526764
+	-> Loop limitation exceeded, break.
+-> Executing 377668 : mov r4,r0 
+-> Executing 377672 : bl #0x80998 
+	-> Direct Jump to 526744 if null 
+	-> Start Jumping from 377672 --> 526744
+	-> Loop limitation exceeded, break.
+-> Executing 377676 : cmp r4,r0 
+-> Executing 377680 : b 377680-2 
+	-> Direct Jump to 377680-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 377680 --> 377680-2
+-> Executing 377680-2 : mov r2,r5 
+-> Executing 377680+2 : b 0x5c354 
+	-> Direct Jump to 377684 if null 
+	-> Start Jumping from 377680+2 --> 377684
+-> Executing 377684 : b #0x5c330 
+	-> Direct Jump to 377648 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 377684 --> 377688
+-> Executing 377688 : b #0x5c334 
+	-> Direct Jump to 377652 if null 
+	-> Start Jumping from 377688 --> 377652
+-> Executing 377652 : ldr r3,[pc,#0x24] 
+-> Executing 377656 : str r2,[r3] 
+-> Executing 377660 : pop {r4,r5,r6,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 377664 : bl #0x809ac 
+	-> Direct Jump to 526764 if null 
+	-> Start Jumping from 377664 --> 526764
+	-> Loop limitation exceeded, break.
+-> Executing 377668 : mov r4,r0 
+-> Executing 377672 : bl #0x80998 
+	-> Direct Jump to 526744 if null 
+	-> Start Jumping from 377672 --> 526744
+	-> Loop limitation exceeded, break.
+-> Executing 377676 : cmp r4,r0 
+-> Executing 377680 : b 377680-2 
+	-> Direct Jump to 377680-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 377680 --> 377680-2
+-> Executing 377680-2 : mov r2,r5 
+-> Executing 377680+2 : b 0x5c354 
+	-> Direct Jump to 377684 if null 
+	-> Start Jumping from 377680+2 --> 377684
+-> Executing 377684 : b #0x5c330 
+	-> Direct Jump to 377648 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 377684 --> 377688
+-> Executing 377688 : b #0x5c334 
+	-> Direct Jump to 377652 if null 
+	-> Start Jumping from 377688 --> 377652
+-> Executing 377652 : ldr r3,[pc,#0x24] 
+-> Executing 377656 : str r2,[r3] 
+-> Executing 377660 : pop {r4,r5,r6,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 377664 : bl #0x809ac 
+	-> Direct Jump to 526764 if null 
+	-> Start Jumping from 377664 --> 526764
+	-> Loop limitation exceeded, break.
+-> Executing 377668 : mov r4,r0 
+-> Executing 377672 : bl #0x80998 
+	-> Direct Jump to 526744 if null 
+	-> Start Jumping from 377672 --> 526744
+	-> Loop limitation exceeded, break.
+-> Executing 377676 : cmp r4,r0 
+-> Executing 377680 : b 377680-2 
+	-> Direct Jump to 377680-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 377680 --> 377680-2
+-> Executing 377680-2 : mov r2,r5 
+-> Executing 377680+2 : b 0x5c354 
+	-> Direct Jump to 377684 if null 
+	-> Start Jumping from 377680+2 --> 377684
+-> Executing 377684 : b #0x5c330 
+	-> Direct Jump to 377648 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 377684 --> 377688
+-> Executing 377688 : b #0x5c334 
+	-> Direct Jump to 377652 if null 
+	-> Start Jumping from 377688 --> 377652
+-> Executing 377652 : ldr r3,[pc,#0x24] 
+-> Executing 377656 : str r2,[r3] 
+-> Executing 377660 : pop {r4,r5,r6,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 377664 : bl #0x809ac 
+	-> Direct Jump to 526764 if null 
+	-> Start Jumping from 377664 --> 526764
+	-> Loop limitation exceeded, break.
+-> Executing 377668 : mov r4,r0 
+-> Executing 377672 : bl #0x80998 
+	-> Direct Jump to 526744 if null 
+	-> Start Jumping from 377672 --> 526744
+	-> Loop limitation exceeded, break.
+-> Executing 377676 : cmp r4,r0 
+-> Executing 377680 : b 377680-2 
+	-> Direct Jump to 377680-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 377680 --> 377680-2
+	-> Loop limitation exceeded, break.
+-> Executing 377684 : b #0x5c330 
+	-> Direct Jump to 377648 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 377684 --> 377688
+	-> Loop limitation exceeded, break.
+-> Executing 377688 : b #0x5c334 
+	-> Direct Jump to 377652 if null 
+	-> Start Jumping from 377688 --> 377652
+	-> Loop limitation exceeded, break.
+-> Executing 377692 : b 377692-2 
+	-> Direct Jump to 377692-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 377692 --> 377692-2
+-> Executing 377692-2 : and lr,ip,ip,ror r0 
+-> Executing 377692+2 : b 0x5c360 
+	-> Direct Jump to 377696 if null 
+	-> Start Jumping from 377692+2 --> 377696
+-> Executing 377696 : b 377696-2 
+	-> Direct Jump to 377696-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 377696 --> 377696-2
+-> Executing 377696-2 : mul ip,r8,r0 
+-> Executing 377696+2 : b 0x5c364 
+	-> Direct Jump to 377700 if null 
+	-> Start Jumping from 377696+2 --> 377700
+-> Executing 377700 : ldr r3,[pc,#0x1c] 
+-> Executing 377704 : mov r1,r0 
+-> Executing 377708 : ldr r2,[r3] 
+-> Executing 377712 : str lr,[sp,#-4]! 
+-> Executing 377716 : cmp r2,#0 
+-> Executing 377720 : mov r0,lr 
+-> Executing 377724 : b 377724-2 
+	-> Direct Jump to 377724-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 377724 --> 377724-2
+-> Executing 377724-2 : pop {pc} 
+Error: Stack is empty !
+-> Executing 377724+2 : b 0x5c380 
+	-> Direct Jump to 377728 if null 
+	-> Start Jumping from 377724+2 --> 377728
+-> Executing 377728 : pop {lr} 
+Error: Stack is empty !
+-> Executing 377732 : b #0x8ba24 
+	-> Direct Jump to 571940 if null 
+	-> Start Jumping from 377732 --> 571940
+-> Executing 571940 : b 571940-2 
+	-> Direct Jump to 571940-2 if HS 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 571940 --> 571944
+-> Executing 571944 : cmp r2,sb 
+-> Executing 571948 : b #0x8bd58 
+	-> Direct Jump to 572760 if LS 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 571948 --> 572760
+-> Executing 572760 : add sp,sp,#0x1c 
+-> Executing 572764 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 572768 : ldr r3,[sp,#4] 
+-> Executing 572772 : ldrh r2,[r3] 
+-> Executing 572776 : ldr r3,[r6,#0x14] 
+-> Executing 572780 : add r1,r3,r2,lsl #3 
+-> Executing 572784 : ldr r5,[r1] 
+-> Executing 572788 : ldr r3,[r5] 
+-> Executing 572792 : cmp r3,sl 
+-> Executing 572796 : b #0x8bcec 
+	-> Direct Jump to 572652 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572796 --> 572652
+-> Executing 572652 : mov r3,#1 
+-> Executing 572656 : str r3,[sp,#0x10] 
+-> Executing 572660 : add r6,r5,#8 
+-> Executing 572664 : ldr r1,[r5,#8] 
+-> Executing 572668 : mov r2,r6 
+-> Executing 572672 : str r1,[sp,#0x14] 
+-> Executing 572676 : ldr r3,[sp,#0x14] 
+-> Executing 572680 : str r3,[sp,#0xc] 
+-> Executing 572684 : ldr r0,[sp,#0x14] 
+-> Executing 572688 : ldr r1,[sp,#0x10] 
+-> Executing 572692 : ldr r4,[sp,#0xc] 
+-> Executing 572696 : add r1,r1,r0 
+-> Executing 572700 : ldr r3,[r2] 
+-> Executing 572704 : cmp r3,r4 
+-> Executing 572708 : b #0x8bd40 
+	-> Direct Jump to 572736 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572708 --> 572712
+-> Executing 572712 : mov r0,r4 
+-> Executing 572716 : mvn r3,#0xf000 
+-> Executing 572720 : mov lr,pc 
+-> Executing 572724 : sub pc,r3,#0x3f 
+-> Executing 572728 : b #0x8bd1c 
+	-> Direct Jump to 572700 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572728 --> 572700
+-> Executing 572700 : ldr r3,[r2] 
+-> Executing 572704 : cmp r3,r4 
+-> Executing 572708 : b #0x8bd40 
+	-> Direct Jump to 572736 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572708 --> 572712
+-> Executing 572712 : mov r0,r4 
+-> Executing 572716 : mvn r3,#0xf000 
+-> Executing 572720 : mov lr,pc 
+-> Executing 572724 : sub pc,r3,#0x3f 
+-> Executing 572728 : b #0x8bd1c 
+	-> Direct Jump to 572700 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572728 --> 572700
+-> Executing 572700 : ldr r3,[r2] 
+-> Executing 572704 : cmp r3,r4 
+-> Executing 572708 : b #0x8bd40 
+	-> Direct Jump to 572736 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572708 --> 572712
+-> Executing 572712 : mov r0,r4 
+-> Executing 572716 : mvn r3,#0xf000 
+-> Executing 572720 : mov lr,pc 
+-> Executing 572724 : sub pc,r3,#0x3f 
+-> Executing 572728 : b #0x8bd1c 
+	-> Direct Jump to 572700 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572728 --> 572700
+-> Executing 572700 : ldr r3,[r2] 
+-> Executing 572704 : cmp r3,r4 
+-> Executing 572708 : b #0x8bd40 
+	-> Direct Jump to 572736 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572708 --> 572712
+-> Executing 572712 : mov r0,r4 
+-> Executing 572716 : mvn r3,#0xf000 
+-> Executing 572720 : mov lr,pc 
+-> Executing 572724 : sub pc,r3,#0x3f 
+-> Executing 572728 : b #0x8bd1c 
+	-> Direct Jump to 572700 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572728 --> 572700
+-> Executing 572700 : ldr r3,[r2] 
+-> Executing 572704 : cmp r3,r4 
+-> Executing 572708 : b #0x8bd40 
+	-> Direct Jump to 572736 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572708 --> 572712
+-> Executing 572712 : mov r0,r4 
+-> Executing 572716 : mvn r3,#0xf000 
+-> Executing 572720 : mov lr,pc 
+-> Executing 572724 : sub pc,r3,#0x3f 
+-> Executing 572728 : b #0x8bd1c 
+	-> Direct Jump to 572700 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572728 --> 572700
+-> Executing 572700 : ldr r3,[r2] 
+-> Executing 572704 : cmp r3,r4 
+-> Executing 572708 : b #0x8bd40 
+	-> Direct Jump to 572736 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572708 --> 572712
+	-> Loop limitation exceeded, break.
+-> Executing 572712 : mov r0,r4 
+-> Executing 572716 : mvn r3,#0xf000 
+-> Executing 572720 : mov lr,pc 
+-> Executing 572724 : sub pc,r3,#0x3f 
+-> Executing 572728 : b #0x8bd1c 
+	-> Direct Jump to 572700 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572728 --> 572700
+	-> Loop limitation exceeded, break.
+-> Executing 572732 : mov r3,r4 
+-> Executing 572736 : str r3,[sp,#8] 
+-> Executing 572740 : ldr r2,[sp,#8] 
+-> Executing 572744 : ldr r3,[sp,#0xc] 
+-> Executing 572748 : cmp r2,r3 
+-> Executing 572752 : b #0x8bcf8 
+	-> Direct Jump to 572664 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572752 --> 572756
+-> Executing 572756 : ldr r3,[sp,#0x14] 
+-> Executing 572760 : add sp,sp,#0x1c 
+-> Executing 572764 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 572768 : ldr r3,[sp,#4] 
+-> Executing 572772 : ldrh r2,[r3] 
+-> Executing 572776 : ldr r3,[r6,#0x14] 
+-> Executing 572780 : add r1,r3,r2,lsl #3 
+-> Executing 572784 : ldr r5,[r1] 
+-> Executing 572788 : ldr r3,[r5] 
+-> Executing 572792 : cmp r3,sl 
+-> Executing 572796 : b #0x8bcec 
+	-> Direct Jump to 572652 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572796 --> 572652
+-> Executing 572652 : mov r3,#1 
+-> Executing 572656 : str r3,[sp,#0x10] 
+-> Executing 572660 : add r6,r5,#8 
+-> Executing 572664 : ldr r1,[r5,#8] 
+-> Executing 572668 : mov r2,r6 
+-> Executing 572672 : str r1,[sp,#0x14] 
+-> Executing 572676 : ldr r3,[sp,#0x14] 
+-> Executing 572680 : str r3,[sp,#0xc] 
+-> Executing 572684 : ldr r0,[sp,#0x14] 
+-> Executing 572688 : ldr r1,[sp,#0x10] 
+-> Executing 572692 : ldr r4,[sp,#0xc] 
+-> Executing 572696 : add r1,r1,r0 
+-> Executing 572700 : ldr r3,[r2] 
+-> Executing 572704 : cmp r3,r4 
+-> Executing 572708 : b #0x8bd40 
+	-> Direct Jump to 572736 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572708 --> 572712
+	-> Loop limitation exceeded, break.
+-> Executing 572712 : mov r0,r4 
+-> Executing 572716 : mvn r3,#0xf000 
+-> Executing 572720 : mov lr,pc 
+-> Executing 572724 : sub pc,r3,#0x3f 
+-> Executing 572728 : b #0x8bd1c 
+	-> Direct Jump to 572700 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572728 --> 572700
+	-> Loop limitation exceeded, break.
+-> Executing 572732 : mov r3,r4 
+-> Executing 572736 : str r3,[sp,#8] 
+-> Executing 572740 : ldr r2,[sp,#8] 
+-> Executing 572744 : ldr r3,[sp,#0xc] 
+-> Executing 572748 : cmp r2,r3 
+-> Executing 572752 : b #0x8bcf8 
+	-> Direct Jump to 572664 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572752 --> 572756
+-> Executing 572756 : ldr r3,[sp,#0x14] 
+-> Executing 572760 : add sp,sp,#0x1c 
+-> Executing 572764 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 572768 : ldr r3,[sp,#4] 
+-> Executing 572772 : ldrh r2,[r3] 
+-> Executing 572776 : ldr r3,[r6,#0x14] 
+-> Executing 572780 : add r1,r3,r2,lsl #3 
+-> Executing 572784 : ldr r5,[r1] 
+-> Executing 572788 : ldr r3,[r5] 
+-> Executing 572792 : cmp r3,sl 
+-> Executing 572796 : b #0x8bcec 
+	-> Direct Jump to 572652 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572796 --> 572652
+-> Executing 572652 : mov r3,#1 
+-> Executing 572656 : str r3,[sp,#0x10] 
+-> Executing 572660 : add r6,r5,#8 
+-> Executing 572664 : ldr r1,[r5,#8] 
+-> Executing 572668 : mov r2,r6 
+-> Executing 572672 : str r1,[sp,#0x14] 
+-> Executing 572676 : ldr r3,[sp,#0x14] 
+-> Executing 572680 : str r3,[sp,#0xc] 
+-> Executing 572684 : ldr r0,[sp,#0x14] 
+-> Executing 572688 : ldr r1,[sp,#0x10] 
+-> Executing 572692 : ldr r4,[sp,#0xc] 
+-> Executing 572696 : add r1,r1,r0 
+-> Executing 572700 : ldr r3,[r2] 
+-> Executing 572704 : cmp r3,r4 
+-> Executing 572708 : b #0x8bd40 
+	-> Direct Jump to 572736 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572708 --> 572712
+	-> Loop limitation exceeded, break.
+-> Executing 572712 : mov r0,r4 
+-> Executing 572716 : mvn r3,#0xf000 
+-> Executing 572720 : mov lr,pc 
+-> Executing 572724 : sub pc,r3,#0x3f 
+-> Executing 572728 : b #0x8bd1c 
+	-> Direct Jump to 572700 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572728 --> 572700
+	-> Loop limitation exceeded, break.
+-> Executing 572732 : mov r3,r4 
+-> Executing 572736 : str r3,[sp,#8] 
+-> Executing 572740 : ldr r2,[sp,#8] 
+-> Executing 572744 : ldr r3,[sp,#0xc] 
+-> Executing 572748 : cmp r2,r3 
+-> Executing 572752 : b #0x8bcf8 
+	-> Direct Jump to 572664 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572752 --> 572756
+-> Executing 572756 : ldr r3,[sp,#0x14] 
+-> Executing 572760 : add sp,sp,#0x1c 
+-> Executing 572764 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 572768 : ldr r3,[sp,#4] 
+-> Executing 572772 : ldrh r2,[r3] 
+-> Executing 572776 : ldr r3,[r6,#0x14] 
+-> Executing 572780 : add r1,r3,r2,lsl #3 
+-> Executing 572784 : ldr r5,[r1] 
+-> Executing 572788 : ldr r3,[r5] 
+-> Executing 572792 : cmp r3,sl 
+-> Executing 572796 : b #0x8bcec 
+	-> Direct Jump to 572652 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572796 --> 572652
+-> Executing 572652 : mov r3,#1 
+-> Executing 572656 : str r3,[sp,#0x10] 
+-> Executing 572660 : add r6,r5,#8 
+-> Executing 572664 : ldr r1,[r5,#8] 
+-> Executing 572668 : mov r2,r6 
+-> Executing 572672 : str r1,[sp,#0x14] 
+-> Executing 572676 : ldr r3,[sp,#0x14] 
+-> Executing 572680 : str r3,[sp,#0xc] 
+-> Executing 572684 : ldr r0,[sp,#0x14] 
+-> Executing 572688 : ldr r1,[sp,#0x10] 
+-> Executing 572692 : ldr r4,[sp,#0xc] 
+-> Executing 572696 : add r1,r1,r0 
+-> Executing 572700 : ldr r3,[r2] 
+-> Executing 572704 : cmp r3,r4 
+-> Executing 572708 : b #0x8bd40 
+	-> Direct Jump to 572736 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572708 --> 572712
+	-> Loop limitation exceeded, break.
+-> Executing 572712 : mov r0,r4 
+-> Executing 572716 : mvn r3,#0xf000 
+-> Executing 572720 : mov lr,pc 
+-> Executing 572724 : sub pc,r3,#0x3f 
+-> Executing 572728 : b #0x8bd1c 
+	-> Direct Jump to 572700 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572728 --> 572700
+	-> Loop limitation exceeded, break.
+-> Executing 572732 : mov r3,r4 
+-> Executing 572736 : str r3,[sp,#8] 
+-> Executing 572740 : ldr r2,[sp,#8] 
+-> Executing 572744 : ldr r3,[sp,#0xc] 
+-> Executing 572748 : cmp r2,r3 
+-> Executing 572752 : b #0x8bcf8 
+	-> Direct Jump to 572664 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572752 --> 572756
+-> Executing 572756 : ldr r3,[sp,#0x14] 
+-> Executing 572760 : add sp,sp,#0x1c 
+-> Executing 572764 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 572768 : ldr r3,[sp,#4] 
+-> Executing 572772 : ldrh r2,[r3] 
+-> Executing 572776 : ldr r3,[r6,#0x14] 
+-> Executing 572780 : add r1,r3,r2,lsl #3 
+-> Executing 572784 : ldr r5,[r1] 
+-> Executing 572788 : ldr r3,[r5] 
+-> Executing 572792 : cmp r3,sl 
+-> Executing 572796 : b #0x8bcec 
+	-> Direct Jump to 572652 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572796 --> 572652
+-> Executing 572652 : mov r3,#1 
+-> Executing 572656 : str r3,[sp,#0x10] 
+-> Executing 572660 : add r6,r5,#8 
+-> Executing 572664 : ldr r1,[r5,#8] 
+-> Executing 572668 : mov r2,r6 
+-> Executing 572672 : str r1,[sp,#0x14] 
+-> Executing 572676 : ldr r3,[sp,#0x14] 
+-> Executing 572680 : str r3,[sp,#0xc] 
+-> Executing 572684 : ldr r0,[sp,#0x14] 
+-> Executing 572688 : ldr r1,[sp,#0x10] 
+-> Executing 572692 : ldr r4,[sp,#0xc] 
+-> Executing 572696 : add r1,r1,r0 
+-> Executing 572700 : ldr r3,[r2] 
+-> Executing 572704 : cmp r3,r4 
+-> Executing 572708 : b #0x8bd40 
+	-> Direct Jump to 572736 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572708 --> 572712
+	-> Loop limitation exceeded, break.
+-> Executing 572712 : mov r0,r4 
+-> Executing 572716 : mvn r3,#0xf000 
+-> Executing 572720 : mov lr,pc 
+-> Executing 572724 : sub pc,r3,#0x3f 
+-> Executing 572728 : b #0x8bd1c 
+	-> Direct Jump to 572700 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572728 --> 572700
+	-> Loop limitation exceeded, break.
+-> Executing 572732 : mov r3,r4 
+-> Executing 572736 : str r3,[sp,#8] 
+-> Executing 572740 : ldr r2,[sp,#8] 
+-> Executing 572744 : ldr r3,[sp,#0xc] 
+-> Executing 572748 : cmp r2,r3 
+-> Executing 572752 : b #0x8bcf8 
+	-> Direct Jump to 572664 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 572752 --> 572756
+-> Executing 572756 : ldr r3,[sp,#0x14] 
+-> Executing 572760 : add sp,sp,#0x1c 
+-> Executing 572764 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 572768 : ldr r3,[sp,#4] 
+-> Executing 572772 : ldrh r2,[r3] 
+-> Executing 572776 : ldr r3,[r6,#0x14] 
+-> Executing 572780 : add r1,r3,r2,lsl #3 
+-> Executing 572784 : ldr r5,[r1] 
+-> Executing 572788 : ldr r3,[r5] 
+-> Executing 572792 : cmp r3,sl 
+-> Executing 572796 : b #0x8bcec 
+	-> Direct Jump to 572652 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 572796 --> 572652
+	-> Loop limitation exceeded, break.
+-> Executing 572800 : ldrh r0,[r1,#4] 
+-> Executing 572804 : cmp r0,#0 
+-> Executing 572808 : b #0x8bdb4 
+	-> Direct Jump to 572852 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+-----> Recursively roll back to the parent branch: 572800
+	-> Start Jumping from 572808 --> 572800
+-> Executing 572800 : ldrh r0,[r1,#4] 
+-> Executing 572804 : cmp r0,#0 
+-> Executing 572808 : b #0x8bdb4 
+	-> Direct Jump to 572852 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+-----> Recursively roll back to the parent branch: 571952
+	-> Start Jumping from 572808 --> 571952
+-> Executing 571952 : ldr r3,[r6,#0x10] 
+-> Executing 571956 : ldr r1,[r6,#0xc] 
+-> Executing 571960 : lsr r3,sb,r3 
+-> Executing 571964 : lsl r3,r3,#1 
+-> Executing 571968 : ldrh r2,[r1,r3] 
+-> Executing 571972 : add r1,r1,r3 
+-> Executing 571976 : cmp r2,#0 
+-> Executing 571980 : str r1,[sp,#4] 
+-> Executing 571984 : b #0x8bd68 
+	-> Direct Jump to 572776 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+-----> Recursively roll back to the parent branch: 377728
+	-> Start Jumping from 571984 --> 377728
+-> Executing 377728 : pop {lr} 
+Error: Stack is empty !
+-> Executing 377732 : b #0x8ba24 
+	-> Direct Jump to 571940 if null 
+	-> Start Jumping from 377732 --> 571940
+-> Executing 571940 : b 571940-2 
+	-> Direct Jump to 571940-2 if HS 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+-----> Recursively roll back to the parent branch: 417612
+	-> Start Jumping from 571940 --> 417612
+-> Executing 417612 : vmr r1,fpscr 
+-> Executing 417616 : ldr r2,[pc,#0x1c] 
+-> Executing 417620 : ldr r3,[pc,#0x1c] 
+-> Executing 417624 : and r2,r1,r2 
+-> Executing 417628 : and r3,r0,r3 
+-> Executing 417632 : orr r2,r2,r3 
+-> Executing 417636 : vmsr fpscr,r2 
+-> Executing 417640 : pop {r4,r5,r6} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 417644 : bx lr 
+	-> Indirect Jump to lr if null 
+	-> Found the destination: 572720
+	-> Start Jumping from 417644 --> 572720
+-> Executing 572720 : mov lr,pc 
+-> Executing 572724 : sub pc,r3,#0x3f 
+-> Executing 572728 : b #0x8bd1c 
+	-> Direct Jump to 572700 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 ... UNSAT
+-----> Recursively roll back to the parent branch: 226892
+	-> Start Jumping from 572728 --> 226892
+-> Executing 226892 : mov r0,r5 
+-> Executing 226896 : mov r2,r1 
+-> Executing 226900 : bl #0x3d250 
+	-> Direct Jump to 250448 if null 
+	-> Start Jumping from 226900 --> 250448
+-> Executing 250448 : push {r4,r5,r6,lr} 
+-> Executing 250452 : mov r4,r0 
+-> Executing 250456 : mov r5,r1 
+-> Executing 250460 : mov r6,r2 
+-> Executing 250464 : bl #0x3d040 
+	-> Direct Jump to 249920 if null 
+	-> Start Jumping from 250464 --> 249920
+-> Executing 249920 : push {r4,r5,r6,r7,r8,lr} 
+-> Executing 249924 : ldr r6,[pc,#0x1ec] 
+-> Executing 249928 : mov r1,#1 
+-> Executing 249932 : mov r2,r6 
+-> Executing 249936 : mov r4,#0 
+-> Executing 249940 : ldr r3,[r2] 
+-> Executing 249944 : cmp r3,r4 
+-> Executing 249948 : b #0x3d078 
+	-> Direct Jump to 249976 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x00 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 #x00 ... SAT
+	-> Start Jumping from 249948 --> 249976
+-> Executing 249976 : cmp r3,r4 
+-> Executing 249980 : b #0x3d20c 
+	-> Direct Jump to 250380 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 ... UNSAT
+	-> Start Jumping from 249980 --> 250380
+-> Executing 250380 : mov r0,r6 
+-> Executing 250384 : bl #0x335bc 
+	-> Direct Jump to 210364 if null 
+	-> Start Jumping from 250384 --> 210364
+-> Executing 210364 : mov r7,#0xf0 
+-> Executing 210368 : b 210368-2 
+	-> Direct Jump to 210368-2 if VC 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x000 ... SAT
+	-> Start Jumping from 210368 --> 210368-2
+-> Executing 210368-2 :  #0 
+-> Executing 210368+2 : b 0x335c4 
+	-> Direct Jump to 210372 if null 
+	-> Start Jumping from 210368+2 --> 210372
+-> Executing 210372 : b #0x33534 
+	-> Direct Jump to 210228 if null 
+	-> Start Jumping from 210372 --> 210228
+-> Executing 210228 : mov r1,#2 
+-> Executing 210232 : mov r2,r5 
+-> Executing 210236 : mov r4,#0 
+-> Executing 210240 : ldr r3,[r2] 
+-> Executing 210244 : cmp r3,r4 
+-> Executing 210248 : b #0x33564 
+	-> Direct Jump to 210276 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub  ... SAT
+	-> Start Jumping from 210248 --> 210252
+-> Executing 210252 : mov r0,r4 
+-> Executing 210256 : mvn r3,#0xf000 
+-> Executing 210260 : mov lr,pc 
+-> Executing 210264 : sub pc,r3,#0x3f 
+-> Executing 210268 : b #0x33540 
+	-> Direct Jump to 210240 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (b ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (b ... UNSAT
+	-> Start Jumping from 210268 --> 210240
+-> Executing 210240 : ldr r3,[r2] 
+-> Executing 210244 : cmp r3,r4 
+-> Executing 210248 : b #0x33564 
+	-> Direct Jump to 210276 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000)  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000)  ... SAT
+	-> Start Jumping from 210248 --> 210252
+-> Executing 210252 : mov r0,r4 
+-> Executing 210256 : mvn r3,#0xf000 
+-> Executing 210260 : mov lr,pc 
+-> Executing 210264 : sub pc,r3,#0x3f 
+-> Executing 210268 : b #0x33540 
+	-> Direct Jump to 210240 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000 ... UNSAT
+	-> Start Jumping from 210268 --> 210240
+-> Executing 210240 : ldr r3,[r2] 
+-> Executing 210244 : cmp r3,r4 
+-> Executing 210248 : b #0x33564 
+	-> Direct Jump to 210276 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x ... SAT
+	-> Start Jumping from 210248 --> 210252
+-> Executing 210252 : mov r0,r4 
+-> Executing 210256 : mvn r3,#0xf000 
+-> Executing 210260 : mov lr,pc 
+-> Executing 210264 : sub pc,r3,#0x3f 
+-> Executing 210268 : b #0x33540 
+	-> Direct Jump to 210240 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x0000000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x0000000 ... UNSAT
+	-> Start Jumping from 210268 --> 210240
+-> Executing 210240 : ldr r3,[r2] 
+-> Executing 210244 : cmp r3,r4 
+-> Executing 210248 : b #0x33564 
+	-> Direct Jump to 210276 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00 ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00 ... SAT
+	-> Start Jumping from 210248 --> 210252
+-> Executing 210252 : mov r0,r4 
+-> Executing 210256 : mvn r3,#0xf000 
+-> Executing 210260 : mov lr,pc 
+-> Executing 210264 : sub pc,r3,#0x3f 
+-> Executing 210268 : b #0x33540 
+	-> Direct Jump to 210240 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 ... UNSAT
+	-> Start Jumping from 210268 --> 210240
+-> Executing 210240 : ldr r3,[r2] 
+-> Executing 210244 : cmp r3,r4 
+-> Executing 210248 : b #0x33564 
+	-> Direct Jump to 210276 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x000 ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x000 ... SAT
+	-> Start Jumping from 210248 --> 210252
+-> Executing 210252 : mov r0,r4 
+-> Executing 210256 : mvn r3,#0xf000 
+-> Executing 210260 : mov lr,pc 
+-> Executing 210264 : sub pc,r3,#0x3f 
+-> Executing 210268 : b #0x33540 
+	-> Direct Jump to 210240 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub  ... UNSAT
+	-> Start Jumping from 210268 --> 210240
+-> Executing 210240 : ldr r3,[r2] 
+-> Executing 210244 : cmp r3,r4 
+-> Executing 210248 : b #0x33564 
+	-> Direct Jump to 210276 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (b ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (b ... SAT
+	-> Start Jumping from 210248 --> 210252
+	-> Loop limitation exceeded, break.
+-> Executing 210252 : mov r0,r4 
+-> Executing 210256 : mvn r3,#0xf000 
+-> Executing 210260 : mov lr,pc 
+-> Executing 210264 : sub pc,r3,#0x3f 
+-> Executing 210268 : b #0x33540 
+	-> Direct Jump to 210240 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 210268 --> 210240
+	-> Loop limitation exceeded, break.
+-> Executing 210272 : mov r3,r4 
+-> Executing 210276 : cmp r3,r4 
+-> Executing 210280 : b #0x335c8 
+	-> Direct Jump to 210376 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 210280 --> 210376
+-> Executing 210376 : pop {r4,r5,r6,r7,pc} 
+-> Executing 210380 : push {r4,r5,r7,lr} 
+-> Executing 210384 : mov r5,r0 
+-> Executing 210388 : b #0x33610 
+	-> Direct Jump to 210448 if null 
+	-> Start Jumping from 210388 --> 210448
+-> Executing 210448 : mov r1,#2 
+-> Executing 210452 : mov r2,r5 
+-> Executing 210456 : mov r4,#1 
+-> Executing 210460 : ldr r3,[r2] 
+-> Executing 210464 : cmp r3,r4 
+-> Executing 210468 : b #0x33640 
+	-> Direct Jump to 210496 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 210468 --> 210496
+-> Executing 210496 : cmp r3,#0 
+-> Executing 210500 : b #0x335d8 
+	-> Direct Jump to 210392 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 210500 --> 210504
+-> Executing 210504 : bl #0x37c98 
+	-> Direct Jump to 228504 if null 
+	-> Start Jumping from 210504 --> 228504
+-> Executing 228504 : mov r7,r0 
+-> Executing 228508 : ldr r0,[pc,#0xc0] 
+-> Executing 228512 : sub sp,sp,#0x20 
+-> Executing 228516 : cmp r0,#0 
+-> Executing 228520 : mov r5,r1 
+-> Executing 228524 : mov r6,r2 
+-> Executing 228528 : mov r4,r3 
+-> Executing 228532 : b #0x37cc4 
+	-> Direct Jump to 228548 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228532 --> 228548
+-> Executing 228548 : ldr r1,[pc,#0x9c] 
+-> Executing 228552 : mov r2,#5 
+-> Executing 228556 : ldr r0,[pc,#0x98] 
+-> Executing 228560 : bl #0x37e80 
+	-> Direct Jump to 228992 if null 
+	-> Start Jumping from 228560 --> 228992
+-> Executing 228992 : str lr,[sp,#-4]! 
+-> Executing 228996 : mov ip,#0 
+-> Executing 229000 : sub sp,sp,#0xc 
+-> Executing 229004 : str r2,[sp,#4] 
+-> Executing 229008 : mov r3,ip 
+-> Executing 229012 : mov r2,ip 
+-> Executing 229016 : str ip,[sp] 
+-> Executing 229020 : bl #0x38d54 
+	-> Direct Jump to 232788 if null 
+	-> Start Jumping from 229020 --> 232788
+-> Executing 232788 : push {r4,r5,r6,r7,r8,sb,sl,fp,lr} 
+-> Executing 232792 : cmp r1,#0 
+-> Executing 232796 : add fp,sp,#0x20 
+-> Executing 232800 : sub sp,sp,#0x5c 
+-> Executing 232804 : b 232804-2 
+	-> Direct Jump to 232804-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 232804 --> 232804-2
+-> Executing 232804-2 : mov r8,r1 
+-> Executing 232804+2 : b 0x38d68 
+	-> Direct Jump to 232808 if null 
+	-> Start Jumping from 232804+2 --> 232808
+-> Executing 232808 : str r1,[fp,#-0x64] 
+-> Executing 232812 : str r0,[fp,#-0x60] 
+-> Executing 232816 : str r2,[fp,#-0x68] 
+-> Executing 232820 : str r3,[fp,#-0x6c] 
+-> Executing 232824 : b #0x38fb4 
+	-> Direct Jump to 233396 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 232824 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+-> Executing 233504 : ldr r8,[fp,#-0x64] 
+-> Executing 233508 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233508 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+-> Executing 233504 : ldr r8,[fp,#-0x64] 
+-> Executing 233508 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233508 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+-> Executing 233504 : ldr r8,[fp,#-0x64] 
+-> Executing 233508 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233508 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+-> Executing 233504 : ldr r8,[fp,#-0x64] 
+-> Executing 233508 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233508 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+-> Executing 233504 : ldr r8,[fp,#-0x64] 
+-> Executing 233508 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233508 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+	-> Loop limitation exceeded, break.
+-> Executing 233420 : ldr r3,[fp,#4] 
+-> Executing 233424 : ldr r2,[fp,#-0x64] 
+-> Executing 233428 : cmp r3,#1 
+-> Executing 233432 : ldr r8,[fp,#-0x68] 
+-> Executing 233436 : b 233436-2 
+	-> Direct Jump to 233436-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 233436 --> 233440
+-> Executing 233440 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233440 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+	-> Loop limitation exceeded, break.
+-> Executing 233420 : ldr r3,[fp,#4] 
+-> Executing 233424 : ldr r2,[fp,#-0x64] 
+-> Executing 233428 : cmp r3,#1 
+-> Executing 233432 : ldr r8,[fp,#-0x68] 
+-> Executing 233436 : b 233436-2 
+	-> Direct Jump to 233436-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 233436 --> 233440
+-> Executing 233440 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233440 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+	-> Loop limitation exceeded, break.
+-> Executing 233420 : ldr r3,[fp,#4] 
+-> Executing 233424 : ldr r2,[fp,#-0x64] 
+-> Executing 233428 : cmp r3,#1 
+-> Executing 233432 : ldr r8,[fp,#-0x68] 
+-> Executing 233436 : b 233436-2 
+	-> Direct Jump to 233436-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 233436 --> 233440
+-> Executing 233440 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233440 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+	-> Loop limitation exceeded, break.
+-> Executing 233420 : ldr r3,[fp,#4] 
+-> Executing 233424 : ldr r2,[fp,#-0x64] 
+-> Executing 233428 : cmp r3,#1 
+-> Executing 233432 : ldr r8,[fp,#-0x68] 
+-> Executing 233436 : b 233436-2 
+	-> Direct Jump to 233436-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 233436 --> 233440
+-> Executing 233440 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233440 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+	-> Loop limitation exceeded, break.
+-> Executing 233420 : ldr r3,[fp,#4] 
+-> Executing 233424 : ldr r2,[fp,#-0x64] 
+-> Executing 233428 : cmp r3,#1 
+-> Executing 233432 : ldr r8,[fp,#-0x68] 
+-> Executing 233436 : b 233436-2 
+	-> Direct Jump to 233436-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 233436 --> 233440
+-> Executing 233440 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233440 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+Error: Stack is empty !
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+	-> Loop limitation exceeded, break.
+-> Executing 233420 : ldr r3,[fp,#4] 
+-> Executing 233424 : ldr r2,[fp,#-0x64] 
+-> Executing 233428 : cmp r3,#1 
+-> Executing 233432 : ldr r8,[fp,#-0x68] 
+-> Executing 233436 : b 233436-2 
+	-> Direct Jump to 233436-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 233436 --> 233440
+	-> Loop limitation exceeded, break.
+-> Executing 233440 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233440 --> 233396
+	-> Loop limitation exceeded, break.
+-> Executing 233444 : ldr r3,[pc,#0x434] 
+-> Executing 233448 : cmp r3,#0 
+-> Executing 233452 : b #0x39000 
+	-> Direct Jump to 233472 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233452 --> 233472
+-> Executing 233472 : ldr r3,[pc,#0x43c] 
+-> Executing 233476 : ldr r1,[fp,#-0x6c] 
+-> Executing 233480 : ldr r2,[fp,#-0x58] 
+-> Executing 233484 : bl #0x37c88 
+	-> Direct Jump to 228488 if null 
+	-> Start Jumping from 233484 --> 228488
+-> Executing 228488 : mvn r0,#0xf000 
+-> Executing 228492 : sub pc,r0,#0x1f 
+-> Executing 228496 : mov r0,r0 
+-> Executing 228500 : mov r0,r0 
+-> Executing 228504 : mov r7,r0 
+-> Executing 228508 : ldr r0,[pc,#0xc0] 
+-> Executing 228512 : sub sp,sp,#0x20 
+-> Executing 228516 : cmp r0,#0 
+-> Executing 228520 : mov r5,r1 
+-> Executing 228524 : mov r6,r2 
+-> Executing 228528 : mov r4,r3 
+-> Executing 228532 : b #0x37cc4 
+	-> Direct Jump to 228548 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228532 --> 228548
+-> Executing 228548 : ldr r1,[pc,#0x9c] 
+-> Executing 228552 : mov r2,#5 
+-> Executing 228556 : ldr r0,[pc,#0x98] 
+-> Executing 228560 : bl #0x37e80 
+	-> Direct Jump to 228992 if null 
+	-> Start Jumping from 228560 --> 228992
+-> Executing 228992 : str lr,[sp,#-4]! 
+-> Executing 228996 : mov ip,#0 
+-> Executing 229000 : sub sp,sp,#0xc 
+-> Executing 229004 : str r2,[sp,#4] 
+-> Executing 229008 : mov r3,ip 
+-> Executing 229012 : mov r2,ip 
+-> Executing 229016 : str ip,[sp] 
+-> Executing 229020 : bl #0x38d54 
+	-> Direct Jump to 232788 if null 
+	-> Start Jumping from 229020 --> 232788
+-> Executing 232788 : push {r4,r5,r6,r7,r8,sb,sl,fp,lr} 
+-> Executing 232792 : cmp r1,#0 
+-> Executing 232796 : add fp,sp,#0x20 
+-> Executing 232800 : sub sp,sp,#0x5c 
+-> Executing 232804 : b 232804-2 
+	-> Direct Jump to 232804-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 232804 --> 232804-2
+-> Executing 232804-2 : mov r8,r1 
+-> Executing 232804+2 : b 0x38d68 
+	-> Direct Jump to 232808 if null 
+	-> Start Jumping from 232804+2 --> 232808
+-> Executing 232808 : str r1,[fp,#-0x64] 
+-> Executing 232812 : str r0,[fp,#-0x60] 
+-> Executing 232816 : str r2,[fp,#-0x68] 
+-> Executing 232820 : str r3,[fp,#-0x6c] 
+-> Executing 232824 : b #0x38fb4 
+	-> Direct Jump to 233396 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 232824 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+	-> Loop limitation exceeded, break.
+-> Executing 233420 : ldr r3,[fp,#4] 
+-> Executing 233424 : ldr r2,[fp,#-0x64] 
+-> Executing 233428 : cmp r3,#1 
+-> Executing 233432 : ldr r8,[fp,#-0x68] 
+-> Executing 233436 : b 233436-2 
+	-> Direct Jump to 233436-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 233436 --> 233440
+	-> Loop limitation exceeded, break.
+-> Executing 233440 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233440 --> 233396
+	-> Loop limitation exceeded, break.
+-> Executing 233444 : ldr r3,[pc,#0x434] 
+-> Executing 233448 : cmp r3,#0 
+-> Executing 233452 : b #0x39000 
+	-> Direct Jump to 233472 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233452 --> 233472
+-> Executing 233472 : ldr r3,[pc,#0x43c] 
+-> Executing 233476 : ldr r1,[fp,#-0x6c] 
+-> Executing 233480 : ldr r2,[fp,#-0x58] 
+-> Executing 233484 : bl #0x37c88 
+	-> Direct Jump to 228488 if null 
+	-> Start Jumping from 233484 --> 228488
+-> Executing 228488 : mvn r0,#0xf000 
+-> Executing 228492 : sub pc,r0,#0x1f 
+-> Executing 228496 : mov r0,r0 
+-> Executing 228500 : mov r0,r0 
+-> Executing 228504 : mov r7,r0 
+-> Executing 228508 : ldr r0,[pc,#0xc0] 
+-> Executing 228512 : sub sp,sp,#0x20 
+-> Executing 228516 : cmp r0,#0 
+-> Executing 228520 : mov r5,r1 
+-> Executing 228524 : mov r6,r2 
+-> Executing 228528 : mov r4,r3 
+-> Executing 228532 : b #0x37cc4 
+	-> Direct Jump to 228548 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228532 --> 228548
+-> Executing 228548 : ldr r1,[pc,#0x9c] 
+-> Executing 228552 : mov r2,#5 
+-> Executing 228556 : ldr r0,[pc,#0x98] 
+-> Executing 228560 : bl #0x37e80 
+	-> Direct Jump to 228992 if null 
+	-> Start Jumping from 228560 --> 228992
+-> Executing 228992 : str lr,[sp,#-4]! 
+-> Executing 228996 : mov ip,#0 
+-> Executing 229000 : sub sp,sp,#0xc 
+-> Executing 229004 : str r2,[sp,#4] 
+-> Executing 229008 : mov r3,ip 
+-> Executing 229012 : mov r2,ip 
+-> Executing 229016 : str ip,[sp] 
+-> Executing 229020 : bl #0x38d54 
+	-> Direct Jump to 232788 if null 
+	-> Start Jumping from 229020 --> 232788
+-> Executing 232788 : push {r4,r5,r6,r7,r8,sb,sl,fp,lr} 
+-> Executing 232792 : cmp r1,#0 
+-> Executing 232796 : add fp,sp,#0x20 
+-> Executing 232800 : sub sp,sp,#0x5c 
+-> Executing 232804 : b 232804-2 
+	-> Direct Jump to 232804-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 232804 --> 232804-2
+-> Executing 232804-2 : mov r8,r1 
+-> Executing 232804+2 : b 0x38d68 
+	-> Direct Jump to 232808 if null 
+	-> Start Jumping from 232804+2 --> 232808
+-> Executing 232808 : str r1,[fp,#-0x64] 
+-> Executing 232812 : str r0,[fp,#-0x60] 
+-> Executing 232816 : str r2,[fp,#-0x68] 
+-> Executing 232820 : str r3,[fp,#-0x6c] 
+-> Executing 232824 : b #0x38fb4 
+	-> Direct Jump to 233396 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 232824 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+	-> Loop limitation exceeded, break.
+-> Executing 233420 : ldr r3,[fp,#4] 
+-> Executing 233424 : ldr r2,[fp,#-0x64] 
+-> Executing 233428 : cmp r3,#1 
+-> Executing 233432 : ldr r8,[fp,#-0x68] 
+-> Executing 233436 : b 233436-2 
+	-> Direct Jump to 233436-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 233436 --> 233440
+	-> Loop limitation exceeded, break.
+-> Executing 233440 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233440 --> 233396
+	-> Loop limitation exceeded, break.
+-> Executing 233444 : ldr r3,[pc,#0x434] 
+-> Executing 233448 : cmp r3,#0 
+-> Executing 233452 : b #0x39000 
+	-> Direct Jump to 233472 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233452 --> 233472
+-> Executing 233472 : ldr r3,[pc,#0x43c] 
+-> Executing 233476 : ldr r1,[fp,#-0x6c] 
+-> Executing 233480 : ldr r2,[fp,#-0x58] 
+-> Executing 233484 : bl #0x37c88 
+	-> Direct Jump to 228488 if null 
+	-> Start Jumping from 233484 --> 228488
+-> Executing 228488 : mvn r0,#0xf000 
+-> Executing 228492 : sub pc,r0,#0x1f 
+-> Executing 228496 : mov r0,r0 
+-> Executing 228500 : mov r0,r0 
+-> Executing 228504 : mov r7,r0 
+-> Executing 228508 : ldr r0,[pc,#0xc0] 
+-> Executing 228512 : sub sp,sp,#0x20 
+-> Executing 228516 : cmp r0,#0 
+-> Executing 228520 : mov r5,r1 
+-> Executing 228524 : mov r6,r2 
+-> Executing 228528 : mov r4,r3 
+-> Executing 228532 : b #0x37cc4 
+	-> Direct Jump to 228548 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228532 --> 228548
+-> Executing 228548 : ldr r1,[pc,#0x9c] 
+-> Executing 228552 : mov r2,#5 
+-> Executing 228556 : ldr r0,[pc,#0x98] 
+-> Executing 228560 : bl #0x37e80 
+	-> Direct Jump to 228992 if null 
+	-> Start Jumping from 228560 --> 228992
+-> Executing 228992 : str lr,[sp,#-4]! 
+-> Executing 228996 : mov ip,#0 
+-> Executing 229000 : sub sp,sp,#0xc 
+-> Executing 229004 : str r2,[sp,#4] 
+-> Executing 229008 : mov r3,ip 
+-> Executing 229012 : mov r2,ip 
+-> Executing 229016 : str ip,[sp] 
+-> Executing 229020 : bl #0x38d54 
+	-> Direct Jump to 232788 if null 
+	-> Start Jumping from 229020 --> 232788
+-> Executing 232788 : push {r4,r5,r6,r7,r8,sb,sl,fp,lr} 
+-> Executing 232792 : cmp r1,#0 
+-> Executing 232796 : add fp,sp,#0x20 
+-> Executing 232800 : sub sp,sp,#0x5c 
+-> Executing 232804 : b 232804-2 
+	-> Direct Jump to 232804-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 232804 --> 232804-2
+-> Executing 232804-2 : mov r8,r1 
+-> Executing 232804+2 : b 0x38d68 
+	-> Direct Jump to 232808 if null 
+	-> Start Jumping from 232804+2 --> 232808
+-> Executing 232808 : str r1,[fp,#-0x64] 
+-> Executing 232812 : str r0,[fp,#-0x60] 
+-> Executing 232816 : str r2,[fp,#-0x68] 
+-> Executing 232820 : str r3,[fp,#-0x6c] 
+-> Executing 232824 : b #0x38fb4 
+	-> Direct Jump to 233396 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 232824 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+	-> Loop limitation exceeded, break.
+-> Executing 233420 : ldr r3,[fp,#4] 
+-> Executing 233424 : ldr r2,[fp,#-0x64] 
+-> Executing 233428 : cmp r3,#1 
+-> Executing 233432 : ldr r8,[fp,#-0x68] 
+-> Executing 233436 : b 233436-2 
+	-> Direct Jump to 233436-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 233436 --> 233440
+	-> Loop limitation exceeded, break.
+-> Executing 233440 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233440 --> 233396
+	-> Loop limitation exceeded, break.
+-> Executing 233444 : ldr r3,[pc,#0x434] 
+-> Executing 233448 : cmp r3,#0 
+-> Executing 233452 : b #0x39000 
+	-> Direct Jump to 233472 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233452 --> 233472
+-> Executing 233472 : ldr r3,[pc,#0x43c] 
+-> Executing 233476 : ldr r1,[fp,#-0x6c] 
+-> Executing 233480 : ldr r2,[fp,#-0x58] 
+-> Executing 233484 : bl #0x37c88 
+	-> Direct Jump to 228488 if null 
+	-> Start Jumping from 233484 --> 228488
+-> Executing 228488 : mvn r0,#0xf000 
+-> Executing 228492 : sub pc,r0,#0x1f 
+-> Executing 228496 : mov r0,r0 
+-> Executing 228500 : mov r0,r0 
+-> Executing 228504 : mov r7,r0 
+-> Executing 228508 : ldr r0,[pc,#0xc0] 
+-> Executing 228512 : sub sp,sp,#0x20 
+-> Executing 228516 : cmp r0,#0 
+-> Executing 228520 : mov r5,r1 
+-> Executing 228524 : mov r6,r2 
+-> Executing 228528 : mov r4,r3 
+-> Executing 228532 : b #0x37cc4 
+	-> Direct Jump to 228548 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228532 --> 228548
+-> Executing 228548 : ldr r1,[pc,#0x9c] 
+-> Executing 228552 : mov r2,#5 
+-> Executing 228556 : ldr r0,[pc,#0x98] 
+-> Executing 228560 : bl #0x37e80 
+	-> Direct Jump to 228992 if null 
+	-> Start Jumping from 228560 --> 228992
+-> Executing 228992 : str lr,[sp,#-4]! 
+-> Executing 228996 : mov ip,#0 
+-> Executing 229000 : sub sp,sp,#0xc 
+-> Executing 229004 : str r2,[sp,#4] 
+-> Executing 229008 : mov r3,ip 
+-> Executing 229012 : mov r2,ip 
+-> Executing 229016 : str ip,[sp] 
+-> Executing 229020 : bl #0x38d54 
+	-> Direct Jump to 232788 if null 
+	-> Start Jumping from 229020 --> 232788
+-> Executing 232788 : push {r4,r5,r6,r7,r8,sb,sl,fp,lr} 
+-> Executing 232792 : cmp r1,#0 
+-> Executing 232796 : add fp,sp,#0x20 
+-> Executing 232800 : sub sp,sp,#0x5c 
+-> Executing 232804 : b 232804-2 
+	-> Direct Jump to 232804-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 232804 --> 232804-2
+-> Executing 232804-2 : mov r8,r1 
+-> Executing 232804+2 : b 0x38d68 
+	-> Direct Jump to 232808 if null 
+	-> Start Jumping from 232804+2 --> 232808
+-> Executing 232808 : str r1,[fp,#-0x64] 
+-> Executing 232812 : str r0,[fp,#-0x60] 
+-> Executing 232816 : str r2,[fp,#-0x68] 
+-> Executing 232820 : str r3,[fp,#-0x6c] 
+-> Executing 232824 : b #0x38fb4 
+	-> Direct Jump to 233396 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 232824 --> 233396
+-> Executing 233396 : mov r0,r8 
+-> Executing 233400 : sub sp,fp,#0x20 
+-> Executing 233404 : pop {r4,r5,r6,r7,r8,sb,sl,fp,pc} 
+-> Executing 233408 : ldr r1,[fp,#-0x6c] 
+-> Executing 233412 : cmp r1,#0 
+-> Executing 233416 : b #0x39020 
+	-> Direct Jump to 233504 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233416 --> 233504
+	-> Loop limitation exceeded, break.
+-> Executing 233420 : ldr r3,[fp,#4] 
+-> Executing 233424 : ldr r2,[fp,#-0x64] 
+-> Executing 233428 : cmp r3,#1 
+-> Executing 233432 : ldr r8,[fp,#-0x68] 
+-> Executing 233436 : b 233436-2 
+	-> Direct Jump to 233436-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 233436 --> 233440
+	-> Loop limitation exceeded, break.
+-> Executing 233440 : b #0x38fb4 
+	-> Direct Jump to 233396 if null 
+	-> Start Jumping from 233440 --> 233396
+	-> Loop limitation exceeded, break.
+-> Executing 233444 : ldr r3,[pc,#0x434] 
+-> Executing 233448 : cmp r3,#0 
+-> Executing 233452 : b #0x39000 
+	-> Direct Jump to 233472 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 233452 --> 233472
+-> Executing 233472 : ldr r3,[pc,#0x43c] 
+-> Executing 233476 : ldr r1,[fp,#-0x6c] 
+-> Executing 233480 : ldr r2,[fp,#-0x58] 
+-> Executing 233484 : bl #0x37c88 
+	-> Direct Jump to 228488 if null 
+	-> Start Jumping from 233484 --> 228488
+-> Executing 228488 : mvn r0,#0xf000 
+-> Executing 228492 : sub pc,r0,#0x1f 
+-> Executing 228496 : mov r0,r0 
+-> Executing 228500 : mov r0,r0 
+-> Executing 228504 : mov r7,r0 
+-> Executing 228508 : ldr r0,[pc,#0xc0] 
+-> Executing 228512 : sub sp,sp,#0x20 
+-> Executing 228516 : cmp r0,#0 
+-> Executing 228520 : mov r5,r1 
+-> Executing 228524 : mov r6,r2 
+-> Executing 228528 : mov r4,r3 
+-> Executing 228532 : b #0x37cc4 
+	-> Direct Jump to 228548 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228532 --> 228548
+	-> Loop limitation exceeded, break.
+-> Executing 228536 : mov r0,#1 
+-> Executing 228540 : mov r1,#0 
+-> Executing 228544 : b #0x37cc4 
+	-> Direct Jump to 228548 if null 
+	-> Start Jumping from 228544 --> 228548
+-> Executing 228548 : ldr r1,[pc,#0x9c] 
+-> Executing 228552 : mov r2,#5 
+-> Executing 228556 : ldr r0,[pc,#0x98] 
+-> Executing 228560 : bl #0x37e80 
+	-> Direct Jump to 228992 if null 
+	-> Start Jumping from 228560 --> 228992
+	-> Loop limitation exceeded, break.
+-> Executing 228564 : ldr r3,[pc,#0x94] 
+-> Executing 228568 : ldr ip,[pc,#0x94] 
+-> Executing 228572 : ldr r2,[r3] 
+-> Executing 228576 : ldr lr,[pc,#0x90] 
+-> Executing 228580 : ldrb r3,[r2] 
+-> Executing 228584 : mov r1,r0 
+-> Executing 228588 : cmp r3,#0 
+-> Executing 228592 : b 228592-2 
+	-> Direct Jump to 228592-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228592 --> 228592-2
+-> Executing 228592-2 : mov r3,ip 
+-> Executing 228592+2 : b 0x37cf4 
+	-> Direct Jump to 228596 if null 
+	-> Start Jumping from 228592+2 --> 228596
+-> Executing 228596 : b 228596-2 
+	-> Direct Jump to 228596-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228596 --> 228600
+-> Executing 228600 : cmp r4,#0 
+-> Executing 228604 : b 228604-2 
+	-> Direct Jump to 228604-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228604 --> 228604-2
+-> Executing 228604-2 : mov r4,ip 
+-> Executing 228604+2 : b 0x37d00 
+	-> Direct Jump to 228608 if null 
+	-> Start Jumping from 228604+2 --> 228608
+-> Executing 228608 : b 228608-2 
+	-> Direct Jump to 228608-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228608 --> 228612
+-> Executing 228612 : b 228612-2 
+	-> Direct Jump to 228612-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228612 --> 228612-2
+-> Executing 228612-2 : mov ip,r4 
+-> Executing 228612+2 : b 0x37d08 
+	-> Direct Jump to 228616 if null 
+	-> Start Jumping from 228612+2 --> 228616
+-> Executing 228616 : add r0,sp,#0x1c 
+-> Executing 228620 : stm sp,{r5,r6} 
+-> Executing 228624 : str r4,[sp,#8] 
+-> Executing 228628 : str ip,[sp,#0xc] 
+-> Executing 228632 : str r7,[sp,#0x10] 
+-> Executing 228636 : bl #0x3ed90 
+	-> Direct Jump to 257424 if null 
+	-> Start Jumping from 228636 --> 257424
+-> Executing 257424 : str lr,[sp,#-4]! 
+-> Executing 257428 : sub sp,sp,#8 
+-> Executing 257432 : add r3,sp,#0x10 
+-> Executing 257436 : mov r2,r3 
+-> Executing 257440 : ldr r1,[sp,#0xc] 
+-> Executing 257444 : str r3,[sp,#4] 
+-> Executing 257448 : bl #0x418a0 
+	-> Direct Jump to 268448 if null 
+	-> Start Jumping from 257448 --> 268448
+-> Executing 268448 : push {r4,r5,r6,r7,r8,lr} 
+-> Executing 268452 : mov r8,r0 
+-> Executing 268456 : sub sp,sp,#0xb0 
+-> Executing 268460 : mov r0,#0x64 
+-> Executing 268464 : mov r6,r1 
+-> Executing 268468 : mov r7,r2 
+-> Executing 268472 : bl #0x4d520 
+	-> Direct Jump to 316704 if null 
+	-> Start Jumping from 268472 --> 316704
+-> Executing 316704 : ldr r3,[pc,#0x33c] 
+-> Executing 316708 : push {r4,r5,r6,r7,r8,sb,sl,lr} 
+-> Executing 316712 : ldr r4,[r3] 
+-> Executing 316716 : mov r1,lr 
+-> Executing 316720 : cmp r4,#0 
+-> Executing 316724 : mov r6,r0 
+-> Executing 316728 : b #0x4d54c 
+	-> Direct Jump to 316748 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 316728 --> 316732
+-> Executing 316732 : blx r4 
+-> Executing 316736 : mov r5,r0 
+-> Executing 316740 : mov r0,r5 
+-> Executing 316744 : pop {r4,r5,r6,r7,r8,sb,sl,pc} 
+-> Executing 316748 : ldr r3,[pc,#0x314] 
+-> Executing 316752 : bl #0x37c84 
+	-> Direct Jump to 228484 if null 
+	-> Start Jumping from 316752 --> 228484
+-> Executing 228484 : b 228484-2 
+	-> Direct Jump to 228484-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228484 --> 228488
+-> Executing 228488 : mvn r0,#0xf000 
+-> Executing 228492 : sub pc,r0,#0x1f 
+-> Executing 228496 : mov r0,r0 
+-> Executing 228500 : mov r0,r0 
+-> Executing 228504 : mov r7,r0 
+-> Executing 228508 : ldr r0,[pc,#0xc0] 
+-> Executing 228512 : sub sp,sp,#0x20 
+-> Executing 228516 : cmp r0,#0 
+-> Executing 228520 : mov r5,r1 
+-> Executing 228524 : mov r6,r2 
+-> Executing 228528 : mov r4,r3 
+-> Executing 228532 : b #0x37cc4 
+	-> Direct Jump to 228548 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228532 --> 228548
+	-> Loop limitation exceeded, break.
+-> Executing 228536 : mov r0,#1 
+-> Executing 228540 : mov r1,#0 
+-> Executing 228544 : b #0x37cc4 
+	-> Direct Jump to 228548 if null 
+	-> Start Jumping from 228544 --> 228548
+-> Executing 228548 : ldr r1,[pc,#0x9c] 
+-> Executing 228552 : mov r2,#5 
+-> Executing 228556 : ldr r0,[pc,#0x98] 
+-> Executing 228560 : bl #0x37e80 
+	-> Direct Jump to 228992 if null 
+	-> Start Jumping from 228560 --> 228992
+	-> Loop limitation exceeded, break.
+-> Executing 228564 : ldr r3,[pc,#0x94] 
+-> Executing 228568 : ldr ip,[pc,#0x94] 
+-> Executing 228572 : ldr r2,[r3] 
+-> Executing 228576 : ldr lr,[pc,#0x90] 
+-> Executing 228580 : ldrb r3,[r2] 
+-> Executing 228584 : mov r1,r0 
+-> Executing 228588 : cmp r3,#0 
+-> Executing 228592 : b 228592-2 
+	-> Direct Jump to 228592-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228592 --> 228592-2
+-> Executing 228592-2 : mov r3,ip 
+-> Executing 228592+2 : b 0x37cf4 
+	-> Direct Jump to 228596 if null 
+	-> Start Jumping from 228592+2 --> 228596
+-> Executing 228596 : b 228596-2 
+	-> Direct Jump to 228596-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228596 --> 228600
+-> Executing 228600 : cmp r4,#0 
+-> Executing 228604 : b 228604-2 
+	-> Direct Jump to 228604-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228604 --> 228604-2
+-> Executing 228604-2 : mov r4,ip 
+-> Executing 228604+2 : b 0x37d00 
+	-> Direct Jump to 228608 if null 
+	-> Start Jumping from 228604+2 --> 228608
+-> Executing 228608 : b 228608-2 
+	-> Direct Jump to 228608-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228608 --> 228612
+-> Executing 228612 : b 228612-2 
+	-> Direct Jump to 228612-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228612 --> 228612-2
+-> Executing 228612-2 : mov ip,r4 
+-> Executing 228612+2 : b 0x37d08 
+	-> Direct Jump to 228616 if null 
+	-> Start Jumping from 228612+2 --> 228616
+-> Executing 228616 : add r0,sp,#0x1c 
+-> Executing 228620 : stm sp,{r5,r6} 
+-> Executing 228624 : str r4,[sp,#8] 
+-> Executing 228628 : str ip,[sp,#0xc] 
+-> Executing 228632 : str r7,[sp,#0x10] 
+-> Executing 228636 : bl #0x3ed90 
+	-> Direct Jump to 257424 if null 
+	-> Start Jumping from 228636 --> 257424
+-> Executing 257424 : str lr,[sp,#-4]! 
+-> Executing 257428 : sub sp,sp,#8 
+-> Executing 257432 : add r3,sp,#0x10 
+-> Executing 257436 : mov r2,r3 
+-> Executing 257440 : ldr r1,[sp,#0xc] 
+-> Executing 257444 : str r3,[sp,#4] 
+-> Executing 257448 : bl #0x418a0 
+	-> Direct Jump to 268448 if null 
+	-> Start Jumping from 257448 --> 268448
+-> Executing 268448 : push {r4,r5,r6,r7,r8,lr} 
+-> Executing 268452 : mov r8,r0 
+-> Executing 268456 : sub sp,sp,#0xb0 
+-> Executing 268460 : mov r0,#0x64 
+-> Executing 268464 : mov r6,r1 
+-> Executing 268468 : mov r7,r2 
+-> Executing 268472 : bl #0x4d520 
+	-> Direct Jump to 316704 if null 
+	-> Start Jumping from 268472 --> 316704
+-> Executing 316704 : ldr r3,[pc,#0x33c] 
+-> Executing 316708 : push {r4,r5,r6,r7,r8,sb,sl,lr} 
+-> Executing 316712 : ldr r4,[r3] 
+-> Executing 316716 : mov r1,lr 
+-> Executing 316720 : cmp r4,#0 
+-> Executing 316724 : mov r6,r0 
+-> Executing 316728 : b #0x4d54c 
+	-> Direct Jump to 316748 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 316728 --> 316732
+-> Executing 316732 : blx r4 
+-> Executing 316736 : mov r5,r0 
+-> Executing 316740 : mov r0,r5 
+-> Executing 316744 : pop {r4,r5,r6,r7,r8,sb,sl,pc} 
+-> Executing 316748 : ldr r3,[pc,#0x314] 
+-> Executing 316752 : bl #0x37c84 
+	-> Direct Jump to 228484 if null 
+	-> Start Jumping from 316752 --> 228484
+-> Executing 228484 : b 228484-2 
+	-> Direct Jump to 228484-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228484 --> 228488
+-> Executing 228488 : mvn r0,#0xf000 
+-> Executing 228492 : sub pc,r0,#0x1f 
+-> Executing 228496 : mov r0,r0 
+-> Executing 228500 : mov r0,r0 
+-> Executing 228504 : mov r7,r0 
+-> Executing 228508 : ldr r0,[pc,#0xc0] 
+-> Executing 228512 : sub sp,sp,#0x20 
+-> Executing 228516 : cmp r0,#0 
+-> Executing 228520 : mov r5,r1 
+-> Executing 228524 : mov r6,r2 
+-> Executing 228528 : mov r4,r3 
+-> Executing 228532 : b #0x37cc4 
+	-> Direct Jump to 228548 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228532 --> 228548
+	-> Loop limitation exceeded, break.
+-> Executing 228536 : mov r0,#1 
+-> Executing 228540 : mov r1,#0 
+-> Executing 228544 : b #0x37cc4 
+	-> Direct Jump to 228548 if null 
+	-> Start Jumping from 228544 --> 228548
+-> Executing 228548 : ldr r1,[pc,#0x9c] 
+-> Executing 228552 : mov r2,#5 
+-> Executing 228556 : ldr r0,[pc,#0x98] 
+-> Executing 228560 : bl #0x37e80 
+	-> Direct Jump to 228992 if null 
+	-> Start Jumping from 228560 --> 228992
+	-> Loop limitation exceeded, break.
+-> Executing 228564 : ldr r3,[pc,#0x94] 
+-> Executing 228568 : ldr ip,[pc,#0x94] 
+-> Executing 228572 : ldr r2,[r3] 
+-> Executing 228576 : ldr lr,[pc,#0x90] 
+-> Executing 228580 : ldrb r3,[r2] 
+-> Executing 228584 : mov r1,r0 
+-> Executing 228588 : cmp r3,#0 
+-> Executing 228592 : b 228592-2 
+	-> Direct Jump to 228592-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228592 --> 228592-2
+-> Executing 228592-2 : mov r3,ip 
+-> Executing 228592+2 : b 0x37cf4 
+	-> Direct Jump to 228596 if null 
+	-> Start Jumping from 228592+2 --> 228596
+-> Executing 228596 : b 228596-2 
+	-> Direct Jump to 228596-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228596 --> 228600
+-> Executing 228600 : cmp r4,#0 
+-> Executing 228604 : b 228604-2 
+	-> Direct Jump to 228604-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228604 --> 228604-2
+-> Executing 228604-2 : mov r4,ip 
+-> Executing 228604+2 : b 0x37d00 
+	-> Direct Jump to 228608 if null 
+	-> Start Jumping from 228604+2 --> 228608
+-> Executing 228608 : b 228608-2 
+	-> Direct Jump to 228608-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228608 --> 228612
+-> Executing 228612 : b 228612-2 
+	-> Direct Jump to 228612-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228612 --> 228612-2
+-> Executing 228612-2 : mov ip,r4 
+-> Executing 228612+2 : b 0x37d08 
+	-> Direct Jump to 228616 if null 
+	-> Start Jumping from 228612+2 --> 228616
+-> Executing 228616 : add r0,sp,#0x1c 
+-> Executing 228620 : stm sp,{r5,r6} 
+-> Executing 228624 : str r4,[sp,#8] 
+-> Executing 228628 : str ip,[sp,#0xc] 
+-> Executing 228632 : str r7,[sp,#0x10] 
+-> Executing 228636 : bl #0x3ed90 
+	-> Direct Jump to 257424 if null 
+	-> Start Jumping from 228636 --> 257424
+-> Executing 257424 : str lr,[sp,#-4]! 
+-> Executing 257428 : sub sp,sp,#8 
+-> Executing 257432 : add r3,sp,#0x10 
+-> Executing 257436 : mov r2,r3 
+-> Executing 257440 : ldr r1,[sp,#0xc] 
+-> Executing 257444 : str r3,[sp,#4] 
+-> Executing 257448 : bl #0x418a0 
+	-> Direct Jump to 268448 if null 
+	-> Start Jumping from 257448 --> 268448
+-> Executing 268448 : push {r4,r5,r6,r7,r8,lr} 
+-> Executing 268452 : mov r8,r0 
+-> Executing 268456 : sub sp,sp,#0xb0 
+-> Executing 268460 : mov r0,#0x64 
+-> Executing 268464 : mov r6,r1 
+-> Executing 268468 : mov r7,r2 
+-> Executing 268472 : bl #0x4d520 
+	-> Direct Jump to 316704 if null 
+	-> Start Jumping from 268472 --> 316704
+-> Executing 316704 : ldr r3,[pc,#0x33c] 
+-> Executing 316708 : push {r4,r5,r6,r7,r8,sb,sl,lr} 
+-> Executing 316712 : ldr r4,[r3] 
+-> Executing 316716 : mov r1,lr 
+-> Executing 316720 : cmp r4,#0 
+-> Executing 316724 : mov r6,r0 
+-> Executing 316728 : b #0x4d54c 
+	-> Direct Jump to 316748 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 316728 --> 316732
+-> Executing 316732 : blx r4 
+-> Executing 316736 : mov r5,r0 
+-> Executing 316740 : mov r0,r5 
+-> Executing 316744 : pop {r4,r5,r6,r7,r8,sb,sl,pc} 
+-> Executing 316748 : ldr r3,[pc,#0x314] 
+-> Executing 316752 : bl #0x37c84 
+	-> Direct Jump to 228484 if null 
+	-> Start Jumping from 316752 --> 228484
+-> Executing 228484 : b 228484-2 
+	-> Direct Jump to 228484-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228484 --> 228488
+-> Executing 228488 : mvn r0,#0xf000 
+-> Executing 228492 : sub pc,r0,#0x1f 
+-> Executing 228496 : mov r0,r0 
+-> Executing 228500 : mov r0,r0 
+-> Executing 228504 : mov r7,r0 
+-> Executing 228508 : ldr r0,[pc,#0xc0] 
+-> Executing 228512 : sub sp,sp,#0x20 
+-> Executing 228516 : cmp r0,#0 
+-> Executing 228520 : mov r5,r1 
+-> Executing 228524 : mov r6,r2 
+-> Executing 228528 : mov r4,r3 
+-> Executing 228532 : b #0x37cc4 
+	-> Direct Jump to 228548 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228532 --> 228548
+	-> Loop limitation exceeded, break.
+-> Executing 228536 : mov r0,#1 
+-> Executing 228540 : mov r1,#0 
+-> Executing 228544 : b #0x37cc4 
+	-> Direct Jump to 228548 if null 
+	-> Start Jumping from 228544 --> 228548
+-> Executing 228548 : ldr r1,[pc,#0x9c] 
+-> Executing 228552 : mov r2,#5 
+-> Executing 228556 : ldr r0,[pc,#0x98] 
+-> Executing 228560 : bl #0x37e80 
+	-> Direct Jump to 228992 if null 
+	-> Start Jumping from 228560 --> 228992
+	-> Loop limitation exceeded, break.
+-> Executing 228564 : ldr r3,[pc,#0x94] 
+-> Executing 228568 : ldr ip,[pc,#0x94] 
+-> Executing 228572 : ldr r2,[r3] 
+-> Executing 228576 : ldr lr,[pc,#0x90] 
+-> Executing 228580 : ldrb r3,[r2] 
+-> Executing 228584 : mov r1,r0 
+-> Executing 228588 : cmp r3,#0 
+-> Executing 228592 : b 228592-2 
+	-> Direct Jump to 228592-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228592 --> 228592-2
+-> Executing 228592-2 : mov r3,ip 
+-> Executing 228592+2 : b 0x37cf4 
+	-> Direct Jump to 228596 if null 
+	-> Start Jumping from 228592+2 --> 228596
+-> Executing 228596 : b 228596-2 
+	-> Direct Jump to 228596-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228596 --> 228600
+-> Executing 228600 : cmp r4,#0 
+-> Executing 228604 : b 228604-2 
+	-> Direct Jump to 228604-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228604 --> 228604-2
+-> Executing 228604-2 : mov r4,ip 
+-> Executing 228604+2 : b 0x37d00 
+	-> Direct Jump to 228608 if null 
+	-> Start Jumping from 228604+2 --> 228608
+-> Executing 228608 : b 228608-2 
+	-> Direct Jump to 228608-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228608 --> 228612
+-> Executing 228612 : b 228612-2 
+	-> Direct Jump to 228612-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228612 --> 228612-2
+-> Executing 228612-2 : mov ip,r4 
+-> Executing 228612+2 : b 0x37d08 
+	-> Direct Jump to 228616 if null 
+	-> Start Jumping from 228612+2 --> 228616
+-> Executing 228616 : add r0,sp,#0x1c 
+-> Executing 228620 : stm sp,{r5,r6} 
+-> Executing 228624 : str r4,[sp,#8] 
+-> Executing 228628 : str ip,[sp,#0xc] 
+-> Executing 228632 : str r7,[sp,#0x10] 
+-> Executing 228636 : bl #0x3ed90 
+	-> Direct Jump to 257424 if null 
+	-> Start Jumping from 228636 --> 257424
+-> Executing 257424 : str lr,[sp,#-4]! 
+-> Executing 257428 : sub sp,sp,#8 
+-> Executing 257432 : add r3,sp,#0x10 
+-> Executing 257436 : mov r2,r3 
+-> Executing 257440 : ldr r1,[sp,#0xc] 
+-> Executing 257444 : str r3,[sp,#4] 
+-> Executing 257448 : bl #0x418a0 
+	-> Direct Jump to 268448 if null 
+	-> Start Jumping from 257448 --> 268448
+-> Executing 268448 : push {r4,r5,r6,r7,r8,lr} 
+-> Executing 268452 : mov r8,r0 
+-> Executing 268456 : sub sp,sp,#0xb0 
+-> Executing 268460 : mov r0,#0x64 
+-> Executing 268464 : mov r6,r1 
+-> Executing 268468 : mov r7,r2 
+-> Executing 268472 : bl #0x4d520 
+	-> Direct Jump to 316704 if null 
+	-> Start Jumping from 268472 --> 316704
+-> Executing 316704 : ldr r3,[pc,#0x33c] 
+-> Executing 316708 : push {r4,r5,r6,r7,r8,sb,sl,lr} 
+-> Executing 316712 : ldr r4,[r3] 
+-> Executing 316716 : mov r1,lr 
+-> Executing 316720 : cmp r4,#0 
+-> Executing 316724 : mov r6,r0 
+-> Executing 316728 : b #0x4d54c 
+	-> Direct Jump to 316748 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 316728 --> 316732
+-> Executing 316732 : blx r4 
+-> Executing 316736 : mov r5,r0 
+-> Executing 316740 : mov r0,r5 
+-> Executing 316744 : pop {r4,r5,r6,r7,r8,sb,sl,pc} 
+-> Executing 316748 : ldr r3,[pc,#0x314] 
+-> Executing 316752 : bl #0x37c84 
+	-> Direct Jump to 228484 if null 
+	-> Start Jumping from 316752 --> 228484
+-> Executing 228484 : b 228484-2 
+	-> Direct Jump to 228484-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228484 --> 228488
+-> Executing 228488 : mvn r0,#0xf000 
+-> Executing 228492 : sub pc,r0,#0x1f 
+-> Executing 228496 : mov r0,r0 
+-> Executing 228500 : mov r0,r0 
+-> Executing 228504 : mov r7,r0 
+-> Executing 228508 : ldr r0,[pc,#0xc0] 
+-> Executing 228512 : sub sp,sp,#0x20 
+-> Executing 228516 : cmp r0,#0 
+-> Executing 228520 : mov r5,r1 
+-> Executing 228524 : mov r6,r2 
+-> Executing 228528 : mov r4,r3 
+-> Executing 228532 : b #0x37cc4 
+	-> Direct Jump to 228548 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228532 --> 228548
+	-> Loop limitation exceeded, break.
+-> Executing 228536 : mov r0,#1 
+-> Executing 228540 : mov r1,#0 
+-> Executing 228544 : b #0x37cc4 
+	-> Direct Jump to 228548 if null 
+	-> Start Jumping from 228544 --> 228548
+-> Executing 228548 : ldr r1,[pc,#0x9c] 
+-> Executing 228552 : mov r2,#5 
+-> Executing 228556 : ldr r0,[pc,#0x98] 
+-> Executing 228560 : bl #0x37e80 
+	-> Direct Jump to 228992 if null 
+	-> Start Jumping from 228560 --> 228992
+	-> Loop limitation exceeded, break.
+-> Executing 228564 : ldr r3,[pc,#0x94] 
+-> Executing 228568 : ldr ip,[pc,#0x94] 
+-> Executing 228572 : ldr r2,[r3] 
+-> Executing 228576 : ldr lr,[pc,#0x90] 
+-> Executing 228580 : ldrb r3,[r2] 
+-> Executing 228584 : mov r1,r0 
+-> Executing 228588 : cmp r3,#0 
+-> Executing 228592 : b 228592-2 
+	-> Direct Jump to 228592-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228592 --> 228592-2
+-> Executing 228592-2 : mov r3,ip 
+-> Executing 228592+2 : b 0x37cf4 
+	-> Direct Jump to 228596 if null 
+	-> Start Jumping from 228592+2 --> 228596
+-> Executing 228596 : b 228596-2 
+	-> Direct Jump to 228596-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228596 --> 228600
+-> Executing 228600 : cmp r4,#0 
+-> Executing 228604 : b 228604-2 
+	-> Direct Jump to 228604-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228604 --> 228604-2
+-> Executing 228604-2 : mov r4,ip 
+-> Executing 228604+2 : b 0x37d00 
+	-> Direct Jump to 228608 if null 
+	-> Start Jumping from 228604+2 --> 228608
+-> Executing 228608 : b 228608-2 
+	-> Direct Jump to 228608-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228608 --> 228612
+-> Executing 228612 : b 228612-2 
+	-> Direct Jump to 228612-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228612 --> 228612-2
+-> Executing 228612-2 : mov ip,r4 
+-> Executing 228612+2 : b 0x37d08 
+	-> Direct Jump to 228616 if null 
+	-> Start Jumping from 228612+2 --> 228616
+-> Executing 228616 : add r0,sp,#0x1c 
+-> Executing 228620 : stm sp,{r5,r6} 
+-> Executing 228624 : str r4,[sp,#8] 
+-> Executing 228628 : str ip,[sp,#0xc] 
+-> Executing 228632 : str r7,[sp,#0x10] 
+-> Executing 228636 : bl #0x3ed90 
+	-> Direct Jump to 257424 if null 
+	-> Start Jumping from 228636 --> 257424
+-> Executing 257424 : str lr,[sp,#-4]! 
+-> Executing 257428 : sub sp,sp,#8 
+-> Executing 257432 : add r3,sp,#0x10 
+-> Executing 257436 : mov r2,r3 
+-> Executing 257440 : ldr r1,[sp,#0xc] 
+-> Executing 257444 : str r3,[sp,#4] 
+-> Executing 257448 : bl #0x418a0 
+	-> Direct Jump to 268448 if null 
+	-> Start Jumping from 257448 --> 268448
+-> Executing 268448 : push {r4,r5,r6,r7,r8,lr} 
+-> Executing 268452 : mov r8,r0 
+-> Executing 268456 : sub sp,sp,#0xb0 
+-> Executing 268460 : mov r0,#0x64 
+-> Executing 268464 : mov r6,r1 
+-> Executing 268468 : mov r7,r2 
+-> Executing 268472 : bl #0x4d520 
+	-> Direct Jump to 316704 if null 
+	-> Start Jumping from 268472 --> 316704
+-> Executing 316704 : ldr r3,[pc,#0x33c] 
+-> Executing 316708 : push {r4,r5,r6,r7,r8,sb,sl,lr} 
+-> Executing 316712 : ldr r4,[r3] 
+-> Executing 316716 : mov r1,lr 
+-> Executing 316720 : cmp r4,#0 
+-> Executing 316724 : mov r6,r0 
+-> Executing 316728 : b #0x4d54c 
+	-> Direct Jump to 316748 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 316728 --> 316732
+-> Executing 316732 : blx r4 
+-> Executing 316736 : mov r5,r0 
+-> Executing 316740 : mov r0,r5 
+-> Executing 316744 : pop {r4,r5,r6,r7,r8,sb,sl,pc} 
+-> Executing 316748 : ldr r3,[pc,#0x314] 
+-> Executing 316752 : bl #0x37c84 
+	-> Direct Jump to 228484 if null 
+	-> Start Jumping from 316752 --> 228484
+-> Executing 228484 : b 228484-2 
+	-> Direct Jump to 228484-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228484 --> 228488
+-> Executing 228488 : mvn r0,#0xf000 
+-> Executing 228492 : sub pc,r0,#0x1f 
+-> Executing 228496 : mov r0,r0 
+-> Executing 228500 : mov r0,r0 
+-> Executing 228504 : mov r7,r0 
+-> Executing 228508 : ldr r0,[pc,#0xc0] 
+-> Executing 228512 : sub sp,sp,#0x20 
+-> Executing 228516 : cmp r0,#0 
+-> Executing 228520 : mov r5,r1 
+-> Executing 228524 : mov r6,r2 
+-> Executing 228528 : mov r4,r3 
+-> Executing 228532 : b #0x37cc4 
+	-> Direct Jump to 228548 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228532 --> 228548
+	-> Loop limitation exceeded, break.
+-> Executing 228536 : mov r0,#1 
+-> Executing 228540 : mov r1,#0 
+-> Executing 228544 : b #0x37cc4 
+	-> Direct Jump to 228548 if null 
+	-> Start Jumping from 228544 --> 228548
+	-> Loop limitation exceeded, break.
+-> Executing 228548 : ldr r1,[pc,#0x9c] 
+-> Executing 228552 : mov r2,#5 
+-> Executing 228556 : ldr r0,[pc,#0x98] 
+-> Executing 228560 : bl #0x37e80 
+	-> Direct Jump to 228992 if null 
+	-> Start Jumping from 228560 --> 228992
+	-> Loop limitation exceeded, break.
+-> Executing 228564 : ldr r3,[pc,#0x94] 
+-> Executing 228568 : ldr ip,[pc,#0x94] 
+-> Executing 228572 : ldr r2,[r3] 
+-> Executing 228576 : ldr lr,[pc,#0x90] 
+-> Executing 228580 : ldrb r3,[r2] 
+-> Executing 228584 : mov r1,r0 
+-> Executing 228588 : cmp r3,#0 
+-> Executing 228592 : b 228592-2 
+	-> Direct Jump to 228592-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228592 --> 228592-2
+	-> Loop limitation exceeded, break.
+-> Executing 228596 : b 228596-2 
+	-> Direct Jump to 228596-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228596 --> 228600
+	-> Loop limitation exceeded, break.
+-> Executing 228600 : cmp r4,#0 
+-> Executing 228604 : b 228604-2 
+	-> Direct Jump to 228604-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228604 --> 228604-2
+	-> Loop limitation exceeded, break.
+-> Executing 228608 : b 228608-2 
+	-> Direct Jump to 228608-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Start Jumping from 228608 --> 228612
+	-> Loop limitation exceeded, break.
+-> Executing 228612 : b 228612-2 
+	-> Direct Jump to 228612-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Start Jumping from 228612 --> 228612-2
+	-> Loop limitation exceeded, break.
+-> Executing 228616 : add r0,sp,#0x1c 
+-> Executing 228620 : stm sp,{r5,r6} 
+-> Executing 228624 : str r4,[sp,#8] 
+-> Executing 228628 : str ip,[sp,#0xc] 
+-> Executing 228632 : str r7,[sp,#0x10] 
+-> Executing 228636 : bl #0x3ed90 
+	-> Direct Jump to 257424 if null 
+	-> Start Jumping from 228636 --> 257424
+	-> Loop limitation exceeded, break.
+-> Executing 228640 : cmp r0,#0 
+-> Executing 228644 : b #0x37d50 
+	-> Direct Jump to 228688 if LT 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+-----> Recursively roll back to the parent branch: 210472
+	-> Start Jumping from 228644 --> 210472
+-> Executing 210472 : mov r0,r4 
+-> Executing 210476 : mvn r3,#0xf000 
+-> Executing 210480 : mov lr,pc 
+-> Executing 210484 : sub pc,r3,#0x3f 
+-> Executing 210488 : b #0x3361c 
+	-> Direct Jump to 210460 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+-----> Recursively roll back to the parent branch: 210372
+	-> Start Jumping from 210488 --> 210372
+-> Executing 210372 : b #0x33534 
+	-> Direct Jump to 210228 if null 
+	-> Start Jumping from 210372 --> 210228
+-> Executing 210228 : mov r1,#2 
+-> Executing 210232 : mov r2,r5 
+-> Executing 210236 : mov r4,#0 
+-> Executing 210240 : ldr r3,[r2] 
+-> Executing 210244 : cmp r3,r4 
+-> Executing 210248 : b #0x33564 
+	-> Direct Jump to 210276 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub  ... SAT
+	-> Start Jumping from 210248 --> 210252
+	-> Loop limitation exceeded, break.
+-> Executing 210252 : mov r0,r4 
+-> Executing 210256 : mvn r3,#0xf000 
+-> Executing 210260 : mov lr,pc 
+-> Executing 210264 : sub pc,r3,#0x3f 
+-> Executing 210268 : b #0x33540 
+	-> Direct Jump to 210240 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (b ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (b ... UNSAT
+	-> Start Jumping from 210268 --> 210240
+	-> Loop limitation exceeded, break.
+-> Executing 210272 : mov r3,r4 
+-> Executing 210276 : cmp r3,r4 
+-> Executing 210280 : b #0x335c8 
+	-> Direct Jump to 210376 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000)  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000)  ... UNSAT
+	-> Start Jumping from 210280 --> 210376
+-> Executing 210376 : pop {r4,r5,r6,r7,pc} 
+-> Executing 210380 : push {r4,r5,r7,lr} 
+-> Executing 210384 : mov r5,r0 
+-> Executing 210388 : b #0x33610 
+	-> Direct Jump to 210448 if null 
+	-> Start Jumping from 210388 --> 210448
+-> Executing 210448 : mov r1,#2 
+-> Executing 210452 : mov r2,r5 
+-> Executing 210456 : mov r4,#1 
+-> Executing 210460 : ldr r3,[r2] 
+-> Executing 210464 : cmp r3,r4 
+-> Executing 210468 : b #0x33640 
+	-> Direct Jump to 210496 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000 ... UNSAT
+	-> Start Jumping from 210468 --> 210496
+-> Executing 210496 : cmp r3,#0 
+-> Executing 210500 : b #0x335d8 
+	-> Direct Jump to 210392 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x ... SAT
+	-> Start Jumping from 210500 --> 210504
+-> Executing 210504 : bl #0x37c98 
+	-> Direct Jump to 228504 if null 
+	-> Start Jumping from 210504 --> 228504
+-> Executing 228504 : mov r7,r0 
+-> Executing 228508 : ldr r0,[pc,#0xc0] 
+-> Executing 228512 : sub sp,sp,#0x20 
+-> Executing 228516 : cmp r0,#0 
+-> Executing 228520 : mov r5,r1 
+-> Executing 228524 : mov r6,r2 
+-> Executing 228528 : mov r4,r3 
+-> Executing 228532 : b #0x37cc4 
+	-> Direct Jump to 228548 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x0000000 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x0000000 ... UNSAT
+	-> Start Jumping from 228532 --> 228548
+	-> Loop limitation exceeded, break.
+-> Executing 228536 : mov r0,#1 
+-> Executing 228540 : mov r1,#0 
+-> Executing 228544 : b #0x37cc4 
+	-> Direct Jump to 228548 if null 
+	-> Start Jumping from 228544 --> 228548
+	-> Loop limitation exceeded, break.
+-> Executing 228548 : ldr r1,[pc,#0x9c] 
+-> Executing 228552 : mov r2,#5 
+-> Executing 228556 : ldr r0,[pc,#0x98] 
+-> Executing 228560 : bl #0x37e80 
+	-> Direct Jump to 228992 if null 
+	-> Start Jumping from 228560 --> 228992
+	-> Loop limitation exceeded, break.
+-> Executing 228564 : ldr r3,[pc,#0x94] 
+-> Executing 228568 : ldr ip,[pc,#0x94] 
+-> Executing 228572 : ldr r2,[r3] 
+-> Executing 228576 : ldr lr,[pc,#0x90] 
+-> Executing 228580 : ldrb r3,[r2] 
+-> Executing 228584 : mov r1,r0 
+-> Executing 228588 : cmp r3,#0 
+-> Executing 228592 : b 228592-2 
+	-> Direct Jump to 228592-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00 ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00 ... UNSAT
+	-> Start Jumping from 228592 --> 228592-2
+	-> Loop limitation exceeded, break.
+-> Executing 228596 : b 228596-2 
+	-> Direct Jump to 228596-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x00000000 ... SAT
+	-> Start Jumping from 228596 --> 228600
+	-> Loop limitation exceeded, break.
+-> Executing 228600 : cmp r4,#0 
+-> Executing 228604 : b 228604-2 
+	-> Direct Jump to 228604-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x000 ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub #x000 ... SAT
+	-> Start Jumping from 228604 --> 228608
+-> Executing 228608 : b 228608-2 
+	-> Direct Jump to 228608-2 if NE 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub  ... SAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (bvsub  ... UNSAT
+	-> Start Jumping from 228608 --> 228608-2
+-> Executing 228608-2 : mov ip,lr 
+-> Executing 228608+2 : b 0x37d04 
+	-> Direct Jump to 228612 if null 
+	-> Start Jumping from 228608+2 --> 228612
+-> Executing 228612 : b 228612-2 
+	-> Direct Jump to 228612-2 if EQ 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (b ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (= (b ... SAT
+	-> Start Jumping from 228612 --> 228616
+-> Executing 228616 : add r0,sp,#0x1c 
+-> Executing 228620 : stm sp,{r5,r6} 
+-> Executing 228624 : str r4,[sp,#8] 
+-> Executing 228628 : str ip,[sp,#0xc] 
+-> Executing 228632 : str r7,[sp,#0x10] 
+-> Executing 228636 : bl #0x3ed90 
+	-> Direct Jump to 257424 if null 
+	-> Start Jumping from 228636 --> 257424
+	-> Loop limitation exceeded, break.
+-> Executing 228640 : cmp r0,#0 
+-> Executing 228644 : b #0x37d50 
+	-> Direct Jump to 228688 if LT 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and (and  ... UNSAT
+-----> Recursively roll back to the parent branch: 249952
+	-> Start Jumping from 228644 --> 249952
+-> Executing 249952 : mov r0,r4 
+-> Executing 249956 : mvn r3,#0xf000 
+-> Executing 249960 : mov lr,pc 
+-> Executing 249964 : sub pc,r3,#0x3f 
+-> Executing 249968 : b #0x3d054 
+	-> Direct Jump to 249940 if LO 
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 ... UNSAT
+	-> Checking path constrains by Z3 (and (and (and (and (and (and (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub #x00000000 ... UNSAT
+-----> Recursively roll back to the parent branch: 92
+	-> Start Jumping from 249968 --> 92
+-> Executing 92 : b #0x60 
+	-> Direct Jump to 96 if null 
+	-> Start Jumping from 92 --> 96
+-> Executing 96 : b 96-2 
+	-> Direct Jump to 96-2 if EQ 
+	-> Checking path constrains by Z3 (and (= (bvsub #x00000000 #x00000000) #x00000000) (= (bvsub (bvadd (bvsub (bvsub (bvsub (bvsub (bvad ... UNSAT
+	-> Checking path constrains by Z3 (and (= (bvsub #x00000000 #x00000000) #x00000000) (not (= (bvsub (bvadd (bvsub (bvsub (bvsub (bvsub  ... UNSAT
+-> Time elapsed: 14274ms

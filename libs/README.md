@@ -1,0 +1,2 @@
+### Compatible Libraries 
+**Corana** takes advantages of Capstone (for single-step disassembler) and Z3 (as the back-end SMT solver). However, the latest releases of these libraries may not perfectly compatible with our project. In such cases, please use the cloned Capstone and Z3 here instead then follow their instructions.
