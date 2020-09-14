@@ -25,6 +25,22 @@ public class Z3Solver {
         return smtDeclarations.value();
     }
 
+    public static String solveBitVecArithmetic(String artm) {
+        String z3Clause = "(simplify " + artm + ")";
+        FileUtils.write(Configs.tempZ3Script, z3Clause);
+        String result = SysUtils.execCmd("z3 -smt2 " + Configs.tempZ3Script);
+        FileUtils.delete(Configs.tempZ3Script);
+        if (result != null) {
+            if (result.contains("ERR0R")) {
+                return "ERROR";
+            }
+            else {
+                return result.split("\n")[0];
+            }
+        }
+        return "ERROR";
+    }
+
     /**
      * Declare needed variables and which value we need to obtain if SAT
      *

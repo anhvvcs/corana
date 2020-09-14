@@ -3,6 +3,7 @@ package utils;
 import executor.Configs;
 import pojos.BitVec;
 
+import java.math.BigInteger;
 import java.util.BitSet;
 
 public class Arithmetic {
@@ -67,13 +68,16 @@ public class Arithmetic {
         return sb.toString();
     }
 
+    // Sym in bitVec is hex string
     public static BitVec fromString(final String s) {
-        BitSet concreteValue = BitSet.valueOf(new long[]{Long.parseLong(s, 2)});
+        String bin = hexToBinary(s);
+        BitSet concreteValue = BitSet.valueOf(new long[]{Long.parseLong(bin, 2)});
         return new BitVec(s, concreteValue);
     }
 
     public static BitVec fromHexStr(final String s) {
-        return fromString(hexToBinary(s));
+        //return fromString(hexToBinary(s));
+        return fromString(s);
     }
 
     public static BitSet floatToBitSet(float v) {

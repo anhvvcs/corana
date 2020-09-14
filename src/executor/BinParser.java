@@ -4,6 +4,7 @@ import capstone.Capstone;
 import elfutils.Elf;
 import elfutils.SectionHeader;
 import pojos.AsmNode;
+import pojos.BitVec;
 import utils.Arithmetic;
 import utils.Logs;
 import utils.Mapping;
@@ -13,10 +14,12 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class BinParser {
-
+    private static int _init = 0;
+    private static int _start = 0;
     public static ArrayList<AsmNode> parse(String inp) {
         Logs.infoLn(" + Analyzing " + inp + " ...");
         try {
@@ -37,6 +40,9 @@ public class BinParser {
                 buff.get(arr);
                 totalByteArray = SysUtils.concatByteArray(totalByteArray, arr);
             }
+            // Set init and start address
+            getFirstAddress(inp);
+
             return parse(totalByteArray);
         } catch (Exception ex) {
             Logs.infoLn("-> Cannot read header section. File might be corrupted.");
@@ -46,7 +52,7 @@ public class BinParser {
 
     public static ArrayList<AsmNode> parse(byte[] bytes) {
         ArrayList<AsmNode> asmNodes = new ArrayList<>();
-        int label = 0;
+        int label = _init;
         int instrSize = 4;
         for (int i = 0; (i + 3) < bytes.length; i += instrSize) {
             byte[] bs = {bytes[i], bytes[i + 1], bytes[i + 2], bytes[i + 3]};
@@ -104,9 +110,28 @@ public class BinParser {
         return expandedNodes;
     }
 
+    // Not checking output format
+    public static void getFirstAddress(String binpath) {
+        String objCmd = "arm-none-eabi-objdump -t " + binpath;
+        String exRes = SysUtils.execCmd(objCmd);
+        String[] resultLines = exRes.split("\n");
+        String start = "000000";
+        String init = "000000";
+        for (String line : resultLines) {
+            if (line.contains(" _start")) {
+                start = line.split("\\s+")[0];
+            }
+            if (line.contains(" .init")) {
+                init = line.split("\\s+")[0];
+            }
+        }
+        _init = Integer.valueOf(init);
+        _start = Integer.valueOf(start);
+    }
+
     public static ArrayList<AsmNode> parseObjDump(String inp) {
         Logs.infoLn(" + Parsing " + inp + " ...");
-        String disassembleCmd = "arm-elf-objdump -D -b binary -marm ";
+        String disassembleCmd = "arm-none-eabi-objdump -D -b binary -marm ";
         String execResult = SysUtils.execCmd(disassembleCmd + inp);
         if (execResult == null) {
             Logs.infoLn("-> Parsing binary file error !");

@@ -1,5 +1,6 @@
 package emulator.base;
 
+import emulator.semantics.Memory;
 import executor.Configs;
 import emulator.semantics.EnvData;
 import emulator.semantics.EnvModel;
@@ -427,7 +428,16 @@ public class Emulator {
 
     public void ldr(Character xt, BitVec label) {
         arithmeticMode = ArithmeticMode.BINARY;
-        write(xt, env.memory.get(label));
+        //Check if the label is an address or arihmetic
+        //And get result of bitvector arithmetic
+        String result = (label.getSym().matches("[01][01]+")) ? label.getSym() : Z3Solver.solveBitVecArithmetic(label.getSym());
+
+        result = result.replace("x", "")
+                .replace("#", "")
+                .replaceFirst("^0+(?!$)", "");
+
+        //String value = Memory.get(result);
+        write(xt, (result.equals("ERROR") ?  env.memory.get(label) : Memory.get(result)));
     }
 
     public void ldrb(Character xt, BitVec label) {
@@ -883,7 +893,9 @@ public class Emulator {
     }
 
     protected void load(Character d, Character label) {
-        write(d, env.memory.get(val(label)));
+        BitVec res = val(label);
+        write(d, Memory.get(val(label)));
+      //  System.out.println("");
     }
 
     public void store(BitVec address, BitVec value) {
