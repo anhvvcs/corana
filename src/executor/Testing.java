@@ -5,11 +5,14 @@
  */
 package executor;
 
+import capstone.Capstone;
 import emulator.semantics.Memory;
 import enums.Variation;
+import pojos.AsmNode;
 import utils.Arithmetic;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class Testing {
 
@@ -29,11 +32,9 @@ public class Testing {
             //Logs.initLog("./results/" + name + ".log");
             //Corana.inpFile = f;
             //Corana.outFile = "./results/" + name;
-            ///BinParser.print(f);
             Memory.loadMemory(f, name);
             Executor.execute(Variation.M0, f);
             //Logs.endLog();
-
             //ControlFlowGraph cfg = Executor.getCFG();
             //cfg.print();
         }
@@ -66,7 +67,8 @@ public class Testing {
         //c10c502e115e615609caa3ee4011841d // corona.arm6 - gafgyt variant
         //8617fef86bed2663e0fa55d5247af9a1
 
-        File dir = new File("./samples/ae/372a36dd19d9772efa60bf469c0a7dba");
+        File dir = new File("./samples/ae/35a82cc5587b885699a703455542fb5f");
         exeFiles(dir);
+
     }
 }

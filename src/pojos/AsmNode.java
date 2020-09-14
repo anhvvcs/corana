@@ -35,7 +35,7 @@ public class AsmNode {
     }
 
     public String getLabel() {
-        return label;
+        return this.label;
     }
 
     public void setLabel(String label) {

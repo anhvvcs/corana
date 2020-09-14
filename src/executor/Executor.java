@@ -14,10 +14,7 @@ import pojos.BitVec;
 import utils.*;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Stack;
+import java.util.*;
 
 public class Executor {
 
@@ -41,7 +38,7 @@ public class Executor {
             Logs.infoLn("-> Input file is not an ARM variation.");
         } else {
             long startCapstone = System.currentTimeMillis();
-            asmNodes = BinParser.parse(inpFile);
+            asmNodes = BinParser.parseBySection(inpFile);
 
             Logs.infoLn("-> Capstone disassembler elapsed: " + (System.currentTimeMillis() - startCapstone) + "ms");
             if (asmNodes != null) {
@@ -51,8 +48,11 @@ public class Executor {
                 }
                 Exporter.exportOriginAsm(Corana.inpFile + ".capstone-asm");
                 asmNodes = BinParser.expand(asmNodes);
+
                 for (int i = 0; i < asmNodes.size(); i++) {
-                    nodeLabelToIndex.put(asmNodes.get(i).getLabel(), i);
+                    if (!nodeLabelToIndex.containsKey(asmNodes.get(i).getLabel())) {
+                        nodeLabelToIndex.put(asmNodes.get(i).getLabel(), i);
+                    }
                 }
 
                 EnvModel genesis = new EnvModel("-", "");
@@ -65,17 +65,17 @@ public class Executor {
 
                 // TODO: Start from asmNodes.get(_start), not the first node
                 if (variation == Variation.M0) {
-                    execFrom(new M0(env), genesis.label, asmNodes.get(0).getLabel());
+                    execFrom(new M0(env), genesis.label, String.valueOf(BinParser.get_start()));
                 } else if (variation == Variation.M0_PLUS) {
-                    execFrom(new M0_Plus(env), genesis.label, asmNodes.get(0).getLabel());
+                    execFrom(new M0_Plus(env), genesis.label, String.valueOf(BinParser.get_start()));
                 } else if (variation == Variation.M3) {
-                    execFrom(new M3(env), genesis.label, asmNodes.get(0).getLabel());
+                    execFrom(new M3(env), genesis.label, String.valueOf(BinParser.get_start()));
                 } else if (variation == Variation.M4) {
-                    execFrom(new M4(env), genesis.label, asmNodes.get(0).getLabel());
+                    execFrom(new M4(env), genesis.label, String.valueOf(BinParser.get_start()));
                 } else if (variation == Variation.M7) {
-                    execFrom(new M7(env), genesis.label, asmNodes.get(0).getLabel());
+                    execFrom(new M7(env), genesis.label, String.valueOf(BinParser.get_start()));
                 } else if (variation == Variation.M33) {
-                    execFrom(new M33(env), genesis.label, asmNodes.get(0).getLabel());
+                    execFrom(new M33(env), genesis.label, String.valueOf(BinParser.get_start()));
                 } else {
                     Logs.infoLn("-> Unsupported ARM Variation.");
                     return;
@@ -153,7 +153,7 @@ public class Executor {
     private static void singleExec(M0 emulator, String prevLabel, AsmNode n) {
         String nLabel = n.getLabel();
         if (nLabel == null) System.exit(0);
-        if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel) + 8));
+        if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel)));
         Exporter.addAsm(nLabel + " " + n.getOpcode() + n.getCondSuffix() + (n.isUpdateFlag() ? "s" : "") + " " + n.getParams());
         Exporter.exportDot(Corana.inpFile + ".dot");
 

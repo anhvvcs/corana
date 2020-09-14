@@ -4,13 +4,13 @@ import capstone.Capstone;
 import elfutils.Elf;
 import elfutils.SectionHeader;
 import pojos.AsmNode;
-import pojos.BitVec;
 import utils.Arithmetic;
 import utils.Logs;
 import utils.Mapping;
 import utils.SysUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,8 +18,63 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BinParser {
-    private static int _init = 0;
-    private static int _start = 0;
+    private static HashMap<String, String> symbolTable; // <hex address, symbol name>
+    public static long _init = 0;
+    public static long _start = 0;
+
+    public static long get_start() {
+        return _start;
+    }
+
+    public static ArrayList<AsmNode> parseBySection(String inp) {
+        Logs.infoLn(" + Analyzing " + inp + " ...");
+        try {
+            // Load symbol table init and start address
+            symbolTable = loadSymbolTable(inp);
+
+            ArrayList<AsmNode> totalNodes = new ArrayList<>();
+            Elf e = new Elf(new File(inp));
+            SectionHeader[] sections = e.sectionHeaders;
+            for (int i = 0; i < sections.length; i++) {
+                SectionHeader sh = sections[i];
+                totalNodes.addAll(parseSection(e, sh));
+            }
+            return totalNodes;
+        } catch (Exception ex) {
+            Logs.infoLn("-> Cannot read header section. File might be corrupted.");
+            return null;
+        }
+    }
+
+    private static HashMap<String, String> loadSymbolTable(String binpath) {
+        String objCmd = "arm-none-eabi-objdump -t " + binpath;
+        String exRes = SysUtils.execCmd(objCmd);
+        String[] resultLines = exRes.split("\n");
+        HashMap<String, String> symTable = new HashMap<>();
+        for (String line : resultLines) {
+            String[] contents = line.split("\\s+");
+            if (contents.length > 5 && !symTable.containsKey(contents[0])) {
+                //symTable.put(contents[0], contents[5].trim());
+                // Find the address of init and _start
+                if (contents[5].trim().equals(".init")) {
+                    _init = Arithmetic.hexToInt(contents[0]);
+                } else if (contents[5].trim().equals("_start")) {
+                    _start = Arithmetic.hexToInt(contents[0]);
+                }
+            }
+        }
+        return symTable;
+    }
+
+    private static ArrayList<AsmNode> parseSection(Elf e, SectionHeader sh) throws IOException {
+        byte[] totalByteArray = new byte[0];
+        ByteBuffer buff = e.getSection(sh);
+        byte[] arr = new byte[buff.remaining()];
+        buff.get(arr);
+        totalByteArray = SysUtils.concatByteArray(totalByteArray, arr);
+        return parse(totalByteArray, sh.virtualAddress);
+    }
+
     public static ArrayList<AsmNode> parse(String inp) {
         Logs.infoLn(" + Analyzing " + inp + " ...");
         try {
@@ -41,23 +96,29 @@ public class BinParser {
                 totalByteArray = SysUtils.concatByteArray(totalByteArray, arr);
             }
             // Set init and start address
-            getFirstAddress(inp);
+            findFirstAddress(inp);
 
-            return parse(totalByteArray);
+            return parse(totalByteArray, 0);
         } catch (Exception ex) {
             Logs.infoLn("-> Cannot read header section. File might be corrupted.");
             return null;
         }
     }
 
-    public static ArrayList<AsmNode> parse(byte[] bytes) {
+    public static ArrayList<AsmNode> parse(byte[] bytes, long virtualAddress) {
         ArrayList<AsmNode> asmNodes = new ArrayList<>();
-        int label = _init;
+        long label = virtualAddress;
         int instrSize = 4;
         for (int i = 0; (i + 3) < bytes.length; i += instrSize) {
             byte[] bs = {bytes[i], bytes[i + 1], bytes[i + 2], bytes[i + 3]};
             Capstone cs = new Capstone(Capstone.CS_ARCH_ARM, Capstone.CS_MODE_ARM);
             Capstone.CsInsn[] insn = cs.disasm(bs, label);
+            // If the instruction is unidentified
+            if (insn.length == 0) {
+                label += instrSize;
+            }
+
+            // Else encode capstone inst as an asmNode
             for (Capstone.CsInsn csInsn : insn) {
                 String opcode = csInsn.mnemonic;
                 String condSuffix = "";
@@ -111,22 +172,22 @@ public class BinParser {
     }
 
     // Not checking output format
-    public static void getFirstAddress(String binpath) {
+    public static void findFirstAddress(String binpath) {
         String objCmd = "arm-none-eabi-objdump -t " + binpath;
         String exRes = SysUtils.execCmd(objCmd);
         String[] resultLines = exRes.split("\n");
-        String start = "000000";
-        String init = "000000";
+        String hexstart = "000000";
+        String hexinit = "000000";
         for (String line : resultLines) {
             if (line.contains(" _start")) {
-                start = line.split("\\s+")[0];
+                hexstart = line.split("\\s+")[0];
             }
             if (line.contains(" .init")) {
-                init = line.split("\\s+")[0];
+                hexinit = line.split("\\s+")[0];
             }
         }
-        _init = Integer.valueOf(init);
-        _start = Integer.valueOf(start);
+        _init = Arithmetic.hexToInt(hexinit);
+        _start = Arithmetic.hexToInt(hexstart);
     }
 
     public static ArrayList<AsmNode> parseObjDump(String inp) {

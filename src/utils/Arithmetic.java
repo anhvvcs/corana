@@ -72,7 +72,7 @@ public class Arithmetic {
     public static BitVec fromString(final String s) {
         String bin = hexToBinary(s);
         BitSet concreteValue = BitSet.valueOf(new long[]{Long.parseLong(bin, 2)});
-        return new BitVec(s, concreteValue);
+        return new BitVec("#x" + s, concreteValue);
     }
 
     public static BitVec fromHexStr(final String s) {
