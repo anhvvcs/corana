@@ -5,10 +5,14 @@ import com.mongodb.*;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.*;
 
-
-import com.mongodb.client.model.Facet;
+import com.mongodb.client.model.UpdateOptions;
+import com.mongodb.client.result.UpdateResult;
+import com.mongodb.operation.UpdateOperation;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import utils.SysUtils;
 
 import java.util.ArrayList;
 
@@ -35,9 +39,16 @@ public class DBDriver {
         return (result == null) ? "#x0" : result.getString("value");
     }
 
-    public static void addDocument(String address, String value) {
+    public static void addMemoryDocument(String address, String value) {
         Document doc = new Document("address", address).append("value", value);
         collection.insertOne(doc);
+    }
+
+    public static void updateMemoryDocument(String address, String value) {
+        Bson filter = eq("address", SysUtils.getAddressValue(address));
+        Bson updateOperation = set("value", SysUtils.getAddressValue(value));
+        UpdateOptions options = new UpdateOptions().upsert(true);
+        collection.updateOne(filter, updateOperation, options);
     }
 
     public static void main(String[] args) {

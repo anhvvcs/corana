@@ -46,4 +46,10 @@ public class SysUtils {
         System.arraycopy(a2, 0, joinedArray, a1.length, a2.length);
         return joinedArray;
     }
+
+    public static String getAddressValue(String hexStr) {
+        return hexStr.replace("x", "")
+                .replace("#", "")
+                .replaceFirst("^0+(?!$)", "");
+    }
 }

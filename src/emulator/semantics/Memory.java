@@ -1,7 +1,5 @@
 package emulator.semantics;
 
-import com.mongodb.DBCollection;
-import executor.BinParser;
 import executor.DBDriver;
 import pojos.BitVec;
 import utils.Arithmetic;
@@ -9,7 +7,6 @@ import utils.Logs;
 import utils.MyStr;
 import utils.SysUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Memory {
@@ -29,14 +26,15 @@ public class Memory {
         memory.put(address.trim(), value);
     }
 
-    public static void loadMemory(String filePath, String name) {
-
-        if (!DBDriver.startConnection("col_" + name.substring(0, 6))) {
+    public static void loadMemory(String filePath) {
+        String[] nparts = filePath.split("[\\/]");
+        String dbname = nparts[nparts.length - 1];
+        if (!DBDriver.startConnection("col_" + dbname.substring(0, 6))) {
             return;
         }
 
         Logs.infoLn(" + Parsing " + filePath + " ...");
-        String disassembleCmd = "arm-none-eabi-objdump -D -b binary -marm ";
+        String disassembleCmd = "arm-linux-gnueabi-objdump -D -S ";
         String execResult = SysUtils.execCmd(disassembleCmd + filePath);
         if (execResult == null) {
             Logs.infoLn("-> Parsing binary file error !");
@@ -56,7 +54,7 @@ public class Memory {
                 String[] contents = parts[1].split("\\s+");
                 if (contents.length > 2) {
                     if (contents[1].matches("-?[0-9a-fA-F]+")) {
-                        DBDriver.addDocument(label, contents[1]);
+                        DBDriver.addMemoryDocument(label, contents[1]);
                     }
                 }
             }
@@ -66,17 +64,23 @@ public class Memory {
 
     public static BitVec get(BitVec address) {
         //Address is in hex
-        String key = address.getSym().trim();
+        String key = SysUtils.getAddressValue(address.getSym().trim());
         String findRes = DBDriver.getValue(key); //hex value
         return findRes.matches("-?[0-9a-fA-F]+") ? Arithmetic.fromHexStr(findRes) : new BitVec(0);
         //return memory.containsKey(key) ? memory.get(key) : new BitVec(0);
     }
-
+    /*
+        Get the value at an address (address can contain #x)
+     */
     public static BitVec get(String address) {
-        String findRes = DBDriver.getValue(address); //hex value
+        String findRes = DBDriver.getValue(SysUtils.getAddressValue(address)); //hex value
       //  System.out.println(findRes);
         return findRes.matches("-?[0-9a-fA-F]+") ? Arithmetic.fromHexStr(findRes) : new BitVec(0);
         //return memory.containsKey(key) ? memory.get(key) : new BitVec(0);
+    }
+
+    public static void set(BitVec address, BitVec value) {
+        DBDriver.updateMemoryDocument(address.getSym(), value.getSym());
     }
 
     @Override

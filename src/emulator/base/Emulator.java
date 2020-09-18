@@ -9,10 +9,7 @@ import enums.*;
 import javafx.util.Pair;
 import pojos.BitBool;
 import pojos.BitVec;
-import utils.Arithmetic;
-import utils.Logs;
-import utils.Mapping;
-import utils.Z3Solver;
+import utils.*;
 
 import java.util.BitSet;
 import java.util.Objects;
@@ -179,7 +176,7 @@ public class Emulator {
         if (preCond != null && preCond.length() > 0) {
             postCond = String.format("(and %s (not %s))", preCond, getCondSuffixSMT(cond));
         } else {
-            postCond = getCondSuffixSMT(cond);
+            postCond = String.format("(not %s)", getCondSuffixSMT(cond));
         }
         String realEval = evalValue.length == 0 ? null : evalValue[0];
         String checkResult = Z3Solver.checkSAT(postCond, realEval);
@@ -388,11 +385,19 @@ public class Emulator {
     public void pop(char r) {
         BitVec popValue = env.stacks.pop();
         if (popValue != null) {
+            String sym = String.format("(bvadd %s #4)", env.register.getFormula('s'));
+            BitSet concreteValue = Arithmetic.intToBitSet(Arithmetic.bitSetToInt(env.register.get('s').getVal()) + 4);
+            write('s', new BitVec(sym, concreteValue));
             write(r, popValue);
         }
     }
 
     public void push(char r) {
+        String sym = String.format("(bvadd %s #-4)", env.register.getFormula('s'));
+        BitSet concreteValue = Arithmetic.intToBitSet(Arithmetic.bitSetToInt(env.register.get('s').getVal()) - 4);
+        write('s', new BitVec(sym, concreteValue));
+        BitVec storeAddress = Memory.get(sym);
+        Memory.set(storeAddress, env.register.get('2'));
         env.stacks.push(val(r));
     }
 
@@ -413,6 +418,8 @@ public class Emulator {
 
     public void str(BitVec xt, BitVec xn) {
         arithmeticMode = ArithmeticMode.BINARY;
+        xt.calculate();
+        xn.calculate();
         store(xn, xt);
     }
 
@@ -428,16 +435,11 @@ public class Emulator {
 
     public void ldr(Character xt, BitVec label) {
         arithmeticMode = ArithmeticMode.BINARY;
-        //Check if the label is an address or arihmetic
-        //And get result of bitvector arithmetic
-        String result = (label.getSym().matches("[01][01]+")) ? label.getSym() : Z3Solver.solveBitVecArithmetic(label.getSym());
-
-        result = result.replace("x", "")
-                .replace("#", "")
-                .replaceFirst("^0+(?!$)", "");
-
+        //Check if the label is an address or arihmetic then get result of the bitvector arithmetic
+        String result = (label.getSym().matches("[01][01]+") || label.getSym().contains("#x"))  ?
+                                                                                        label.getSym() : Z3Solver.solveBitVecArithmetic(label.getSym());
         //String value = Memory.get(result);
-        write(xt, (result.equals("ERROR") ?  env.memory.get(label) : Memory.get(result)));
+        write(xt, (result.equals("ERROR") ?  env.memory.get(label) : Memory.get(SysUtils.getAddressValue(result))));
     }
 
     public void ldrb(Character xt, BitVec label) {
@@ -900,6 +902,7 @@ public class Emulator {
 
     public void store(BitVec address, BitVec value) {
         env.memory.put(address, value);
+        Memory.set(address, value);
     }
 
     public void store(BitVec r, BitVec a, BitVec b) {

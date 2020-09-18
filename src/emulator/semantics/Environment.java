@@ -52,6 +52,7 @@ public class Environment {
             memory = new Memory(Configs.architecture);
             stacks = new Stacks(Configs.architecture);
         } else {
+            // Default value of registers and flags
             flags = new Flags(false, false, false, false, false, false);
             register = new Register(Configs.architecture, Arithmetic.intToBitSet(0), Arithmetic.intToBitSet(0),
                     Arithmetic.intToBitSet(0), Arithmetic.intToBitSet(0),

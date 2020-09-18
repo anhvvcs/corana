@@ -59,9 +59,9 @@ public class Executor {
                 labelToEnvModel.put(genesis.label, genesis);
                 startTime = System.currentTimeMillis();
 
-                //Load memory
+                //Load memory and initialize stack pointer
                 Environment env = new Environment();
-                //env.memory.loadProgram(inpFile);
+                Memory.loadMemory(inpFile);
 
                 // TODO: Start from asmNodes.get(_start), not the first node
                 if (variation == Variation.M0) {
@@ -153,7 +153,7 @@ public class Executor {
     private static void singleExec(M0 emulator, String prevLabel, AsmNode n) {
         String nLabel = n.getLabel();
         if (nLabel == null) System.exit(0);
-        if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel)));
+        if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel) + 8));
         Exporter.addAsm(nLabel + " " + n.getOpcode() + n.getCondSuffix() + (n.isUpdateFlag() ? "s" : "") + " " + n.getParams());
         Exporter.exportDot(Corana.inpFile + ".dot");
 

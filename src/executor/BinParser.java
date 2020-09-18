@@ -30,12 +30,19 @@ public class BinParser {
         Logs.infoLn(" + Analyzing " + inp + " ...");
         try {
             // Load symbol table init and start address
-            symbolTable = loadSymbolTable(inp);
+            findEntryPoint(inp);
 
             ArrayList<AsmNode> totalNodes = new ArrayList<>();
             Elf e = new Elf(new File(inp));
             SectionHeader[] sections = e.sectionHeaders;
+            int beginCodeSection = -1;
+            int endCodeSection = -1;
             for (int i = 0; i < sections.length; i++) {
+                SectionHeader sh = sections[i];
+                if (sh.getName().equals(".init")) beginCodeSection = i;
+                if (sh.getName().equals(".fini")) endCodeSection = i;
+            }
+            for (int i = beginCodeSection; i <= endCodeSection; i++) {
                 SectionHeader sh = sections[i];
                 totalNodes.addAll(parseSection(e, sh));
             }
@@ -96,7 +103,6 @@ public class BinParser {
                 totalByteArray = SysUtils.concatByteArray(totalByteArray, arr);
             }
             // Set init and start address
-            findFirstAddress(inp);
 
             return parse(totalByteArray, 0);
         } catch (Exception ex) {
@@ -171,22 +177,16 @@ public class BinParser {
         return expandedNodes;
     }
 
-    // Not checking output format
-    public static void findFirstAddress(String binpath) {
-        String objCmd = "arm-none-eabi-objdump -t " + binpath;
+    private static void findEntryPoint(String binpath) {
+        String objCmd = "readelf -h " + binpath;
         String exRes = SysUtils.execCmd(objCmd);
         String[] resultLines = exRes.split("\n");
         String hexstart = "000000";
-        String hexinit = "000000";
         for (String line : resultLines) {
-            if (line.contains(" _start")) {
-                hexstart = line.split("\\s+")[0];
-            }
-            if (line.contains(" .init")) {
-                hexinit = line.split("\\s+")[0];
+            if (line.contains("Entry point address")) {
+                hexstart = line.split(":")[1].trim();
             }
         }
-        _init = Arithmetic.hexToInt(hexinit);
         _start = Arithmetic.hexToInt(hexstart);
     }
 

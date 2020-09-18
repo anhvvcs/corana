@@ -10,7 +10,7 @@ public class Arithmetic {
 
     public static long hexToInt(String hex) {
         if (hex.contains("-0x")) return -Long.parseLong(hex.substring(3), 16);
-        return Long.parseLong(hex.contains("0x") ? hex.substring(2) : hex, 16);
+        return Long.parseLong(hex.contains("0x") || hex.contains("#x") ? hex.substring(2) : hex, 16);
     }
 
     public static String floatToHexSmt(float l) {
@@ -37,7 +37,7 @@ public class Arithmetic {
     }
 
     public static String intToHex(long l) {
-        return Long.toHexString(l);
+        return Integer.toHexString( (int) l); //Integer because using 32 bit
     }
 
     public static String decToBinary(String l) {
