@@ -88,7 +88,7 @@ public class Executor {
 
     private static void execFrom(Emulator emulator, String prevLabel, String label) {
         AsmNode n = asmNodes.get(nodeLabelToIndex.get(label));
-        Logs.info("-> Executing", label, ":", n.getOpcode(), n.getParams(), '\n');
+        Logs.info("-> Executing", n.getAddress(), ":", n.getOpcode(), n.getParams(), '\n');
 
         if (emulator.getClass() == M0.class) {
             singleExec((M0) emulator, prevLabel, n);
@@ -108,17 +108,20 @@ public class Executor {
         }
 
         String newLabel = (jumpTo == null) ? nextInst(label) : jumpTo;
+        String address = n.getAddress();
+        String newAddress = asmNodes.get(nodeLabelToIndex.get(newLabel)).getAddress();
+
         boolean isFault = false;
 
         if (jumpTo != null) {
             if (nodeLabelToIndex.containsKey(newLabel)) {
                 String pair = jumpFrom + " --> " + jumpTo;
-                Logs.info(String.format("\t-> Start Jumping from %s --> %s\n", jumpFrom, jumpTo));
+                Logs.info(String.format("\t-> Start Jumping from %s --> %s\n", asmNodes.get(nodeLabelToIndex.get(jumpFrom)).getAddress(), asmNodes.get(nodeLabelToIndex.get(jumpTo)).getAddress()));
                 countJumpedPair.put(pair, countJumpedPair.containsKey(pair) ? countJumpedPair.get(pair) + 1 : 1);
                 if (countJumpedPair.get(pair) <= loopLimitation) {
                     jumpTo = null;
                     jumpFrom = null;
-                    Exporter.add(label + "," + newLabel + "," + countJumpedPair.get(pair) + "\n");
+                    Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
 
                     int savedAsmSize = Exporter.savedAsm.size();
                     String lastSaved = Exporter.savedAsm.get(savedAsmSize - 1);
@@ -143,8 +146,9 @@ public class Executor {
             jumpTo = null;
             jumpFrom = null;
             newLabel = nextInst(label);
+            newAddress = asmNodes.get(nodeLabelToIndex.get(newLabel)).getAddress();
             if (nodeLabelToIndex.containsKey(newLabel)) {
-                Exporter.add(label + "," + newLabel);
+                Exporter.add(address + "," + newAddress);
                 execFrom(emulator, label, newLabel);
             }
         }
@@ -154,7 +158,7 @@ public class Executor {
         String nLabel = n.getLabel();
         if (nLabel == null) System.exit(0);
         if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel) + 8));
-        Exporter.addAsm(nLabel + " " + n.getOpcode() + n.getCondSuffix() + (n.isUpdateFlag() ? "s" : "") + " " + n.getParams());
+        Exporter.addAsm(n.getLabel() + " " + n.getOpcode() + n.getCondSuffix() + (n.isUpdateFlag() ? "s" : "") + " " + n.getParams());
         Exporter.exportDot(Corana.inpFile + ".dot");
 
         Character suffix = n.isUpdateFlag() ? 's' : null;
@@ -592,7 +596,12 @@ public class Executor {
                 } else {
                     String lastP = arrParams[arrParams.length - 1];
                     type = lastP.endsWith("]") ? 1 : (lastP.endsWith("!") ? 2 : 3);
+                    // TODO: tmp
+                    if (arrParams[1].contains("]")) {
+                        type = 4;
+                    }
                 }
+
                 for (int k = 0; k < arrParams.length; k++) {
                     arrParams[k] = arrParams[k].trim().replace("[", "").replace("]", "").replace("!", "");
                 }
@@ -626,7 +635,7 @@ public class Executor {
                         }
                         emulator.ldr(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -655,34 +664,46 @@ public class Executor {
                         emulator.ldr(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
+                            p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
+                            p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
+
+                            i2 = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
+                            p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
+                            extValue = (i2 == null) ? emulator.valCheckNeg(p2, arrParams[2].contains("-")) : new BitVec(i2);
+
+                            newValue = emulator.valCheckNeg(p1, arrParams[1].contains("-"));
+                            if (arrParams.length == 3) {
+                                newValue = newValue;
+                                extValue = emulator.add(newValue, extValue);
+                            } else {
+                                String[] extArr = arrParams[3].split("\\s+");
+                                String extType = extArr[0];
+                                Integer extraNum = null;
+                                Character extraChar = null;
+                                if (extArr.length > 1) {
+                                    extraNum = extArr[1].contains("#") ? Integer.parseInt(extArr[1].replace("#", "")) : null;
+                                    extraChar = extArr[1].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(extArr[1]));
+                                }
+                                BitVec handledExt = emulator.handleExtra(extValue, extType, extraChar, extraNum);
+
+                                newValue = newValue;
+                                extValue = emulator.add(newValue, handledExt);
+                            }
+                        emulator.ldr(p0, newValue);
+                        emulator.write(p1, extValue);
+                        break;
+                    case 4:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
-                        p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
+                        p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].replace("[", "").replace("]","")));
 
                         i2 = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                         p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                         extValue = (i2 == null) ? emulator.valCheckNeg(p2, arrParams[2].contains("-")) : new BitVec(i2);
-
-                        newValue = emulator.valCheckNeg(p1, arrParams[1].contains("-"));
                         if (arrParams.length == 3) {
-                            newValue = newValue;
-                            extValue = emulator.add(newValue, extValue);
-                        } else {
-                            String[] extArr = arrParams[3].split("\\s+");
-                            String extType = extArr[0];
-                            Integer extraNum = null;
-                            Character extraChar = null;
-                            if (extArr.length > 1) {
-                                extraNum = extArr[1].contains("#") ? Integer.parseInt(extArr[1].replace("#", "")) : null;
-                                extraChar = extArr[1].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(extArr[1]));
-                            }
-                            BitVec handledExt = emulator.handleExtra(extValue, extType, extraChar, extraNum);
-
-                            newValue = newValue;
-                            extValue = emulator.add(newValue, handledExt);
+                            newValue = emulator.add(emulator.val(p1), extValue);
+                            emulator.ldr(p0, newValue);
                         }
-                        emulator.ldr(p0, newValue);
-                        emulator.write(p1, extValue);
                         break;
                     default:
                         break;

@@ -10,6 +10,7 @@ import emulator.semantics.Memory;
 import enums.Variation;
 import pojos.AsmNode;
 import utils.Arithmetic;
+import utils.SysUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,7 +63,7 @@ public class Testing {
         //7d9223a90c7efbeca41085fbe53e1f1c // mirai
         //72f2d7f12ab091afca9d53035ed195e8 // gafgyt
         //77e059e31858420b9ed1373e2e425ab6 // miori - mirai
-        //89bfbc8232ff375a98733322eeb4d7cc  //yowai - mirai
+        //89bfbc8232ff375a98733322eeb4d7cc // yowai - mirai
         //8dea1949cef646176685153203cc289e // variant of mirai
         //c10c502e115e615609caa3ee4011841d // corona.arm6 - gafgyt variant
         //8617fef86bed2663e0fa55d5247af9a1

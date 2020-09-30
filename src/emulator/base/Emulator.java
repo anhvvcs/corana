@@ -384,16 +384,18 @@ public class Emulator {
 
     public void pop(char r) {
         BitVec popValue = env.stacks.pop();
+        String sym = String.format("(bvadd %s (bvneg #x00000004))", env.register.getFormula('s'));
+        BitSet concreteValue = Arithmetic.intToBitSet(Arithmetic.bitSetToInt(env.register.get('s').getVal()) + 4);
+        write('s', new BitVec(sym, concreteValue));
         if (popValue != null) {
-            String sym = String.format("(bvadd %s #4)", env.register.getFormula('s'));
-            BitSet concreteValue = Arithmetic.intToBitSet(Arithmetic.bitSetToInt(env.register.get('s').getVal()) + 4);
-            write('s', new BitVec(sym, concreteValue));
             write(r, popValue);
+        } else {
+            write(r, new BitVec("#x00000000", 0));
         }
     }
 
     public void push(char r) {
-        String sym = String.format("(bvadd %s #-4)", env.register.getFormula('s'));
+        String sym = String.format("(bvadd %s #x00000004)", env.register.getFormula('s'));
         BitSet concreteValue = Arithmetic.intToBitSet(Arithmetic.bitSetToInt(env.register.get('s').getVal()) - 4);
         write('s', new BitVec(sym, concreteValue));
         BitVec storeAddress = Memory.get(sym);
@@ -891,7 +893,10 @@ public class Emulator {
     }
 
     public BitVec val(Character r) {
-        return env.value(r);
+        BitVec res = env.value(r);
+        // if the value is number in bitvec < 32 -> change to bitvec 32 (#x0 -> #x00000000)
+        String symValue = (res.getSym().charAt(0)  == '#' && res.getSym().length() < 8) ? SysUtils.normalizeNumInHex(res.getSym().trim()) : res.getSym();
+        return new BitVec(symValue, res.getVal());
     }
 
     protected void load(Character d, Character label) {

@@ -1,9 +1,12 @@
 package utils;
 
+import pojos.BitVec;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.BitSet;
 
 public class SysUtils {
 
@@ -30,6 +33,16 @@ public class SysUtils {
     public static Integer normalizeNumInParam(String s) {
         String raw = s.replace("#", "");
         return raw.contains("0x") ? (int) Arithmetic.hexToInt(raw) : Integer.parseInt(raw);
+    }
+
+    public static String normalizeNumInHex(String s) {
+        String raw = s.replace("#", "");
+        raw = (raw.charAt(0) == 'x') ? raw.replaceFirst("x", "") : raw;
+        while (raw.length() < 8) {
+            raw = "0" + raw;
+        }
+        String symbolicValue = "#x" + raw;
+        return symbolicValue;
     }
 
     public static String normalizeRegName(String n) {

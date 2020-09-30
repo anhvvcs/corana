@@ -55,10 +55,17 @@ public class DBDriver {
         //startConnection("test");
         //addDocument("0x01", "0xff");
         String result = "x000008e";
-        if (result.contains("x0")) {
-            result = result.replace("x", "")
-                    .replaceFirst("^0+(?!$)", "");
+
+        MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+        DBDriver.database = mongoClient.getDatabase("CORANA");
+        String collectionName = "Test";
+        boolean collectionExists = database.listCollectionNames()
+                .into(new ArrayList<String>()).contains(collectionName);
+        if (!collectionExists) {
+            database.createCollection(collectionName);
         }
-        System.out.println(result);
+        DBDriver.collection = database.getCollection("test");
+        //updateMemoryDocument("#xfefffff4", "r0");
+        System.out.println(getValue("fefffff4"));
     }
 }

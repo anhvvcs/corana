@@ -146,7 +146,7 @@ public class BinParser {
                         params.append(",");
                     }
                 }
-                AsmNode n = new AsmNode(String.valueOf(csInsn.address), opcode, condSuffix, params.toString(), updateFlag);
+                AsmNode n = new AsmNode(String.valueOf(csInsn.address), opcode, condSuffix, params.toString(), updateFlag, Arithmetic.intToHex(csInsn.address));
                 asmNodes.add(n);
                 label += instrSize;
             }
@@ -160,6 +160,7 @@ public class BinParser {
             String label = an.getLabel();
             String opcode = an.getOpcode();
             String condSuffix = an.getCondSuffix();
+            String address = an.getAddress();
             List<String> branches = Arrays.asList("b", "bx", "bl", "blx");
             if (label != null && opcode != null && condSuffix != null && !condSuffix.equals("") && !branches.contains(opcode)) {
                 AsmNode originNode = new AsmNode(an);
@@ -167,9 +168,9 @@ public class BinParser {
                 String newOriginLabel = Integer.parseInt(label) + "-2";
                 originNode.setLabel(newOriginLabel);
                 expandedNodes.add(originNode);
-                expandedNodes.add(new AsmNode(label, "b", condSuffix, newOriginLabel, false));
+                expandedNodes.add(new AsmNode(label, "b", condSuffix, newOriginLabel, false, address));
                 expandedNodes.add(new AsmNode(Integer.parseInt(label) + "+2", "b", "",
-                        "0x" + Arithmetic.intToHex(Integer.parseInt(label) + 4), false));
+                        "0x" + Arithmetic.intToHex(Integer.parseInt(label) + 4), false, address + "+2"));
             } else {
                 expandedNodes.add(an);
             }
