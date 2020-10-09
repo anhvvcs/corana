@@ -75,6 +75,8 @@ public class Z3Solver {
         Logs.info("\t-> Checking path constrains by Z3", Logs.shorten(pathConstrain), "... ");
 
         ArrayList<String> bvVars = new ArrayList<>(Mapping.regStrToChar.keySet());
+        bvVars.addAll(new ArrayList<>(Mapping.intToSymVariable.values()));
+
         ArrayList<String> boolVars = new ArrayList<>();
         Field[] fields = Flags.class.getFields();
         for (Field f : fields) {

@@ -22,7 +22,7 @@ public class Executor {
     private static ArrayList<AsmNode> asmNodes = null;
     private static String jumpFrom = null;
     private static String jumpTo = null;
-    private static int loopLimitation = 5;
+    private static int loopLimitation = 100;
     private static HashMap<String, Integer> countJumpedPair = new HashMap<>();
     private static HashMap<String, EnvModel> labelToEnvModel = new HashMap<>();
     private static Stack<Pair<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
@@ -635,7 +635,7 @@ public class Executor {
                         }
                         emulator.ldr(p0, newValue);
                         break;
-                    case 2:
+                    case 2: //@address mode: pre-indexed
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -664,7 +664,7 @@ public class Executor {
                         emulator.ldr(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3:
+                    case 3: //@address mode: offset
                             p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                             p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -693,17 +693,34 @@ public class Executor {
                         emulator.ldr(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 4:
+                    case 4: //@address mode: post-indexed
+                        // ldr r3, [r1], #4    Load the value at memory address found in R1 to register R3. Base register (R1) modified: R1 = R1+4
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].replace("[", "").replace("]","")));
 
                         i2 = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                         p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                         extValue = (i2 == null) ? emulator.valCheckNeg(p2, arrParams[2].contains("-")) : new BitVec(i2);
+
+                        newValue = emulator.valCheckNeg(p1, arrParams[1].contains("-"));
                         if (arrParams.length == 3) {
-                            newValue = emulator.add(emulator.val(p1), extValue);
-                            emulator.ldr(p0, newValue);
+                            newValue = emulator.val(p1);
+                            extValue = emulator.add(newValue, extValue);
+                        } else  {
+                            String[] extArr = arrParams[3].split("\\s+");
+                            String extType = extArr[0];
+                            Integer extraNum = null;
+                            Character extraChar = null;
+                            if (extArr.length > 1) {
+                                extraNum = extArr[1].contains("#") ? Integer.parseInt(extArr[1].replace("#", "")) : null;
+                                extraChar = extArr[1].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(extArr[1]));
+                            }
+                            BitVec handledExt = emulator.handleExtra(extValue, extType, extraChar, extraNum);
+                            newValue = emulator.val(p1);
+                            extValue = emulator.add(newValue, handledExt);
                         }
+                        emulator.ldr(p0, newValue);
+                        emulator.write(p1, extValue);
                         break;
                     default:
                         break;
@@ -851,7 +868,9 @@ public class Executor {
                         }
                         emulator.str(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2: //@ address mode: offset.  str r2, [r1, #2]
+                        // Store the value found in R2 (0x03) to the memory address found in R1 plus 2.
+                        // Base register (R1) unmodified.
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -862,7 +881,7 @@ public class Executor {
                         newValue = emulator.valCheckNeg(p1, arrParams[1].contains("-"));
                         if (arrParams.length == 3) {
                             newValue = emulator.add(newValue, extValue);
-                            extValue = emulator.add(newValue, extValue);
+                            extValue = newValue;
                         } else {
                             String[] extArr = arrParams[3].split("\\s+");
                             String extType = extArr[0];
@@ -878,7 +897,7 @@ public class Executor {
                             extValue = emulator.add(newValue, handledExt);
                         }
                         emulator.str(emulator.val(p0), newValue);
-                        emulator.write(p1, extValue);
+                        emulator.write(p1, extValue); //base register is unmodified
                         break;
                     case 3: 
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
@@ -911,6 +930,19 @@ public class Executor {
                         break;
                     default:
                         break;
+                }
+            } else if ("stmib".equals(opcode)) {
+                // Store multiple increase before
+                // addr = Rn + 4; for each Ri in params: addr = addr + 4; ri = M[addr]
+                for (int k = 0; k < arrParams.length; k++) {
+                    arrParams[k] = arrParams[k].trim().replace("{", "").replace("}", "").replace("!", "");
+                }
+                Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
+                BitVec baseAddr = emulator.val(p0);
+                for (int i = 1; i < arrParams.length; i++) {
+                    baseAddr = emulator.add(baseAddr, new BitVec(4));
+                    Character pi = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[i]));
+                    emulator.str(emulator.val(pi), baseAddr);
                 }
             } else if ("strb".equals(opcode)) {
                 int type;
@@ -1118,7 +1150,8 @@ public class Executor {
                         break;
                 }
             }
-        } else {
+        }
+        else {
             Logs.infoLn("Error: Opcode is null!");
         }
     }

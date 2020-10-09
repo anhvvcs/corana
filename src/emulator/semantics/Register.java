@@ -29,7 +29,7 @@ public class Register {
         regs.put('x', new BitVec("r10", r10));
         regs.put('e', new BitVec("r11", r11));
         regs.put('t', new BitVec("r12", r12));
-        regs.put('s', new BitVec("#xff000000", sp));
+        regs.put('s', new BitVec("#xff000000", sp)); //#xfffefd70
         regs.put('l', new BitVec("lr", lr));
         regs.put('p', new BitVec("pc", pc));
 

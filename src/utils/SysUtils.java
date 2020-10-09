@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.BitSet;
 
 public class SysUtils {
+    private static int count = 0;
 
     public static String execCmd(String cmd) {
         try {
@@ -32,7 +33,8 @@ public class SysUtils {
 
     public static Integer normalizeNumInParam(String s) {
         String raw = s.replace("#", "");
-        return raw.contains("0x") ? (int) Arithmetic.hexToInt(raw) : Integer.parseInt(raw);
+        //return raw.contains("0x") ? (int) Arithmetic.hexToInt(raw) : Integer.parseInt(raw);
+        return (int) Arithmetic.hexToInt(raw);
     }
 
     public static String normalizeNumInHex(String s) {
@@ -64,5 +66,14 @@ public class SysUtils {
         return hexStr.replace("x", "")
                 .replace("#", "")
                 .replaceFirst("^0+(?!$)", "");
+    }
+
+    public static String addSymVar() {
+        String var = "sym" + String.valueOf(count);
+        Mapping.intToSymVariable.put(count++, var);
+        return var;
+    }
+    public static int getCountSyms() {
+        return count;
     }
 }

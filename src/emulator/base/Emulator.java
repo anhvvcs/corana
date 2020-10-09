@@ -384,22 +384,23 @@ public class Emulator {
 
     public void pop(char r) {
         BitVec popValue = env.stacks.pop();
-        String sym = String.format("(bvadd %s (bvneg #x00000004))", env.register.getFormula('s'));
+        String sym = String.format("(bvadd %s #x00000004)", env.register.getFormula('s'));
         BitSet concreteValue = Arithmetic.intToBitSet(Arithmetic.bitSetToInt(env.register.get('s').getVal()) + 4);
         write('s', new BitVec(sym, concreteValue));
         if (popValue != null) {
             write(r, popValue);
         } else {
-            write(r, new BitVec("#x00000000", 0));
+            write(r, new BitVec(SysUtils.addSymVar(), 0));
         }
     }
 
     public void push(char r) {
-        String sym = String.format("(bvadd %s #x00000004)", env.register.getFormula('s'));
+        // write new sp
+        String sym = String.format("(bvadd %s (bvneg #x00000004))", env.register.getFormula('s'));
         BitSet concreteValue = Arithmetic.intToBitSet(Arithmetic.bitSetToInt(env.register.get('s').getVal()) - 4);
         write('s', new BitVec(sym, concreteValue));
-        BitVec storeAddress = Memory.get(sym);
-        Memory.set(storeAddress, env.register.get('2'));
+        // store in stack
+        Memory.set(env.register.get('s'), val(r));
         env.stacks.push(val(r));
     }
 
