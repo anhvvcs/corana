@@ -29,6 +29,9 @@ public class DBDriver {
         if (!collectionExists) {
             database.createCollection(collectionName);
             load = true;
+        } else {
+            database.getCollection(collectionName).drop();
+            database.createCollection(collectionName);
         }
         DBDriver.collection = database.getCollection(collectionName);
         return load;
@@ -36,11 +39,21 @@ public class DBDriver {
 
     public static String getValue(String address) {
         Document result = DBDriver.collection.find(eq("address",address)).limit(1).first();
-        return (result == null) ? "#x0" : result.getString("value");
+        return (result == null) ? "#x00000000" /* SysUtils.addSymVar()*/ : result.getString("value");
+    }
+
+    public static String getFunctionLabel(String address) {
+        Document result =  DBDriver.collection.find(eq("address",address)).limit(1).first();
+        return (result == null) ? null : result.getString("label");
     }
 
     public static void addMemoryDocument(String address, String value) {
-        Document doc = new Document("address", address).append("value", value);
+        Document doc = new Document("address", SysUtils.getAddressValue(address)).append("value", SysUtils.getAddressValue(value));
+        collection.insertOne(doc);
+    }
+
+    public static void addMemoryDocument(String address, String value, String label) {
+        Document doc = new Document("address", SysUtils.getAddressValue(address)).append("value", SysUtils.getAddressValue(value)).append("label", label);
         collection.insertOne(doc);
     }
 

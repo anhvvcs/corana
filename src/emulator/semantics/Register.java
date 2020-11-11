@@ -16,7 +16,7 @@ public class Register {
                     BitSet r7, BitSet r8, BitSet r9, BitSet r10, BitSet r11, BitSet r12, BitSet sp, BitSet lr, BitSet pc) {
         this.length = length;
         regs = new HashMap<>();
-        regs.put('0', new BitVec("r0", r0));
+        regs.put('0', new BitVec("0x00000001", r0));
         regs.put('1', new BitVec("r1", r1));
         regs.put('2', new BitVec("r2", r2));
         regs.put('3', new BitVec("r3", r3));
@@ -29,7 +29,7 @@ public class Register {
         regs.put('x', new BitVec("r10", r10));
         regs.put('e', new BitVec("r11", r11));
         regs.put('t', new BitVec("r12", r12));
-        regs.put('s', new BitVec("#xff000000", sp)); //#xfffefd70
+        regs.put('s', new BitVec(Configs.topStack, sp));
         regs.put('l', new BitVec("lr", lr));
         regs.put('p', new BitVec("pc", pc));
 

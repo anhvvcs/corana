@@ -383,6 +383,7 @@ public class Emulator {
     }
 
     public void pop(char r) {
+        boolean isEmpty = env.stacks.stack.empty();
         BitVec popValue = env.stacks.pop();
         String sym = String.format("(bvadd %s #x00000004)", env.register.getFormula('s'));
         BitSet concreteValue = Arithmetic.intToBitSet(Arithmetic.bitSetToInt(env.register.get('s').getVal()) + 4);
@@ -390,7 +391,11 @@ public class Emulator {
         if (popValue != null) {
             write(r, popValue);
         } else {
-            write(r, new BitVec(SysUtils.addSymVar(), 0));
+            if (isEmpty) {
+                write(r, new BitVec(Configs.argc, Arithmetic.intToBitSet(env.rand())));
+            } else {
+                write(r, new BitVec("#x00000000", Arithmetic.intToBitSet(env.rand())));
+            }
         }
     }
 
@@ -904,6 +909,10 @@ public class Emulator {
         BitVec res = val(label);
         write(d, Memory.get(val(label)));
       //  System.out.println("");
+    }
+
+    public void ldrAt(Character d, BitVec address) {
+        write(d, Memory.get(address.getSym()));
     }
 
     public void store(BitVec address, BitVec value) {

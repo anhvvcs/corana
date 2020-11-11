@@ -38,7 +38,9 @@ public class Exporter {
         HashMap<String, Boolean> relationships = new HashMap<>();
         for (String s : savedGraph) {
             String[] arr = s.split("\\,");
-            relationships.put(arr[0] + "->" + arr[1], true);
+            if (arr[0].trim() != arr[1].trim()) {
+                relationships.put(arr[0] + "->" + arr[1], true);
+            }
         }
         Map<String, Boolean> result = relationships.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())

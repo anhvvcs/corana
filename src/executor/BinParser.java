@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BinParser {
-    private static HashMap<String, String> symbolTable; // <hex address, symbol name>
+    private static List<String> symbolTable; // <hex address, symbol name>
     public static long _init = 0;
     public static long _start = 0;
 
@@ -188,8 +188,39 @@ public class BinParser {
                 hexstart = line.split(":")[1].trim();
             }
         }
-        _start = Arithmetic.hexToInt(hexstart);
+        //_start = Arithmetic.hexToInt(hexstart);
+        _start = Arithmetic.hexToInt("0x13e00");
     }
+
+    public static List<String> getInternalSymbols(String binpath) {
+        String objCmd = "nm -g -C " + binpath;
+        String exRes = SysUtils.execCmd(objCmd);
+        List<String> externalFuncs = new ArrayList<>();
+        String[] resultLines = exRes.split("\n");
+
+        for (String line : resultLines) {
+            String[] ls = line.split(" ");
+            if (ls.length > 2) {
+                externalFuncs.add(ls[2]);
+            }
+        }
+
+        objCmd = "nm -C " + binpath;
+        exRes = SysUtils.execCmd(objCmd);
+        List<String> inFuncs = new ArrayList<>();
+        resultLines = exRes.split("\n");
+
+        for (String line : resultLines) {
+            String[] ls = line.split(" ");
+            if (ls.length > 2) {
+                if (!externalFuncs.contains(ls[2]) && !ls[2].contains("$"))
+                    inFuncs.add(ls[2]);
+            }
+        }
+        return inFuncs;
+    }
+
+
 
     public static ArrayList<AsmNode> parseObjDump(String inp) {
         Logs.infoLn(" + Parsing " + inp + " ...");

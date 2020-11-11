@@ -28,6 +28,7 @@ public class Executor {
     private static Stack<Pair<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
     private static Pair<EnvModel, HashMap<String, EnvModel>> recentPop = null;
     private static String triggerPrevLabelTwoUnsat = null;
+    private static List<String> internalFunctions = new ArrayList<>();
 
     private static long startTime;
 
@@ -39,6 +40,7 @@ public class Executor {
         } else {
             long startCapstone = System.currentTimeMillis();
             asmNodes = BinParser.parseBySection(inpFile);
+            internalFunctions = BinParser.getInternalSymbols(inpFile);
 
             Logs.infoLn("-> Capstone disassembler elapsed: " + (System.currentTimeMillis() - startCapstone) + "ms");
             if (asmNodes != null) {
@@ -132,8 +134,8 @@ public class Executor {
                     triggerPrevLabelTwoUnsat = null;
                     execFrom(emulator, finalPrevLabel, newLabel);
                 } else {
-                    Logs.infoLn("\t-> Loop limitation exceeded, break.");
-                    isFault = true;
+                    //Logs.infoLn("\t-> Loop limitation exceeded, break.");
+                    //isFault = true;
                 }
             } else {
                 Logs.infoLn("\t-> Non-existing label, break.");
@@ -156,6 +158,7 @@ public class Executor {
     
     private static void singleExec(M0 emulator, String prevLabel, AsmNode n) {
         String nLabel = n.getLabel();
+        String Funclabel = "";
         if (nLabel == null) System.exit(0);
         if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel) + 8));
         Exporter.addAsm(n.getLabel() + " " + n.getOpcode() + n.getCondSuffix() + (n.isUpdateFlag() ? "s" : "") + " " + n.getParams());
@@ -169,6 +172,9 @@ public class Executor {
                 Character condSuffix = Mapping.condStrToChar.get(Objects.requireNonNull(n.getCondSuffix()).toUpperCase());
                 String preCond = recentPop == null ? "" : recentPop.getKey().pathCondition;
                 jumpFrom = nLabel;
+                // Check if the function is user defined
+                Funclabel = DBDriver.getFunctionLabel(n.getAddress());
+
                 EnvModel thisEnvModel = new EnvModel(jumpFrom, preCond);
                 labelToEnvModel.put(thisEnvModel.label, thisEnvModel);
 
@@ -197,19 +203,28 @@ public class Executor {
                 }
                 EnvModel modelTrue = envPair.getKey();
                 EnvModel modelFalse = envPair.getValue();
+                // If it is a direct jump
                 if (isConcreteLabel(arrParams[0])) {
-                    if (modelTrue != null && modelTrue.envData != null) { 
-                        modelTrue.label = strLabel;
-                        modelTrue.prevLabel = prevLabel;
-                        labelToEnvModel.put(modelTrue.label, modelTrue);
+                    if (modelTrue != null && modelTrue.envData != null) {
+                        if (Funclabel == null || internalFunctions.contains(Funclabel)) {
+                            //Internal Function
+                            modelTrue.label = strLabel;
+                            modelTrue.prevLabel = prevLabel;
+                            labelToEnvModel.put(modelTrue.label, modelTrue);
+                        } else {
+                            Logs.infoLn("\t === External Function");
+                            emulator.write('0', new BitVec(SysUtils.addSymVar()));
+                            modelTrue.label = nextInst(jumpFrom);
+                            modelTrue.prevLabel = prevLabel;
+                            labelToEnvModel.put(modelTrue.label, modelTrue);
+                        }
                     }
                 } else {
+                    // Indirect jump
                     if (modelTrue != null && modelTrue.envData != null) { 
                         modelTrue.label = modelTrue.envData.eval;
                         modelTrue.prevLabel = prevLabel;
                         if (modelTrue.label == null) {
-                            
-                            
                             int foundLabel = Arithmetic.bitSetToInt(emulator.getEnv().register.regs.get('l').getVal());
                             if (foundLabel != 0 && foundLabel % 4 == 0) {
                                 modelTrue.label = String.valueOf(foundLabel);
@@ -482,7 +497,8 @@ public class Executor {
                     emulator.pop(c);
                 }
             } else if ("push".equals(opcode)) {
-                for (String p : arrParams) {
+                for (int i = arrParams.length - 1; i >= 0; i--) {
+                    String p = arrParams[i];
                     p = p.replace("{", "").replace("}", "");
                     Character c = Mapping.regStrToChar.get(SysUtils.normalizeRegName(p));
                     emulator.push(c);
@@ -719,7 +735,7 @@ public class Executor {
                             newValue = emulator.val(p1);
                             extValue = emulator.add(newValue, handledExt);
                         }
-                        emulator.ldr(p0, newValue);
+                        emulator.ldrAt(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
                     default:

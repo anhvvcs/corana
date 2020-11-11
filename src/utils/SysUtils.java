@@ -70,10 +70,15 @@ public class SysUtils {
 
     public static String addSymVar() {
         String var = "sym" + String.valueOf(count);
-        Mapping.intToSymVariable.put(count++, var);
+        Mapping.intToSymVariable.put(count, var);
+        count = count + 1;
         return var;
     }
     public static int getCountSyms() {
         return count;
+    }
+
+    public static String getNextAdress(String address) {
+        return Z3Solver.solveBitVecArithmetic(String.format("(bvadd %s #x00000004)", address));
     }
 }

@@ -1,13 +1,16 @@
 package pojos;
 
+import executor.Configs;
 import utils.Arithmetic;
 import utils.Z3Solver;
 
 import java.util.BitSet;
+import java.util.Random;
 
 public class BitVec {
     private String sym;
     private BitSet val;
+    public Random generator;
 
     public BitVec(String sym, int n) {
         this.sym = Arithmetic.intToHexSmt(n);
@@ -23,6 +26,13 @@ public class BitVec {
     public BitVec(BitVec bv) {
         this.sym = bv.sym;
         this.val = bv.val;
+    }
+
+    public BitVec(String sym) {
+        Configs.RANDOM_SEED += 1;
+        generator = new Random(Configs.RANDOM_SEED);
+        this.sym = sym;
+        this.val = Arithmetic.intToBitSet(rand());
     }
 
     public BitVec(Integer n) {
@@ -60,5 +70,9 @@ public class BitVec {
                 "sym='" + sym + '\'' +
                 ", val=" + val +
                 '}';
+    }
+
+    public int rand() {
+        return generator.nextInt((int) Math.pow(2, Configs.architecture >> 2));
     }
 }

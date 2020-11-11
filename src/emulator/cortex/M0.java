@@ -341,8 +341,13 @@ public class M0 extends Emulator {
         arithmeticMode = ArithmeticMode.BINARY;
         char[] flags = new char[]{'N','Z','C','V'};
         if (xd == null) xd = xm;
-		BitVec result = shift(val(xm),Mode.valueOf("left".toUpperCase()),val(im,shift(val(xs),Mode.LEFT,8)));
-            write(xd,result);
+        BitVec result;
+        if (xs == null) {
+            result = shift(val(xm),Mode.valueOf("left".toUpperCase()),shift(val(im), Mode.LEFT,8));
+        } else {
+            result = shift(val(xm),Mode.valueOf("left".toUpperCase()),val(im,shift(val(xs),Mode.LEFT,8)));
+        }
+        write(xd,result);
         if (suffix != null && suffix == 's') {
             if (result != null) {
                 updateFlags(flags, result);
