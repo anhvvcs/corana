@@ -22,7 +22,7 @@ public class Executor {
     private static ArrayList<AsmNode> asmNodes = null;
     private static String jumpFrom = null;
     private static String jumpTo = null;
-    private static int loopLimitation = 100;
+    private static int loopLimitation = 1;
     private static HashMap<String, Integer> countJumpedPair = new HashMap<>();
     private static HashMap<String, EnvModel> labelToEnvModel = new HashMap<>();
     private static Stack<Pair<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
@@ -134,8 +134,8 @@ public class Executor {
                     triggerPrevLabelTwoUnsat = null;
                     execFrom(emulator, finalPrevLabel, newLabel);
                 } else {
-                    //Logs.infoLn("\t-> Loop limitation exceeded, break.");
-                    //isFault = true;
+                    Logs.infoLn("\t-> Loop limitation exceeded, break.");
+                    isFault = true;
                 }
             } else {
                 Logs.infoLn("\t-> Non-existing label, break.");
@@ -206,18 +206,18 @@ public class Executor {
                 // If it is a direct jump
                 if (isConcreteLabel(arrParams[0])) {
                     if (modelTrue != null && modelTrue.envData != null) {
-                        if (Funclabel == null || internalFunctions.contains(Funclabel)) {
+                        //if (Funclabel == null || internalFunctions.contains(Funclabel)) {
                             //Internal Function
                             modelTrue.label = strLabel;
                             modelTrue.prevLabel = prevLabel;
                             labelToEnvModel.put(modelTrue.label, modelTrue);
-                        } else {
-                            Logs.infoLn("\t === External Function");
-                            emulator.write('0', new BitVec(SysUtils.addSymVar()));
-                            modelTrue.label = nextInst(jumpFrom);
-                            modelTrue.prevLabel = prevLabel;
-                            labelToEnvModel.put(modelTrue.label, modelTrue);
-                        }
+//                        } else {
+//                            Logs.infoLn("\t === External Function");
+//                            emulator.write('0', new BitVec(SysUtils.addSymVar()));
+//                            modelTrue.label = nextInst(jumpFrom);
+//                            modelTrue.prevLabel = prevLabel;
+//                            labelToEnvModel.put(modelTrue.label, modelTrue);
+//                        }
                     }
                 } else {
                     // Indirect jump

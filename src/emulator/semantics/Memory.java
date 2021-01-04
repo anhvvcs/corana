@@ -30,7 +30,7 @@ public class Memory {
     public static void loadMemory(String filePath) {
         String[] nparts = filePath.split("[\\/]");
         String dbname = nparts[nparts.length - 1];
-        String colname = "col_" + dbname.substring(0, 6);
+        String colname = dbname.length() < 6 ? "col_" + dbname :  "col_" + dbname.substring(0, 6);
         DBDriver.startConnection(colname);
         Logs.infoLn(" + Parsing " + filePath + " ...");
         String disassembleCmd = "arm-linux-gnueabi-objdump -D -S ";

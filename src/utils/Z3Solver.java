@@ -27,16 +27,21 @@ public class Z3Solver {
 
     public static String solveBitVecArithmetic(String artm) {
         String z3Clause = "(simplify " + artm + ")";
-        FileUtils.write(Configs.tempZ3Script, z3Clause);
-        String result = SysUtils.execCmd("z3 -smt2 " + Configs.tempZ3Script);
-        FileUtils.delete(Configs.tempZ3Script);
-        if (result != null) {
-            if (result.contains("ERR0R")) {
-                return "ERROR";
+        try {
+            FileUtils.write(Configs.tempZ3Script, z3Clause);
+            String result = SysUtils.execCmd("z3 -smt2 " + Configs.tempZ3Script);
+            FileUtils.delete(Configs.tempZ3Script);
+            if (result != null) {
+                if (result.contains("ERR0R")) {
+                    return "ERROR";
+                }
+                else {
+                    return result.split("\n")[0];
+                }
             }
-            else {
-                return result.split("\n")[0];
-            }
+        }
+        catch (Exception e) {
+            System.err.println("Command length: "+ Configs.tempZ3Script.length());
         }
         return "ERROR";
     }

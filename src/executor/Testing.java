@@ -17,9 +17,6 @@ import java.util.ArrayList;
 
 public class Testing {
 
-    //Full
-    //b2bd9252c45f5200a8c5b67233689a85
-    //b97700ca121588f9912780f341d5b92c
     private static void exeFiles(File inpFile) throws Exception {
         if (inpFile.isDirectory()) {
             System.out.println("Directory: " + inpFile.getName());
@@ -69,8 +66,7 @@ public class Testing {
         //c10c502e115e615609caa3ee4011841d // corona.arm6 - gafgyt variant
         //8617fef86bed2663e0fa55d5247af9a1
 
-        File dir = new File("./samples/37c81e/37c81e");
+        File dir = new File("samples/hello");
         exeFiles(dir);
-
     }
 }

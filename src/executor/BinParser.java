@@ -30,7 +30,8 @@ public class BinParser {
         Logs.infoLn(" + Analyzing " + inp + " ...");
         try {
             // Load symbol table init and start address
-            findEntryPoint(inp);
+            // findEntryPoint(inp);
+            loadSymbolTable(inp);
 
             ArrayList<AsmNode> totalNodes = new ArrayList<>();
             Elf e = new Elf(new File(inp));
@@ -188,8 +189,7 @@ public class BinParser {
                 hexstart = line.split(":")[1].trim();
             }
         }
-        //_start = Arithmetic.hexToInt(hexstart);
-        _start = Arithmetic.hexToInt("0x13e00");
+        _start = Arithmetic.hexToInt(hexstart);
     }
 
     public static List<String> getInternalSymbols(String binpath) {
