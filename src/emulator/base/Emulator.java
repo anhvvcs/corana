@@ -6,6 +6,8 @@ import emulator.semantics.EnvData;
 import emulator.semantics.EnvModel;
 import emulator.semantics.Environment;
 import enums.*;
+import external.handler.APIStub;
+import external.handler.ExternalCall;
 import javafx.util.Pair;
 import pojos.BitBool;
 import pojos.BitVec;
@@ -418,6 +420,17 @@ public class Emulator {
                 write(r, shift(shift(value, Mode.LEFT, 32), Mode.RIGHT, 32));
                 break;
         }
+    }
+
+    public void writeLower(char r, BitVec value) {
+        env.register.set(r, value);
+    }
+
+    public void writeUpper(char r, BitVec value) {
+        String upBin = Arithmetic.bitsetToStr(value.getVal());
+        String lowBin = Arithmetic.bitsetToStr(env.register.get(r).getVal());
+        String fullBin = upBin.substring(16, 32) + lowBin.substring(16, 32);
+        write(r, Arithmetic.fromString(fullBin));
     }
 
     public void write(char r, BitVec value) {
@@ -1120,6 +1133,16 @@ public class Emulator {
         }
         BitSet val = Arithmetic.intToBitSet(result);
         return new BitVec(sym, val);
+    }
+
+    /**
+     * Call an external function
+     */
+    public void call(String jmpAdress) {
+        String func = ExternalCall.findFunctionName(jmpAdress);
+        if ("printf".equals(func)) {
+            APIStub.printf(env);
+        }
     }
 
 }

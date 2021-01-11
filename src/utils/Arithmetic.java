@@ -70,14 +70,17 @@ public class Arithmetic {
 
     // Sym in bitVec is hex string
     public static BitVec fromString(final String s) {
+        BitSet concreteValue = BitSet.valueOf(new long[]{Long.parseLong(s, 2)});
+        long fl = bitSetToLong(concreteValue);
+        String hex = Arithmetic.intToHexSmt(fl);
+        return new BitVec(hex, concreteValue);
+    }
+
+
+    public static BitVec fromHexStr(final String s) {
         String bin = hexToBinary(s);
         BitSet concreteValue = BitSet.valueOf(new long[]{Long.parseLong(bin, 2)});
         return new BitVec("#x" + s, concreteValue);
-    }
-
-    public static BitVec fromHexStr(final String s) {
-        //return fromString(hexToBinary(s));
-        return fromString(s);
     }
 
     public static BitSet floatToBitSet(float v) {

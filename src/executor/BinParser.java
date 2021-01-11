@@ -18,12 +18,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BinParser {
-    private static List<String> symbolTable; // <hex address, symbol name>
+    private static HashMap<String, String> symbolTable; // <hex address, symbol name>
     public static long _init = 0;
     public static long _start = 0;
+    public static long main = 0;
 
     public static long get_start() {
-        return _start;
+        return main;
     }
 
     public static ArrayList<AsmNode> parseBySection(String inp) {
@@ -54,7 +55,7 @@ public class BinParser {
         }
     }
 
-    private static HashMap<String, String> loadSymbolTable(String binpath) {
+    private static void loadSymbolTable(String binpath) {
         String objCmd = "arm-none-eabi-objdump -t " + binpath;
         String exRes = SysUtils.execCmd(objCmd);
         String[] resultLines = exRes.split("\n");
@@ -68,10 +69,12 @@ public class BinParser {
                     _init = Arithmetic.hexToInt(contents[0]);
                 } else if (contents[5].trim().equals("_start")) {
                     _start = Arithmetic.hexToInt(contents[0]);
+                } else if (contents[5].trim().equals("main")) {
+                    main = Arithmetic.hexToInt(contents[0]);
                 }
             }
         }
-        return symTable;
+        symbolTable = symTable;
     }
 
     private static ArrayList<AsmNode> parseSection(Elf e, SectionHeader sh) throws IOException {

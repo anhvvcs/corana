@@ -34,8 +34,6 @@ public class Testing {
 
             Executor.execute(Variation.M0, f);
             //Logs.endLog();
-            //ControlFlowGraph cfg = Executor.getCFG();
-            //cfg.print();
         }
     }
 

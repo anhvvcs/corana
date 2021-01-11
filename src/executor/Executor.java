@@ -8,6 +8,7 @@ import emulator.semantics.EnvModel;
 import emulator.semantics.Environment;
 import emulator.semantics.Memory;
 import enums.Variation;
+import external.handler.ExternalCall;
 import javafx.util.Pair;
 import pojos.AsmNode;
 import pojos.BitVec;
@@ -111,7 +112,14 @@ public class Executor {
 
         String newLabel = (jumpTo == null) ? nextInst(label) : jumpTo;
         String address = n.getAddress();
-        String newAddress = asmNodes.get(nodeLabelToIndex.get(newLabel)).getAddress();
+        String newAddress = "";
+        // Check if function call is external
+        if (nodeLabelToIndex.get(newLabel) == null) {
+            // Deal with external call
+            newAddress = asmNodes.get(nodeLabelToIndex.get(nextInst(label))).getAddress();
+        } else {
+            newAddress = asmNodes.get(nodeLabelToIndex.get(newLabel)).getAddress();
+        }
 
         boolean isFault = false;
 
@@ -158,7 +166,6 @@ public class Executor {
     
     private static void singleExec(M0 emulator, String prevLabel, AsmNode n) {
         String nLabel = n.getLabel();
-        String Funclabel = "";
         if (nLabel == null) System.exit(0);
         if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel) + 8));
         Exporter.addAsm(n.getLabel() + " " + n.getOpcode() + n.getCondSuffix() + (n.isUpdateFlag() ? "s" : "") + " " + n.getParams());
@@ -168,12 +175,10 @@ public class Executor {
         String[] arrParams = Objects.requireNonNull(n.getParams()).split("\\,");
         if (n.getOpcode() != null) {
             String opcode = n.getOpcode();
-            if ("b".equals(opcode) || "bl".equals(opcode) || "bx".equals(opcode)) {
+            if ("b".equals(opcode) || "bl".equals(opcode) || "bx".equals(opcode) || "blx".equals((opcode))) {
                 Character condSuffix = Mapping.condStrToChar.get(Objects.requireNonNull(n.getCondSuffix()).toUpperCase());
                 String preCond = recentPop == null ? "" : recentPop.getKey().pathCondition;
                 jumpFrom = nLabel;
-                // Check if the function is user defined
-                Funclabel = DBDriver.getFunctionLabel(n.getAddress());
 
                 EnvModel thisEnvModel = new EnvModel(jumpFrom, preCond);
                 labelToEnvModel.put(thisEnvModel.label, thisEnvModel);
@@ -197,6 +202,9 @@ public class Executor {
                     case "bx":
                         envPair = emulator.bx(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
                         break;
+                    case "blx":
+                        envPair = emulator.bl(Integer.parseInt(nLabel), preCond, condSuffix, strLabel == null ? charLabel : strLabel);
+                        break;
                     default:
                         envPair = null;
                         break;
@@ -206,18 +214,20 @@ public class Executor {
                 // If it is a direct jump
                 if (isConcreteLabel(arrParams[0])) {
                     if (modelTrue != null && modelTrue.envData != null) {
-                        //if (Funclabel == null || internalFunctions.contains(Funclabel)) {
+                        if (!ExternalCall.isExternalFucntion(arrParams[0])) {
                             //Internal Function
                             modelTrue.label = strLabel;
                             modelTrue.prevLabel = prevLabel;
                             labelToEnvModel.put(modelTrue.label, modelTrue);
-//                        } else {
-//                            Logs.infoLn("\t === External Function");
-//                            emulator.write('0', new BitVec(SysUtils.addSymVar()));
-//                            modelTrue.label = nextInst(jumpFrom);
-//                            modelTrue.prevLabel = prevLabel;
-//                            labelToEnvModel.put(modelTrue.label, modelTrue);
-//                        }
+                        }
+                        if (ExternalCall.isExternalFucntion(arrParams[0])) {
+                            Logs.infoLn("\t === External Function");
+                            //emulator.write('0', new BitVec(SysUtils.addSymVar()));
+                            emulator.call(arrParams[0]);
+                            modelTrue.label = nextInst(jumpFrom);
+                            modelTrue.prevLabel = prevLabel;
+                            labelToEnvModel.put(modelTrue.label, modelTrue);
+                        }
                     }
                 } else {
                     // Indirect jump
@@ -285,11 +295,22 @@ public class Executor {
                 } else {
                     emulator.mvn(p0, im, suffix);
                 }
-            } else if ("mov".equals(opcode)) { 
+            } else if ("mov".equals(opcode) || "movw".equals(opcode) || "movt".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = arrParams[1].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[1].contains("#") ? SysUtils.normalizeNumInParam(arrParams[1].trim()) : null;
-                emulator.mov(p0, p1, im, suffix);
+                switch (opcode) {
+                    case "mov":
+                        emulator.mov(p0, p1, im, suffix);
+                        break;
+                    case "movw":
+                        emulator.movw(p0, p1, im, suffix);
+                        break;
+                    case "movt":
+                        emulator.movt(p0, p1, im, suffix);
+                        break;
+                }
+
             } else if ("adc".equals(opcode)) { 
                 Integer im;
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
@@ -1166,6 +1187,8 @@ public class Executor {
                         break;
                 }
             }
+            // Added instructions
+
         }
         else {
             Logs.infoLn("Error: Opcode is null!");
@@ -6070,10 +6093,21 @@ public class Executor {
         return Objects.requireNonNull(SysUtils.execCmd("file " + inpFile)).contains("ARM");
     }
     
-    private static String nextInst(String label) {
+    private static String nextInstLabel(String label) {
+        //TODO: temporary skip external call
+        if (label.contains("+")) {
+            label = label.split("\\+")[0];
+        }
         return label.contains("-") ? label.replace("-", "+") : String.valueOf(Integer.parseInt(label) + 4);
     }
 
+    private static String nextInst(String label) {
+        label = nextInstLabel(label);
+        while (nodeLabelToIndex.get(label) == null) {
+            label = nextInstLabel(label);
+        }
+        return label;
+    }
     private static String prevInst(String label) {
         return label.contains("+") ? label.replace("+", "-") : String.valueOf(Integer.parseInt(label) - 4);
     }

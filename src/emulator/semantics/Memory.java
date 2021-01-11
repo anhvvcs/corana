@@ -60,7 +60,6 @@ public class Memory {
                             } else {
                                 DBDriver.addMemoryDocument(label, contents[1]);
                             }
-
                     }
                 }
             }
@@ -119,5 +118,9 @@ public class Memory {
             result.append("\t- ", k, " : ", memory.get(k).toString(), "\n");
         }
         return result.value();
+    }
+
+    public String getText(BitVec atAddress) {
+        return "text";
     }
 }
