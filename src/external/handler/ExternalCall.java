@@ -16,6 +16,11 @@ public class ExternalCall {
     public static String findFunctionName(String jmpAddress){
     // find Function name from jmpAddress
         String tmp = "printf"; // e.g.;
+        if (jmpAddress.equals("#0x207e0")) {
+            tmp = "gettimeofday";
+        } else if (jmpAddress.equals("#0x14fb0")) {
+            tmp = "printf";
+        }
         return tmp;
     }
 

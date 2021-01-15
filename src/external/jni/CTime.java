@@ -5,21 +5,24 @@ import com.sun.jna.Native;
 import com.sun.jna.Structure;
 
 public interface CTime extends Library {
-    CTime INSTANCE = (CTime)
-            Native.load(("c"), CTime.class);
+    CTime INSTANCE = (CTime) Native.load(("c"), CTime.class);
 
     @Structure.FieldOrder({"tv_sec", "tv_usec"})
     class timeval extends Structure {
         public long tv_sec, tv_usec;
+        public static class ByReference extends timeval implements Structure.ByReference {};
+        public static class ByValue extends timeval implements Structure.ByValue {};
     }
 
     @Structure.FieldOrder({ "tz_minuteswest", "tz_dsttime" })
     class timezone extends Structure {
         public int tz_minuteswest, tz_dsttime;
+        public static class ByReference extends timezone implements Structure.ByReference {};
+        public static class ByValue extends timezone implements Structure.ByValue {};
     }
 
     //int gettimeofday(struct timeval *tv, struct timezone *tz);
-    int gettimeofday(timeval timeval, timezone timezone);
+    int gettimeofday(timeval.ByReference timeval, timezone.ByReference timezone);
 
     @Structure.FieldOrder({ "tms_utime", "tms_stime", "tms_cutime", "tms_cstime" })
     class tms extends Structure {
@@ -45,4 +48,5 @@ public interface CTime extends Library {
 
     //int nanosleep(const struct timespec *req, struct timespec *rem);
     int nanosleep(timespec req, timespec rem);
+
 }

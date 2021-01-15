@@ -36,8 +36,24 @@ public class Arithmetic {
         return "#x" + (result.contains("-") ? result.replace("-", "") : result);
     }
 
+    public static String longToHexSmt(long n) {
+        StringBuilder hex = new StringBuilder(Arithmetic.longToHex(n));
+        int len = hex.length();
+        if (len < Configs.architecture / 4) {
+            for (int i = 0; i < Configs.architecture / 4 - len; i++) {
+                hex.insert(0, "0");
+            }
+        }
+        String result = hex.toString();
+        return "#x" + (result.contains("-") ? result.replace("-", "") : result);
+    }
+
     public static String intToHex(long l) {
         return Integer.toHexString( (int) l); //Integer because using 32 bit
+    }
+
+    public static String longToHex(long l) {
+        return Long.toHexString(l);
     }
 
     public static String decToBinary(String l) {
@@ -80,7 +96,7 @@ public class Arithmetic {
     public static BitVec fromHexStr(final String s) {
         String bin = hexToBinary(s);
         BitSet concreteValue = BitSet.valueOf(new long[]{Long.parseLong(bin, 2)});
-        return new BitVec("#x" + s, concreteValue);
+        return new BitVec(s.contains("#x") ? s : "#x" + s, concreteValue);
     }
 
     public static BitSet floatToBitSet(float v) {

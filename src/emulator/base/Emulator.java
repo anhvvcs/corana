@@ -1142,6 +1142,8 @@ public class Emulator {
         String func = ExternalCall.findFunctionName(jmpAdress);
         if ("printf".equals(func)) {
             APIStub.printf(env);
+        } else if ("gettimeofday".equals(func)) {
+            APIStub.gettimeofday(env);
         }
     }
 

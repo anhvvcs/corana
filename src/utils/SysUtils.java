@@ -5,8 +5,10 @@ import pojos.BitVec;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.List;
 
 public class SysUtils {
     private static int count = 0;
@@ -80,5 +82,15 @@ public class SysUtils {
 
     public static String getNextAdress(String address) {
         return Z3Solver.solveBitVecArithmetic(String.format("(bvadd %s #x00000004)", address));
+    }
+
+    public static List<Character> getPrintfFormat(String fmt) {
+        List<Character> result = new ArrayList<>();
+        for (char s : fmt.toCharArray()) {
+            if (s == '%') {
+                result.add(fmt.charAt(fmt.indexOf(s) + 1));
+            }
+        }
+        return result;
     }
 }

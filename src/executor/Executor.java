@@ -92,6 +92,9 @@ public class Executor {
     private static void execFrom(Emulator emulator, String prevLabel, String label) {
         AsmNode n = asmNodes.get(nodeLabelToIndex.get(label));
         Logs.info("-> Executing", n.getAddress(), ":", n.getOpcode(), n.getParams(), '\n');
+        if (n.getAddress().equals("10a3c")) {
+            return;
+        }
 
         if (emulator.getClass() == M0.class) {
             singleExec((M0) emulator, prevLabel, n);
@@ -221,7 +224,7 @@ public class Executor {
                             labelToEnvModel.put(modelTrue.label, modelTrue);
                         }
                         if (ExternalCall.isExternalFucntion(arrParams[0])) {
-                            Logs.infoLn("\t === External Function");
+                            Logs.infoLn("\t === Call to " + ExternalCall.findFunctionName(arrParams[0]) + " function");
                             //emulator.write('0', new BitVec(SysUtils.addSymVar()));
                             emulator.call(arrParams[0]);
                             modelTrue.label = nextInst(jumpFrom);

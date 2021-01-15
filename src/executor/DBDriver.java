@@ -12,6 +12,7 @@ import com.mongodb.client.result.UpdateResult;
 import com.mongodb.operation.UpdateOperation;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import utils.Arithmetic;
 import utils.SysUtils;
 
 import java.util.ArrayList;
@@ -38,8 +39,21 @@ public class DBDriver {
     }
 
     public static String getValue(String address) {
-        Document result = DBDriver.collection.find(eq("address",address)).limit(1).first();
+        String hexStr = address;
+        if (address.charAt(0) == '#') {
+            hexStr = Arithmetic.intToHex(Arithmetic.hexToInt(address));
+        }
+        Document result = DBDriver.collection.find(eq("address",hexStr)).limit(1).first();
         return (result == null) ? "#x00000000" /* SysUtils.addSymVar()*/ : result.getString("value");
+    }
+
+    public static String getValueOrNull(String address) {
+        String hexStr = address;
+        if (address.charAt(0) == '#') {
+            hexStr = Arithmetic.intToHex(Arithmetic.hexToInt(address));
+        }
+        Document result = DBDriver.collection.find(eq("address",hexStr)).limit(1).first();
+        return (result == null) ? null : result.getString("value");
     }
 
     public static String getFunctionLabel(String address) {

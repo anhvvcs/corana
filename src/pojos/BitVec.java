@@ -4,6 +4,7 @@ import executor.Configs;
 import utils.Arithmetic;
 import utils.Z3Solver;
 
+import java.math.BigInteger;
 import java.util.BitSet;
 import java.util.Random;
 
@@ -40,6 +41,11 @@ public class BitVec {
         this.val = Arithmetic.intToBitSet(n);
     }
 
+    public BitVec(Long n) {
+        this.sym = Arithmetic.intToHexSmt(n);
+        this.val = Arithmetic.longToBitSet(n);
+    }
+
     public String getSym() {
         return sym;
     }
@@ -74,5 +80,10 @@ public class BitVec {
 
     public int rand() {
         return generator.nextInt((int) Math.pow(2, Configs.architecture >> 2));
+    }
+
+    public BitVec add(int byte_step) {
+        String hex = this.sym;
+        return Arithmetic.fromHexStr(Arithmetic.intToHex(Arithmetic.hexToInt(hex) + byte_step));
     }
 }

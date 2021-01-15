@@ -64,7 +64,7 @@ public class Testing {
         //c10c502e115e615609caa3ee4011841d // corona.arm6 - gafgyt variant
         //8617fef86bed2663e0fa55d5247af9a1
 
-        File dir = new File("samples/hello");
+        File dir = new File("samples/time");
         exeFiles(dir);
     }
 }

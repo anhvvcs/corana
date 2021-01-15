@@ -21,6 +21,7 @@ public class Memory {
 
     public void put(BitVec address, BitVec value) {
         memory.put(address.toString().trim(), value);
+        DBDriver.addMemoryDocument(address.getSym(), value.getSym());
     }
 
     public void put(String address, BitVec value) {
@@ -120,7 +121,61 @@ public class Memory {
         return result.value();
     }
 
-    public String getText(BitVec atAddress) {
-        return "text";
+    public String getTextFromReference(BitVec atAddress) {
+        String text = "";
+        boolean flag = true;
+        String word = atAddress.getSym();
+        while (flag) {
+                String memValue = DBDriver.getValue(word);
+                String nextText = HexToASCII(memValue);
+                if (DBDriver.getValue(word).contains("00") || memValue.length() < 8) flag = false;
+                text += nextText;
+                word = Arithmetic.intToHex(Arithmetic.hexToInt(word) + Configs.wordSize);
+        }
+        return text;
+    }
+
+    //for 32bit machine
+    public BitVec getWordMemoryValue(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValueOrNull(word);
+        if (memValue == null) {
+            return new BitVec(SysUtils.addSymVar());
+        }
+        return Arithmetic.fromHexStr(memValue);
+    }
+
+    public int getIntFromReference(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        String haftWord = memValue.substring(Configs.wordSize-Configs.getIntSize(), Configs.wordSize);
+        return (int) Arithmetic.hexToInt(haftWord);
+    }
+
+    public long getLongFromReference(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        return (long) Arithmetic.hexToInt(memValue);
+    }
+
+    public int getInt(BitVec atAddress) {
+        String word = atAddress.getSym();
+        return (int) Arithmetic.hexToInt(word);
+    }
+
+    public long getLong(BitVec atAddress) {
+        String word = atAddress.getSym();
+        return (long) Arithmetic.hexToInt(word);
+    }
+
+    private String HexToASCII(String memstr) {
+        StringBuilder result = new StringBuilder();
+        for (int i = memstr.length() - 1; i > 0; i -= 2) {
+            String hexStr = memstr.substring(i-1, i+1);
+            if (hexStr.equals("00")) break;
+            char c = (char) Integer.parseInt(hexStr, 16);
+            result.append(c);
+        }
+        return result.toString();
     }
 }
