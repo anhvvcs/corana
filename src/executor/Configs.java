@@ -9,7 +9,7 @@ public class Configs {
     public static String neo4jPassword = "password";
 
     public static int architecture = Integer.SIZE;
-    public static String topStack = "#xbefffc88"; // #xff0000000
+    public static String topStack = "#xffffffff"; // #xff0000000, befffc88
     public static String argc = "#x00000001";
     public static int envVarCount = 17; // default in GCC
     public static int wordSize = architecture / 8;

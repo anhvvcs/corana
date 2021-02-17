@@ -1,5 +1,7 @@
 package emulator.semantics;
 
+import com.sun.jna.NativeLong;
+import com.sun.jna.Pointer;
 import executor.Configs;
 import executor.DBDriver;
 import pojos.BitVec;
@@ -8,6 +10,7 @@ import utils.Logs;
 import utils.MyStr;
 import utils.SysUtils;
 
+import java.nio.Buffer;
 import java.util.HashMap;
 
 public class Memory {
@@ -121,6 +124,32 @@ public class Memory {
         return result.value();
     }
 
+    public void setTextReference(BitVec atAdd, String text) {
+    }
+    public void setStringReference(BitVec atAdd, String text) {
+    }
+    public void setPointer(BitVec add, Object p) {}
+    public void setByte(BitVec add, byte val) {}
+
+    public void setInt(BitVec add, int val) {}
+    public void setIntReference(BitVec atAdd, int val) {
+    }
+    public void setNativeLong(BitVec atAdd, NativeLong val) {
+
+    }
+    public void setNativeLongReference(BitVec atAdd, NativeLong val) {
+
+    }
+    public void setShortReference(BitVec atAdd, short val) {
+
+    }
+    public void setLongReference(BitVec atAdd, long val) {
+
+    }
+    public void setArray(BitVec add, int size, Object[] arr) {
+
+    }
+
     public String getTextFromReference(BitVec atAddress) {
         String text = "";
         boolean flag = true;
@@ -135,6 +164,33 @@ public class Memory {
         return text;
     }
 
+    public Object[] getArray(BitVec atAddress, int size) {
+        return null;
+    }
+    public byte[] getByteArray(BitVec atAddress, int size) {
+        return null;
+    }
+    public short[] getShortArray(BitVec atAddress, int size) {
+        return null;
+    }
+
+    public int[] getIntArray(BitVec atAddress, int size) {
+        return null;
+    }
+    public void setByteArray(BitVec add, int size, byte[] arr){
+
+    }
+    public void setIntArray(BitVec add, int size, int[] arr){
+
+    }
+    public void setShortArray(BitVec add, int size, short[] arr){
+
+    }
+    public Buffer getBuffer(BitVec atAddress, int size) {
+        return null;
+    }
+    public void setBuffer(BitVec add, int size, Buffer buf) {}
+
     //for 32bit machine
     public BitVec getWordMemoryValue(BitVec atAddress) {
         String word = atAddress.getSym();
@@ -145,6 +201,11 @@ public class Memory {
         return Arithmetic.fromHexStr(memValue);
     }
 
+    public Pointer getPointer(BitVec atAddress) {
+        String word = atAddress.getSym();
+        return new Pointer((long) Arithmetic.hexToInt(word));
+    }
+
     public int getIntFromReference(BitVec atAddress) {
         String word = atAddress.getSym();
         String memValue = DBDriver.getValue(word);
@@ -152,17 +213,46 @@ public class Memory {
         return (int) Arithmetic.hexToInt(haftWord);
     }
 
+    public NativeLong getNativeLongFromReference(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        return (NativeLong) new NativeLong(Arithmetic.hexToInt(memValue));
+    }
+
     public long getLongFromReference(BitVec atAddress) {
         String word = atAddress.getSym();
         String memValue = DBDriver.getValue(word);
         return (long) Arithmetic.hexToInt(memValue);
+    }
+    public short getShortFromReference(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        return (short) Arithmetic.hexToInt(memValue);
     }
 
     public int getInt(BitVec atAddress) {
         String word = atAddress.getSym();
         return (int) Arithmetic.hexToInt(word);
     }
+    public float getFloat(BitVec atAddress) {
+        String word = atAddress.getSym();
+        return (float) Arithmetic.hexToInt(word);
+    }
+    public byte getByte(BitVec atAddress) {
+        String word = atAddress.getSym();
+        return (byte) Arithmetic.hexToInt(word);
+    }
+    public double getDouble(BitVec address) {
+        String word = address.getSym();
+        return (int) Arithmetic.hexToInt(word);
+    }
+    public void setDouble(BitVec add, double val) {}
+    public void setFloat(BitVec add, float val) {}
 
+    public NativeLong getNativeLong(BitVec atAddress) {
+        String word = atAddress.getSym();
+        return new NativeLong(Arithmetic.hexToInt(word));
+    }
     public long getLong(BitVec atAddress) {
         String word = atAddress.getSym();
         return (long) Arithmetic.hexToInt(word);
@@ -177,5 +267,9 @@ public class Memory {
             result.append(c);
         }
         return result.toString();
+    }
+
+    public String getStringFromReference(BitVec add) {
+        return getTextFromReference(add);
     }
 }

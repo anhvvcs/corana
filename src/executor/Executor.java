@@ -2,6 +2,7 @@ package executor;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.sun.jna.Native;
 import emulator.base.Emulator;
 import emulator.cortex.*;
 import emulator.semantics.EnvModel;
@@ -14,6 +15,7 @@ import pojos.AsmNode;
 import pojos.BitVec;
 import utils.*;
 
+
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -23,7 +25,7 @@ public class Executor {
     private static ArrayList<AsmNode> asmNodes = null;
     private static String jumpFrom = null;
     private static String jumpTo = null;
-    private static int loopLimitation = 1;
+    private static int loopLimitation = 50;
     private static HashMap<String, Integer> countJumpedPair = new HashMap<>();
     private static HashMap<String, EnvModel> labelToEnvModel = new HashMap<>();
     private static Stack<Pair<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
@@ -34,11 +36,13 @@ public class Executor {
     private static long startTime;
 
     public static void execute(Variation variation, String inpFile) {
+
         if (!FileUtils.isExist(inpFile)) {
             Logs.infoLn("-> Input file doest not exist.");
         } else if (!isARM(inpFile)) {
             Logs.infoLn("-> Input file is not an ARM variation.");
         } else {
+
             long startCapstone = System.currentTimeMillis();
             asmNodes = BinParser.parseBySection(inpFile);
             internalFunctions = BinParser.getInternalSymbols(inpFile);
@@ -92,10 +96,9 @@ public class Executor {
     private static void execFrom(Emulator emulator, String prevLabel, String label) {
         AsmNode n = asmNodes.get(nodeLabelToIndex.get(label));
         Logs.info("-> Executing", n.getAddress(), ":", n.getOpcode(), n.getParams(), '\n');
-        if (n.getAddress().equals("10a3c")) {
-            return;
+        if (label.equals(String.valueOf(BinParser.end))) {
+            System.exit(0);
         }
-
         if (emulator.getClass() == M0.class) {
             singleExec((M0) emulator, prevLabel, n);
         } else if (emulator.getClass() == M0_Plus.class) {
@@ -212,6 +215,7 @@ public class Executor {
                         envPair = null;
                         break;
                 }
+                if (envPair == null) {return;}
                 EnvModel modelTrue = envPair.getKey();
                 EnvModel modelFalse = envPair.getValue();
                 // If it is a direct jump

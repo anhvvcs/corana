@@ -22,9 +22,14 @@ public class BinParser {
     public static long _init = 0;
     public static long _start = 0;
     public static long main = 0;
+    public static long end = 0;
 
     public static long get_start() {
         return main;
+    }
+
+    public static HashMap<String, String> getSymbolTable() {
+        return symbolTable;
     }
 
     public static ArrayList<AsmNode> parseBySection(String inp) {
@@ -59,11 +64,18 @@ public class BinParser {
         String objCmd = "arm-none-eabi-objdump -t " + binpath;
         String exRes = SysUtils.execCmd(objCmd);
         String[] resultLines = exRes.split("\n");
+        long main_size;
         HashMap<String, String> symTable = new HashMap<>();
         for (String line : resultLines) {
             String[] contents = line.split("\\s+");
-            if (contents.length > 5 && !symTable.containsKey(contents[0])) {
-                //symTable.put(contents[0], contents[5].trim());
+            if (contents.length == 6) {
+                if (!symTable.containsKey(contents[0])) {
+                    symTable.put(contents[0], contents[5].trim()); // e.g. 00014fa0 printf
+                } else {
+                    if (!contents[5].contains("_")) {
+                        symTable.put(contents[0], contents[5].trim());
+                    }
+                }
                 // Find the address of init and _start
                 if (contents[5].trim().equals(".init")) {
                     _init = Arithmetic.hexToInt(contents[0]);
@@ -71,6 +83,8 @@ public class BinParser {
                     _start = Arithmetic.hexToInt(contents[0]);
                 } else if (contents[5].trim().equals("main")) {
                     main = Arithmetic.hexToInt(contents[0]);
+                    main_size = Arithmetic.hexToInt(contents[4]);
+                    end = main + main_size - 4;
                 }
             }
         }

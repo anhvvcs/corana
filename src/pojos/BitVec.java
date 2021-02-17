@@ -1,5 +1,6 @@
 package pojos;
 
+import com.sun.jna.NativeLong;
 import executor.Configs;
 import utils.Arithmetic;
 import utils.Z3Solver;
@@ -22,6 +23,19 @@ public class BitVec {
         String result = (sym.matches("[01][01]+") || sym.matches("^(0x|0X|#x)?[a-fA-F0-9]+$")) ? sym: Z3Solver.solveBitVecArithmetic(sym);
         this.sym = (!result.equals("ERROR")) ? result : sym;
         this.val = val;
+    }
+
+    public BitVec(byte bv) {
+        //TODO
+    }
+
+    public BitVec(Object bv) {
+        //TODO
+    }
+
+    public BitVec(NativeLong n) {
+        this.sym = Arithmetic.intToHexSmt(n.longValue());
+        this.val = Arithmetic.longToBitSet(n.longValue());
     }
 
     public BitVec(BitVec bv) {
