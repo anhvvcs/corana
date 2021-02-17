@@ -10355,10 +10355,10 @@ public class APIStub {
         BitVec t0 = env.register.get('0');
         Pointer param0;
         param0 = env.memory.getPointer(t0);
-        //int ret = CLibrary.INSTANCE.sigemptyset(param0);
-        int ret = 0;
+        int ret = CLibrary.INSTANCE.sigemptyset(param0);
+        //int ret = 0;
         env.register.set('0', new BitVec(ret));
-//        env.memory.setPointer(t0, param0.getNativeLong(0));
+        env.memory.setPointer(t0, param0.getNativeLong(0));
     }
     public static void sigfillset(Environment env) {
         BitVec t0 = env.register.get('0');
@@ -10484,11 +10484,11 @@ public class APIStub {
         param2 = env.memory.getPointer(t2);
         param1 = env.memory.getPointer(t1);
         param0 = env.memory.getInt(t0);
-//        int ret = CLibrary.INSTANCE.sigprocmask(param0, param1, param2);
-//        env.register.set('0', new BitVec(ret));
-//        env.memory.setInt(t0, param0);
-//        env.memory.setPointer(t1, param1.getNativeLong(0));
-//        env.memory.setPointer(t2, param2.getNativeLong(0));
+        int ret = CLibrary.INSTANCE.sigprocmask(param0, param1, param2);
+        env.register.set('0', new BitVec(ret));
+        env.memory.setInt(t0, param0);
+        env.memory.setPointer(t1, param1.getNativeLong(0));
+        env.memory.setPointer(t2, param2.getNativeLong(0));
     }
     public static void sigsetjmp(Environment env) {
         BitVec t0 = env.register.get('0');
