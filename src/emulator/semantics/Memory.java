@@ -2,6 +2,7 @@ package emulator.semantics;
 
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
+import com.sun.jna.ptr.*;
 import executor.Configs;
 import executor.DBDriver;
 import pojos.BitVec;
@@ -37,7 +38,7 @@ public class Memory {
         String colname = dbname.length() < 6 ? "col_" + dbname :  "col_" + dbname.substring(0, 6);
         DBDriver.startConnection(colname);
         Logs.infoLn(" + Parsing " + filePath + " ...");
-        String disassembleCmd = "arm-linux-gnueabi-objdump -D -S ";
+        String disassembleCmd = "arm-none-eabi-objdump -D -S ";
         String execResult = SysUtils.execCmd(disassembleCmd + filePath);
         if (execResult == null) {
             Logs.infoLn("-> Parsing binary file error !");
@@ -128,7 +129,12 @@ public class Memory {
     }
     public void setStringReference(BitVec atAdd, String text) {
     }
-    public void setPointer(BitVec add, Object p) {}
+    public void setPointer(BitVec add, Object p) {
+        //int val = ((IntByReference) p).getValue();
+        //long val =
+        //memory.put(add.getSym(), new BitVec(val));
+    }
+
     public void setByte(BitVec add, byte val) {}
 
     public void setInt(BitVec add, int val) {}
@@ -203,7 +209,16 @@ public class Memory {
 
     public Pointer getPointer(BitVec atAddress) {
         String word = atAddress.getSym();
-        return new Pointer((long) Arithmetic.hexToInt(word));
+        String memValue = DBDriver.getValue(word);
+        Pointer ptr = new com.sun.jna.Memory(8);
+        ptr.setLong(0, Arithmetic.hexToInt(memValue));
+        return ptr;
+    }
+    public NativeLongByReference getPointerByRef(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        NativeLongByReference ref = new NativeLongByReference(new NativeLong(Arithmetic.hexToInt(memValue)));
+        return ref;
     }
 
     public int getIntFromReference(BitVec atAddress) {

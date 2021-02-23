@@ -7,6 +7,10 @@ import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 
 import java.nio.Buffer;
+
+import com.sun.jna.ptr.ByReference;
+import com.sun.jna.ptr.LongByReference;
+import com.sun.jna.ptr.PointerByReference;
 import external.jni.CStruct.*;
 
 public interface CLibrary extends Library {
@@ -941,7 +945,7 @@ public interface CLibrary extends Library {
     int sigblock(int mask);
     int sigdelset(Pointer set, int signum);
     byte sigdescr_np(int __sig);
-    int sigemptyset(Pointer set);
+    int sigemptyset(ByReference set);
     int sigfillset(Pointer set);
     int siginterrupt(int sig, int flag);
     int sigismember(Pointer set, int signum);

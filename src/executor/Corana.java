@@ -18,7 +18,7 @@ public class Corana {
                     Logs.infoLn(missingArgsMsg);
                 } else {
                     inpFile = args[1];
-                    String variation = (args.length == 3) ? args[2] : "M7";
+                    String variation = (args.length == 3) ? args[2] : "M0";
                     Executor.execute(Variation.valueOf(variation), inpFile);
                 }
             } else {

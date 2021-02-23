@@ -8,12 +8,13 @@ import emulator.semantics.Environment;
 import enums.*;
 import external.handler.APIStub;
 import external.handler.ExternalCall;
-import javafx.util.Pair;
+
 import pojos.BitBool;
 import pojos.BitVec;
 import utils.*;
 
 import java.util.BitSet;
+import java.util.Map;
 import java.util.Objects;
 
 public class Emulator {
@@ -116,30 +117,30 @@ public class Emulator {
      * @param label: target
      * @return true branch and false branch, each is represented by a graph node
      */
-    public Pair<EnvModel, EnvModel> b(String preCond, Character cond, Object label) {
+    public Map.Entry<EnvModel, EnvModel> b(String preCond, Character cond, Object label) {
         if (label instanceof String) {
             String finalLabel = (String) label;
             Logs.info("\t-> Direct Jump to", finalLabel, "if", Mapping.condCharToStr.get(cond), "\n");
             EnvModel modelTrue = checkPosCond(preCond, cond);
             EnvModel modelFalse = checkNegCond(preCond, cond);
-            return new Pair<>(modelTrue, modelFalse);
+            return Pair.of(modelTrue, modelFalse);
         } else if (label instanceof Character) {
             Character finalLabel = (Character) label;
             Logs.info("\t-> Indirect Jump to", Mapping.regCharToStr.get(finalLabel), "if", Mapping.condCharToStr.get(cond), "\n");
             EnvModel modelTrue = checkPosCond(preCond, cond, val(finalLabel).getSym());
             EnvModel modelFalse = checkNegCond(preCond, cond, val(finalLabel).getSym());
-            return new Pair<>(modelTrue, modelFalse);
+            return Pair.of(modelTrue, modelFalse);
         }
         Logs.infoLn("+ Wrong type of label!");
         return null;
     }
 
-    public Pair<EnvModel, EnvModel> bl(int nextLabel, String preCond, Character cond, Object label) {
+    public Map.Entry<EnvModel, EnvModel> bl(int nextLabel, String preCond, Character cond, Object label) {
         write('l', new BitVec(nextLabel));
         return b(preCond, cond, label);
     }
 
-    public Pair<EnvModel, EnvModel> bx(String preCond, Character cond, Object label) {
+    public Map.Entry<EnvModel, EnvModel> bx(String preCond, Character cond, Object label) {
         return b(preCond, cond, label);
     }
 

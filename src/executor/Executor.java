@@ -10,7 +10,6 @@ import emulator.semantics.Environment;
 import emulator.semantics.Memory;
 import enums.Variation;
 import external.handler.ExternalCall;
-import javafx.util.Pair;
 import pojos.AsmNode;
 import pojos.BitVec;
 import utils.*;
@@ -28,8 +27,8 @@ public class Executor {
     private static int loopLimitation = 50;
     private static HashMap<String, Integer> countJumpedPair = new HashMap<>();
     private static HashMap<String, EnvModel> labelToEnvModel = new HashMap<>();
-    private static Stack<Pair<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
-    private static Pair<EnvModel, HashMap<String, EnvModel>> recentPop = null;
+    private static Stack<Map.Entry<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
+    private static Map.Entry<EnvModel, HashMap<String, EnvModel>> recentPop = null;
     private static String triggerPrevLabelTwoUnsat = null;
     private static List<String> internalFunctions = new ArrayList<>();
 
@@ -197,7 +196,7 @@ public class Executor {
                 } else { 
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
-                Pair<EnvModel, EnvModel> envPair;
+                Map.Entry<EnvModel, EnvModel> envPair;
                 switch (opcode) {
                     case "b":
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
@@ -1228,7 +1227,7 @@ public class Executor {
                 } else { 
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
-                Pair<EnvModel, EnvModel> envPair;
+                Map.Entry<EnvModel, EnvModel> envPair;
                 switch (opcode) {
                     case "b":
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
@@ -2180,7 +2179,7 @@ public class Executor {
                 } else {
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
-                Pair<EnvModel, EnvModel> envPair;
+                Map.Entry<EnvModel, EnvModel> envPair;
                 switch (opcode) {
                     case "b":
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
@@ -3160,7 +3159,7 @@ public class Executor {
                 } else { 
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
-                Pair<EnvModel, EnvModel> envPair;
+                Map.Entry<EnvModel, EnvModel> envPair;
                 switch (opcode) {
                     case "b":
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
@@ -4138,7 +4137,7 @@ public class Executor {
                 } else { 
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
-                Pair<EnvModel, EnvModel> envPair;
+                Map.Entry<EnvModel, EnvModel> envPair;
                 switch (opcode) {
                     case "b":
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
@@ -5116,7 +5115,7 @@ public class Executor {
                 } else { 
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
-                Pair<EnvModel, EnvModel> envPair;
+                Map.Entry<EnvModel, EnvModel> envPair;
                 switch (opcode) {
                     case "b":
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
@@ -6074,16 +6073,16 @@ public class Executor {
         HashMap<String, EnvModel> clonedMap = gson.fromJson(jsonString, type);
         if (modelFalse != null && labelToEnvModel.containsKey(modelFalse.label)) {
             if (modelFalse.label != null) {
-                envStack.push(new Pair<>(new EnvModel(modelFalse), clonedMap));
+                envStack.push(Pair.of(new EnvModel(modelFalse), clonedMap));
             }
         }
         if (modelTrue != null && labelToEnvModel.containsKey(modelTrue.label)) {
             if (modelTrue.label != null) {
-                envStack.push(new Pair<>(new EnvModel(modelTrue), clonedMap));
+                envStack.push(Pair.of(new EnvModel(modelTrue), clonedMap));
             }
         }
         if (envStack.empty()) gg();
-        Pair<EnvModel, HashMap<String, EnvModel>> model = envStack.pop();
+        Map.Entry<EnvModel, HashMap<String, EnvModel>> model = envStack.pop();
         recentPop = model;
         jumpTo = model.getKey().label; 
         labelToEnvModel = model.getValue(); 

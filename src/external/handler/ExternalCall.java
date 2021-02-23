@@ -9,8 +9,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ExternalCall {
 
@@ -18,15 +20,10 @@ public class ExternalCall {
     public static boolean isExternalFucntion(String functionSym) {
         // add all function interfaces to the database
         // query function name
-        List<String> apilist = new ArrayList<>();
-        try {
-            List<String> list = Files.readAllLines(new File("./resources/external_funcs").toPath(), Charset.defaultCharset());
+        List<String> list = Arrays.stream(APIStub.class.getMethods()).map(s -> s.getName()).collect(Collectors.toList());
             if (list.contains(findFunctionName(functionSym))) {
                 return true;
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         return false;
     }
 
