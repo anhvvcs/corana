@@ -2400,7 +2400,8 @@ public class Emulator {
             else if ("main".equals(func)) {
                 APIStub.main(env); }
             else if ("makecontext".equals(func)) {
-                APIStub.makecontext(env); }
+                //APIStub.makecontext(env);
+            }
             else if ("malloc".equals(func)) {
                 APIStub.malloc(env); }
             else if ("mallopt".equals(func)) {

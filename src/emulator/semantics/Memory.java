@@ -1,7 +1,7 @@
 package emulator.semantics;
 
 import com.sun.jna.NativeLong;
-import com.sun.jna.Pointer;
+import com.sun.jna.Structure;
 import com.sun.jna.ptr.*;
 import executor.Configs;
 import executor.DBDriver;
@@ -125,6 +125,9 @@ public class Memory {
         return result.value();
     }
 
+    /*
+     SETTERS
+     */
     public void setTextReference(BitVec atAdd, String text) {
     }
     public void setStringReference(BitVec atAdd, String text) {
@@ -138,6 +141,7 @@ public class Memory {
     public void setByte(BitVec add, byte val) {}
 
     public void setInt(BitVec add, int val) {}
+
     public void setIntReference(BitVec atAdd, int val) {
     }
     public void setNativeLong(BitVec atAdd, NativeLong val) {
@@ -147,7 +151,6 @@ public class Memory {
 
     }
     public void setShortReference(BitVec atAdd, short val) {
-
     }
     public void setLongReference(BitVec atAdd, long val) {
 
@@ -156,33 +159,6 @@ public class Memory {
 
     }
 
-    public String getTextFromReference(BitVec atAddress) {
-        String text = "";
-        boolean flag = true;
-        String word = atAddress.getSym();
-        while (flag) {
-                String memValue = DBDriver.getValue(word);
-                String nextText = HexToASCII(memValue);
-                if (DBDriver.getValue(word).contains("00") || memValue.length() < 8) flag = false;
-                text += nextText;
-                word = Arithmetic.intToHex(Arithmetic.hexToInt(word) + Configs.wordSize);
-        }
-        return text;
-    }
-
-    public Object[] getArray(BitVec atAddress, int size) {
-        return null;
-    }
-    public byte[] getByteArray(BitVec atAddress, int size) {
-        return null;
-    }
-    public short[] getShortArray(BitVec atAddress, int size) {
-        return null;
-    }
-
-    public int[] getIntArray(BitVec atAddress, int size) {
-        return null;
-    }
     public void setByteArray(BitVec add, int size, byte[] arr){
 
     }
@@ -192,87 +168,25 @@ public class Memory {
     public void setShortArray(BitVec add, int size, short[] arr){
 
     }
-    public Buffer getBuffer(BitVec atAddress, int size) {
-        return null;
-    }
+
     public void setBuffer(BitVec add, int size, Buffer buf) {}
 
-    //for 32bit machine
-    public BitVec getWordMemoryValue(BitVec atAddress) {
+    /*
+     GETTERS
+     */
+    public String getTextFromReference(BitVec atAddress) {
+        String text = "";
+        boolean flag = true;
         String word = atAddress.getSym();
-        String memValue = DBDriver.getValueOrNull(word);
-        if (memValue == null) {
-            return new BitVec(SysUtils.addSymVar());
+        while (flag) {
+            String memValue = DBDriver.getValue(word);
+            String nextText = HexToASCII(memValue);
+            if (DBDriver.getValue(word).contains("00") || memValue.length() < 8) flag = false;
+            text += nextText;
+            word = Arithmetic.intToHex(Arithmetic.hexToInt(word) + Configs.wordSize);
         }
-        return Arithmetic.fromHexStr(memValue);
+        return text;
     }
-
-    public Pointer getPointer(BitVec atAddress) {
-        String word = atAddress.getSym();
-        String memValue = DBDriver.getValue(word);
-        Pointer ptr = new com.sun.jna.Memory(8);
-        ptr.setLong(0, Arithmetic.hexToInt(memValue));
-        return ptr;
-    }
-    public NativeLongByReference getPointerByRef(BitVec atAddress) {
-        String word = atAddress.getSym();
-        String memValue = DBDriver.getValue(word);
-        NativeLongByReference ref = new NativeLongByReference(new NativeLong(Arithmetic.hexToInt(memValue)));
-        return ref;
-    }
-
-    public int getIntFromReference(BitVec atAddress) {
-        String word = atAddress.getSym();
-        String memValue = DBDriver.getValue(word);
-        String haftWord = memValue.substring(Configs.wordSize-Configs.getIntSize(), Configs.wordSize);
-        return (int) Arithmetic.hexToInt(haftWord);
-    }
-
-    public NativeLong getNativeLongFromReference(BitVec atAddress) {
-        String word = atAddress.getSym();
-        String memValue = DBDriver.getValue(word);
-        return (NativeLong) new NativeLong(Arithmetic.hexToInt(memValue));
-    }
-
-    public long getLongFromReference(BitVec atAddress) {
-        String word = atAddress.getSym();
-        String memValue = DBDriver.getValue(word);
-        return (long) Arithmetic.hexToInt(memValue);
-    }
-    public short getShortFromReference(BitVec atAddress) {
-        String word = atAddress.getSym();
-        String memValue = DBDriver.getValue(word);
-        return (short) Arithmetic.hexToInt(memValue);
-    }
-
-    public int getInt(BitVec atAddress) {
-        String word = atAddress.getSym();
-        return (int) Arithmetic.hexToInt(word);
-    }
-    public float getFloat(BitVec atAddress) {
-        String word = atAddress.getSym();
-        return (float) Arithmetic.hexToInt(word);
-    }
-    public byte getByte(BitVec atAddress) {
-        String word = atAddress.getSym();
-        return (byte) Arithmetic.hexToInt(word);
-    }
-    public double getDouble(BitVec address) {
-        String word = address.getSym();
-        return (int) Arithmetic.hexToInt(word);
-    }
-    public void setDouble(BitVec add, double val) {}
-    public void setFloat(BitVec add, float val) {}
-
-    public NativeLong getNativeLong(BitVec atAddress) {
-        String word = atAddress.getSym();
-        return new NativeLong(Arithmetic.hexToInt(word));
-    }
-    public long getLong(BitVec atAddress) {
-        String word = atAddress.getSym();
-        return (long) Arithmetic.hexToInt(word);
-    }
-
     private String HexToASCII(String memstr) {
         StringBuilder result = new StringBuilder();
         for (int i = memstr.length() - 1; i > 0; i -= 2) {
@@ -287,4 +201,128 @@ public class Memory {
     public String getStringFromReference(BitVec add) {
         return getTextFromReference(add);
     }
+    public Object[] getArray(BitVec atAddress, int size) {
+        return null;
+    }
+    public byte[] getByteArray(BitVec atAddress, int size) {
+        return null;
+    }
+    public short[] getShortArray(BitVec atAddress, int size) {
+        return null;
+    }
+
+    public int[] getIntArray(BitVec atAddress, int size) {
+        return null;
+    }
+    public Buffer getBuffer(BitVec atAddress, int size) {
+        return null;
+    }
+    //for 32bit machine
+    public BitVec getWordMemoryValue(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValueOrNull(word);
+        if (memValue == null) {
+            return new BitVec(SysUtils.addSymVar());
+        }
+        return Arithmetic.fromHexStr(memValue);
+    }
+
+    public LongByReference getPointer(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+//        Pointer ptr = new com.sun.jna.Memory(8);
+//        ptr.setLong(0, Arithmetic.hexToInt(memValue));
+        return new LongByReference((int) Arithmetic.hexToInt(word));
+    }
+
+    public NativeLongByReference getPointerByRef(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        NativeLongByReference ref = new NativeLongByReference(new NativeLong(Arithmetic.hexToInt(memValue)));
+        return ref;
+    }
+
+    public IntByReference getIntRef(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        String haftWord = memValue.substring(Configs.wordSize-Configs.getIntSize(), Configs.wordSize);
+        IntByReference ref = new IntByReference((int) Arithmetic.hexToInt(haftWord));
+        return ref;
+    }
+    public int getIntFromReference(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        String haftWord = memValue.substring(Configs.wordSize-Configs.getIntSize(), Configs.wordSize);
+        return (int ) Arithmetic.hexToInt(haftWord);
+    }
+
+    public NativeLong getNativeLongFromReference(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        return (NativeLong) new NativeLong(Arithmetic.hexToInt(memValue));
+    }
+
+    public NativeLongByReference getNativeLongRef(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        return new NativeLongByReference(new NativeLong(Arithmetic.hexToInt(memValue)));
+    }
+
+    public long getLongFromReference(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        return (long) Arithmetic.hexToInt(memValue);
+    }
+    public short getShortFromReference(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        return (short) Arithmetic.hexToInt(memValue);
+    }
+    public ShortByReference getShortRef(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        return new ShortByReference((short) Arithmetic.hexToInt(memValue));
+    }
+    public FloatByReference getFloatRef(BitVec atAddress) {
+        String word = atAddress.getSym();
+        String memValue = DBDriver.getValue(word);
+        return new FloatByReference((float) Arithmetic.hexToInt(memValue));
+    }
+
+    public int getInt(BitVec atAddress) {
+        String word = atAddress.getSym();
+        return (int) Arithmetic.hexToInt(word);
+    }
+    public float getFloat(BitVec atAddress) {
+        String word = atAddress.getSym();
+        return (float) Arithmetic.hexToInt(word);
+    }
+    public short getShort(BitVec atAddress) {
+        String word = atAddress.getSym();
+        return (short) Arithmetic.hexToInt(word);
+    }
+    public byte getByte(BitVec atAddress) {
+        String word = atAddress.getSym();
+        return (byte) Arithmetic.hexToInt(word);
+    }
+    public double getDouble(BitVec address) {
+        String word = address.getSym();
+        return (int) Arithmetic.hexToInt(word);
+    }
+    public DoubleByReference getDoubleRef(BitVec address) {
+        String word = address.getSym();
+        return new DoubleByReference((double) Arithmetic.hexToInt(word));
+    }
+    public void setDouble(BitVec add, double val) {}
+    public void setFloat(BitVec add, float val) {}
+
+    public NativeLong getNativeLong(BitVec atAddress) {
+        String word = atAddress.getSym();
+        return new NativeLong(Arithmetic.hexToInt(word));
+    }
+    public long getLong(BitVec atAddress) {
+        String word = atAddress.getSym();
+        return (long) Arithmetic.hexToInt(word);
+    }
+
 }

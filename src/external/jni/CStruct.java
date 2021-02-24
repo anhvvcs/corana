@@ -2,8 +2,12 @@ package external.jni;
 
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
+import com.sun.jna.PointerType;
 import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.LongByReference;
+import com.sun.jna.ptr.ByReference;
+import com.sun.jna.ptr.ShortByReference;
 import jdk.jfr.Unsigned;
 
 import java.nio.Buffer;
@@ -114,7 +118,7 @@ public class CStruct {
         public int aup_uid;
         public int aup_gid;
         public int aup_len;
-        public Pointer aup_gids;
+        public PointerType aup_gids;
     }
 
 //    @Structure.FieldOrder({ "cb_rpcvers", "cb_prog", "cb_vers", "cb_proc", "cb_cred", "cb_verf" })
@@ -158,11 +162,11 @@ public class CStruct {
 //        public NativeLong rq_proc;
 //        public opaque_auth rq_cred;
 //        public int rq_clntcred;
-//        public Pointer rq_xprt;
+//        public PointerType rq_xprt;
 //    }
     @Structure.FieldOrder({ "client", "socket", "oldprognum", "oldversnum", "valid", "oldhost" })
     public static class callrpc_private_s extends Structure {
-        public Pointer client;
+        public PointerType client;
         public int socket;
         public NativeLong oldprognum;
         public NativeLong oldversnum;
@@ -223,7 +227,7 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "client", "pid", "uid" })
     public static class key_call_private extends Structure {
-        public Pointer client;
+        public PointerType client;
         public int pid;
         public int uid;
     }
@@ -260,7 +264,7 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "client", "proc" })
     public static class rpc_arg extends Structure {
-        public Pointer client;
+        public PointerType client;
         public NativeLong proc;
     }
 
@@ -349,9 +353,9 @@ public class CStruct {
 
     @Structure.FieldOrder({ "list", "futex_offset", "list_op_pending" })
     public static class robust_list_head extends Structure {
-        public Pointer list;
+        public PointerType list;
         public NativeLong futex_offset;
-        public Pointer list_op_pending;
+        public PointerType list_op_pending;
     }
     @Structure.FieldOrder({ "priomax", "priomap" })
     public static class priority_protection_data extends Structure {
@@ -360,14 +364,14 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "rwlock", "clockid", "fnname" })
     public static class thread_args extends Structure {
-        public Pointer rwlock;
+        public PointerType rwlock;
         public int clockid;
         public String fnname;
     }
     @Structure.FieldOrder({ "thread", "set", "size", "get", "result" })
     public static class affinity_access_task extends Structure {
         public int thread;
-        public Pointer set;
+        public PointerType set;
         public int size;
         public boolean get;
         public int result;
@@ -380,7 +384,7 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "the_sem", "rec" })
     public static class walk_closure extends Structure {
-        public Pointer the_sem;
+        public PointerType the_sem;
         public int rec;
     }
     @Structure.FieldOrder({ "low", "high" })
@@ -428,7 +432,7 @@ public class CStruct {
     @Structure.FieldOrder({ "_next", "_sbuf", "_pos" })
     public static class _IO_marker extends Structure {
         public _IO_marker _next;
-        public Pointer _sbuf;
+        public PointerType _sbuf;
         public int _pos;
     }
     @Structure.FieldOrder({ "__cd_in", "__cd_out" })
@@ -467,14 +471,14 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "read", "write", "seek", "close" })
     public static class cookie_io_functions_t extends Structure {
-        public Pointer read;
-        public Pointer write;
-        public Pointer seek;
-        public Pointer close;
+        public PointerType read;
+        public PointerType write;
+        public PointerType seek;
+        public PointerType close;
     }
     @Structure.FieldOrder({ "buffer", "mybuffer", "append", "size", "pos", "maxpos" })
     public static class fmemopen_cookie_struct extends Structure {
-        public Pointer buffer;
+        public PointerType buffer;
         public int mybuffer;
         public int append;
         public int size;
@@ -486,13 +490,13 @@ public class CStruct {
     public static class _IO_FILE_wmemstream extends Structure {
         public int _sf;
         public String[] bufloc;
-        public Pointer sizeloc;
+        public PointerType sizeloc;
     }
     @Structure.FieldOrder({ "_sf", "*bufloc", "sizeloc" })
     public static class _IO_FILE_memstream extends Structure {
         public int _sf;
         public String[] bufloc;
-        public Pointer sizeloc;
+        public PointerType sizeloc;
     }
 
 
@@ -504,20 +508,20 @@ public class CStruct {
         public int idxcnt;
         public int backw;
         public int backw_stop;
-        public Pointer us;
+        public PointerType us;
         public byte rule;
         public int idx;
         public int save_idx;
-        public Pointer back_us;
+        public PointerType back_us;
     }
     @Structure.FieldOrder({ "nrules", "rulesets", "weights", "table", "extra", "indirect" })
     public static class locale_data_t extends Structure {
         public int nrules;
-        public Pointer rulesets;
-        public Pointer weights;
-        public Pointer table;
-        public Pointer extra;
-        public Pointer indirect;
+        public PointerType rulesets;
+        public PointerType weights;
+        public PointerType table;
+        public PointerType extra;
+        public PointerType indirect;
     }
     @Structure.FieldOrder({ "line", "expected" })
     public static class input extends Structure {
@@ -644,8 +648,8 @@ public class CStruct {
         public int sigev_value;
         public int sigev_signo;
         public int sigev_notify;
-        public Pointer __sigval_t;
-        public Pointer sigev_notify_attributes;
+        public PointerType __sigval_t;
+        public PointerType sigev_notify_attributes;
     }
     @Structure.FieldOrder({ "sched_priority" })
     public static class sched_param extends Structure {
@@ -658,14 +662,14 @@ public class CStruct {
         public int si_code;
         public int si_pid;
         public int si_uid;
-        public Pointer si_addr;
+        public PointerType si_addr;
         public int si_status;
         public NativeLong si_band;
         public int si_value;
     }
     @Structure.FieldOrder({ "ss_sp", "ss_size", "ss_flags" })
     public static class stack_t extends Structure {
-        public Pointer ss_sp;
+        public PointerType ss_sp;
         public int ss_size;
         public int ss_flags;
     }
@@ -692,7 +696,7 @@ public class CStruct {
     public static class __gconv_loaded_object extends Structure {
         public String name;
         public int counter;
-        public Pointer handle;
+        public PointerType handle;
         public int fct;
         public int init_fct;
         public int end_fct;
@@ -731,16 +735,16 @@ public class CStruct {
         public int __min_needed_to;
         public int __max_needed_to;
         public int __stateful;
-        public Pointer __data;
+        public PointerType __data;
     }
     @Structure.FieldOrder({ "__outbuf", "__outbufend", "__flags", "__invocation_counter", "__internal_use", "__statep", "__state" })
     public static class __gconv_step_data extends Structure {
-        public Pointer __outbuf;
-        public Pointer __outbufend;
+        public PointerType __outbuf;
+        public PointerType __outbufend;
         public int __flags;
         public int __invocation_counter;
         public int __internal_use;
-        public Pointer __statep;
+        public PointerType __statep;
         public int __state;
     }
     @Structure.FieldOrder({ "tocode", "fromcode" })
@@ -783,8 +787,8 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "pattern", "string", "no_leading_period" })
     public static class STRUCT extends Structure {
-        public Pointer pattern;
-        public Pointer string;
+        public PointerType pattern;
+        public PointerType string;
         public int no_leading_period;
     }
 
@@ -818,26 +822,26 @@ public class CStruct {
     public static class locarhandle extends Structure {
         public String fname;
         public int fd;
-        public Pointer addr;
+        public PointerType addr;
         public int mmaped;
         public int reserved;
-        public Pointer mmap_base;
+        public PointerType mmap_base;
         public int mmap_len;
     }
 //    @Structure.FieldOrder({ "__locales", "__ctype_b", "__ctype_tolower", "__ctype_toupper", "__names" })
 //    public static class __locale_struct extends Structure {
 //        public __locale_data[] __locales;
-//        public Pointer __ctype_b;
-//        public Pointer __ctype_tolower;
-//        public Pointer __ctype_toupper;
-//        public Pointer __names;
+//        public PointerType __ctype_b;
+//        public PointerType __ctype_tolower;
+//        public PointerType __ctype_toupper;
+//        public PointerType __names;
 //    }
 
 //    @Structure.FieldOrder({ "n_elements", "next_element", "offsets", "data", "structure_stage" })
 //    public static class locale_file extends Structure {
 //        public int n_elements;
 //        public int next_element;
-//        public Pointer offsets;
+//        public PointerType offsets;
 //        public obstack data;
 //        public int structure_stage;
 //    }
@@ -887,13 +891,13 @@ public class CStruct {
         public int q;
         public int level1_alloc;
         public int level1_size;
-        public Pointer level1;
+        public PointerType level1;
         public int level2_alloc;
         public int level2_size;
-        public Pointer level2;
+        public PointerType level2;
         public int level3_alloc;
         public int level3_size;
-        public Pointer level3;
+        public PointerType level3;
         public int result_size;
     }
     @Structure.FieldOrder({ "name", "symname_or_ident", "locale" })
@@ -904,7 +908,7 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "argv", "exp", "complocaledir" })
     public static class test_closure extends Structure {
-        public Pointer argv;
+        public PointerType argv;
         public String exp;
         public String complocaledir;
     }
@@ -994,8 +998,8 @@ public class CStruct {
         public int[] stop_date;
         public String name;
         public String format;
-        public Pointer wname;
-        public Pointer wformat;
+        public PointerType wname;
+        public PointerType wformat;
     }
     @Structure.FieldOrder({ "decimal_point", "thousands_sep", "grouping", "grouping_len", "decimal_point_wc", "thousands_sep_wc" })
     public static class locale_numeric_t extends Structure {
@@ -1027,7 +1031,7 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "dir", "directory", "directory_len", "pathname", "pathname_size" })
     public static class charmap_dir extends Structure {
-        public Pointer dir;
+        public PointerType dir;
         public String directory;
         public int directory_len;
         public String pathname;
@@ -1049,7 +1053,7 @@ public class CStruct {
         public String abbreviation;
         public String revision;
         public String date;
-        public Pointer category;
+        public PointerType category;
     }
 //    @Structure.FieldOrder({ "cnt", "locrec" })
 //    public static class oldlocrecent extends Structure {
@@ -1059,7 +1063,7 @@ public class CStruct {
 
     @Structure.FieldOrder({ "sum", "file_offset", "nlink" })
     public static class dataent extends Structure {
-        public Pointer sum;
+        public PointerType sum;
         public int file_offset;
         public int nlink;
     }
@@ -1118,27 +1122,27 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "current", "end", "scratch" })
     public static class char_buffer extends Structure {
-        public Pointer current;
-        public Pointer end;
+        public PointerType current;
+        public PointerType end;
         public Buffer scratch;
     }
 //    @Structure.FieldOrder({ "_f", "_put_stream", "lock" })
 //    public static class helper_file extends Structure {
 //        public _IO_FILE_plus _f;
-//        public Pointer _put_stream;
+//        public PointerType _put_stream;
 //        public int lock;
 //    }
     @Structure.FieldOrder({ "d", "fmt", "ru" })
     public static class dec_test extends Structure {
         public double d;
         public String fmt;
-        public Pointer ru;
+        public PointerType ru;
     }
     @Structure.FieldOrder({ "d", "fmt", "ru" })
     public static class hex_test extends Structure {
         public double d;
         public String fmt;
-        public Pointer ru;
+        public PointerType ru;
     }
     @Structure.FieldOrder({ "line", "value", "result", "format_string" })
     public static class sprint_int_type extends Structure {
@@ -1151,8 +1155,8 @@ public class CStruct {
     @Structure.FieldOrder({ "value", "fmt", "expect" })
     public static class testcase extends Structure {
         public double value;
-        public Pointer fmt;
-        public Pointer expect;
+        public PointerType fmt;
+        public PointerType expect;
     }
     @Structure.FieldOrder({ "i", "d" })
     public static class two_argument extends Structure {
@@ -1168,7 +1172,7 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "fp", "indent_level", "first_element" })
     public static class json_ctx extends Structure {
-        public Pointer fp;
+        public PointerType fp;
         public int indent_level;
         public boolean first_element;
     }
@@ -1268,12 +1272,12 @@ public class CStruct {
 //    @Structure.FieldOrder({ "exception", "errcode", "env" })
 //    public static class catch extends Structure {
 //        public dl_ exception;
-//        public Pointer errcode;
+//        public PointerType errcode;
 //        public int env;
 //    }
     @Structure.FieldOrder({ "next", })
     public static class strct extends Structure {
-        public Pointer next;
+        public PointerType next;
     }
     @Structure.FieldOrder({ "lib", "path", "flags", "osversion", "hwcap", "bits_hwcap", "next" })
     public static class cache_entry extends Structure {
@@ -1306,38 +1310,38 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "next", })
     public static class testdat extends Structure {
-        public Pointer next;
+        public PointerType next;
     }
     @Structure.FieldOrder({ "nsid", "file", "mode", "neW", "caller" })
     public static class dlmopen_args extends Structure {
         public NativeLong nsid;
         public String file;
         public int mode;
-        public Pointer neW;
-        public Pointer caller;
+        public PointerType neW;
+        public PointerType caller;
     }
     @Structure.FieldOrder({ "file", "mode", "neW", "caller" })
     public static class dlopen_args extends Structure {
         public String file;
         public int mode;
-        public Pointer neW;
-        public Pointer caller;
+        public PointerType neW;
+        public PointerType caller;
     }
 
     @Structure.FieldOrder({ "handle", "name", "who", "sym" })
     public static class dlsym_args extends Structure {
-        public Pointer handle;
+        public PointerType handle;
         public String name;
-        public Pointer who;
-        public Pointer sym;
+        public PointerType who;
+        public PointerType sym;
     }
     @Structure.FieldOrder({ "handle", "name", "version", "who", "sym" })
     public static class dlvsym_args extends Structure {
-        public Pointer handle;
+        public PointerType handle;
         public String name;
         public String version;
-        public Pointer who;
-        public Pointer sym;
+        public PointerType who;
+        public PointerType sym;
     }
 
     @Structure.FieldOrder({ "args", "silent", "verbose", "output_file" })
@@ -1359,7 +1363,7 @@ public class CStruct {
 
     @Structure.FieldOrder({ "iov_base", "iov_len" })
     public static class iovec extends Structure {
-        public Pointer iov_base;
+        public PointerType iov_base;
         public int iov_len;
     }
 
@@ -1377,12 +1381,12 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "buf", "oldaction" })
     public static class cleanup_arg extends Structure {
-        public Pointer buf;
+        public PointerType buf;
         public sigaction oldaction;
     }
     @Structure.FieldOrder({ "callback", "expected" })
     public static class tests extends Structure {
-        public Pointer callback;
+        public PointerType callback;
         public String expected;
     }
     @Structure.FieldOrder({ "A", "B", "C", "D", "total", "buflen" })
@@ -1398,7 +1402,7 @@ public class CStruct {
     public static class support_next_to_fault extends Structure {
         public String buffer;
         public int length;
-        public Pointer region_start;
+        public PointerType region_start;
         public int region_size;
     }
 
@@ -1425,7 +1429,7 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "out", "buffer", "length" })
     public static class xmemstream extends Structure {
-        public Pointer out;
+        public PointerType out;
         public String buffer;
         public int length;
     }
@@ -1445,7 +1449,7 @@ public class CStruct {
     }
 //    @Structure.FieldOrder({ "query_buffer", "query_length", "server_index", "tcp", "edns" })
 //    public static class resolv_response_context extends Structure {
-//        public Pointer query_buffer;
+//        public PointerType query_buffer;
 //        public int query_length;
 //        public int server_index;
 //        public boolean tcp;
@@ -1469,7 +1473,7 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "alloc_base", "alloc_size", "alt_stack", "old_stack" })
     public static class sigstack_desc extends Structure {
-        public Pointer alloc_base;
+        public PointerType alloc_base;
         public int alloc_size;
         public int alt_stack;
         public int old_stack;
@@ -1503,7 +1507,7 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "data", "size" })
     public static class in_buffer extends Structure {
-        public Pointer data;
+        public PointerType data;
         public int size;
     }
     @Structure.FieldOrder({ "alias_name", "alias_members_len", "alias_members", "alias_local" })
@@ -1538,7 +1542,7 @@ public class CStruct {
     @Structure.FieldOrder({ "name", "b3", "q" })
     public static class thr_data extends Structure {
         public String name;
-        public Pointer b3;
+        public LongByReference  b3;
         public int q;
     }
 
@@ -1547,12 +1551,12 @@ public class CStruct {
         public byte dbid;
         public boolean extra_string;
         public database next;
-        public Pointer entries;
+        public PointerType entries;
         public int nentries;
         public int nhashentries;
-        public Pointer hashtable;
+        public PointerType hashtable;
         public int keystrlen;
-        public Pointer keyidxtab;
+        public PointerType keyidxtab;
         public String keystrtab;
     }
     @Structure.FieldOrder({ "validx", "hashval", "str" })
@@ -1596,7 +1600,7 @@ public class CStruct {
     public static class loaded_l10nfile extends Structure {
         public String filename;
         public int decided;
-        public Pointer data;
+        public PointerType data;
         public loaded_l10nfile next;
         public loaded_l10nfile[] successor;
     }
@@ -1630,18 +1634,18 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "fptr", "rptr", "state", "rand_type", "rand_deg", "rand_sep", "end_ptr" })
     public static class random_data extends Structure {
-        public Pointer fptr;
-        public Pointer rptr;
-        public Pointer state;
+        public PointerType fptr;
+        public PointerType rptr;
+        public PointerType state;
         public int rand_type;
         public int rand_deg;
         public int rand_sep;
-        public Pointer end_ptr;
+        public PointerType end_ptr;
     }
     @Structure.FieldOrder({ "__x", "__old_x", "__c", "__init", "__a" })
     public static class drand48_data extends Structure {
-        public short[] __x;
-        public short[] __old_x;
+        public ShortByReference __x;
+        public ShortByReference __old_x;
         public short __c;
         public short __init;
         public long __a;
@@ -1705,7 +1709,7 @@ public class CStruct {
         public int s;
         public int var;
         public int cmp;
-        public Pointer arg;
+        public PointerType arg;
         public String t;
     }
 
@@ -1715,7 +1719,7 @@ public class CStruct {
 //        public int __refcount;
 //        public sockaddr[] nameserver_list;
 //        public int nameserver_list_size;
-//        public Pointer search_list;
+//        public PointerType search_list;
 //        public int search_list_size;
 //        public resolv_sortlist_entry sort_list;
 //        public int sort_list_size;
@@ -1779,7 +1783,7 @@ public class CStruct {
         public int unused1;
         public int[] unused2;
         public int num_trimdomains;
-        public Pointer trimdomain;
+        public PointerType trimdomain;
         public int flags;
     }
     @Structure.FieldOrder({ "input", "ipv4_ok", "ipv6_ok", "ipv4_expected", "ipv6_expected" })
@@ -1793,7 +1797,7 @@ public class CStruct {
 
     @Structure.FieldOrder({ "data", "length" })
     public static class buffer extends Structure {
-        public Pointer data;
+        public PointerType data;
         public int length;
     }
 //    @Structure.FieldOrder({ "qname", "qtype", "edns" })
@@ -1807,11 +1811,11 @@ public class CStruct {
     public static class dynarray_header extends Structure {
         public int used;
         public int allocated;
-        public Pointer array;
+        public PointerType array;
     }
     @Structure.FieldOrder({ "array", "length" })
     public static class dynarray_finalize_result extends Structure {
-        public Pointer array;
+        public PointerType array;
         public int length;
     }
     @Structure.FieldOrder({ "limit", "prev", "contents" })
@@ -1835,17 +1839,17 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "pointer", "alignment" })
     public static class allocate_result extends Structure {
-        public Pointer pointer;
+        public PointerType pointer;
         public int alignment;
     }
     @Structure.FieldOrder({ "ifd", "real_stderr" })
     public static class buffer_tp_args extends Structure {
         public int ifd;
-        public Pointer real_stderr;
+        public PointerType real_stderr;
     }
     @Structure.FieldOrder({ "array", "length" })
     public static class long_array extends Structure {
-        public Pointer array;
+        public PointerType array;
         public int length;
     }
     @Structure.FieldOrder({ "next", })
@@ -1890,7 +1894,7 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "data", "size", "seed" })
     public static class allocation extends Structure {
-        public Pointer data;
+        public PointerType data;
         public int size;
         public int seed;
     }
@@ -1900,7 +1904,7 @@ public class CStruct {
         public NativeLong magic;
         public hdr prev;
         public hdr next;
-        public Pointer block;
+        public PointerType block;
         public NativeLong magic2;
     }
     @Structure.FieldOrder({ "next", "prev" })
@@ -1921,8 +1925,8 @@ public class CStruct {
     }
     @Structure.FieldOrder({ "dp", "v", "cnt" })
     public static class scandir_cancel_struct extends Structure {
-        public Pointer dp;
-        public Pointer v;
+        public PointerType dp;
+        public PointerType v;
         public int cnt;
     }
 //    @Structure.FieldOrder({ "r_list", "r_nlist" })
@@ -2042,13 +2046,13 @@ public class CStruct {
 
     @Structure.FieldOrder({ "pw_name", "pw_passwd", "pw_uid", "pw_gid", "pw_gecos", "pw_dir", "pw_shell" })
     public static class passwd extends Structure {
-        public Pointer pw_name;
-        public Pointer pw_passwd;
+        public LongByReference pw_name;
+        public LongByReference pw_passwd;
         public int pw_uid;
         public int pw_gid;
-        public Pointer pw_gecos;
-        public Pointer pw_dir;
-        public Pointer pw_shell;
+        public LongByReference pw_gecos;
+        public LongByReference pw_dir;
+        public LongByReference pw_shell;
     }
     @Structure.FieldOrder({ "st_dev", "st_ino", "st_mode", "st_nlink", "st_uid", "st_gid", "st_rdev", "st_size", "st_blksize", "st_blocks", "st_atim", "st_mtim", "st_ctim", "st_ctim.tv_sec" })
     public static class stat extends Structure {
@@ -2172,7 +2176,7 @@ public class CStruct {
     public static class aiocb extends Structure {
         public int             aio_fildes;     /* File descriptor */
         public int           aio_offset;     /* File offset */
-        public Pointer aio_buf;        /* Location of buffer */
+        public PointerType aio_buf;        /* Location of buffer */
         public int          aio_nbytes;     /* Length of transfer */
         public int             aio_reqprio;    /* Request priority */
         //sigevent aio_sigevent;   /* Notification method */
@@ -2183,7 +2187,7 @@ public class CStruct {
     public static class aiocb64 extends Structure {
         public int             aio_fildes;     /* File descriptor */
         public int           aio_offset;     /* File offset */
-        public Pointer aio_buf;        /* Location of buffer */
+        public PointerType aio_buf;        /* Location of buffer */
         public int          aio_nbytes;     /* Length of transfer */
         public int             aio_reqprio;    /* Request priority */
         //sigevent aio_sigevent;   /* Notification method */
@@ -2198,6 +2202,7 @@ public class CStruct {
         public int   gr_gid;        /* group ID */
         public String[] gr_mem;        /* group members */
     }
+
     @Structure.FieldOrder({ "gr_name", "gr_passwd;", "gr_gid","gr_mem"})
     public static class utmp extends Structure {
         public char[]    ut_user; //100
@@ -2228,6 +2233,10 @@ public class CStruct {
         public String fs_type;                /* FSTAB_* from fs_mntops */
         public int fs_freq;                        /* dump frequency, in days */
         public int fs_passno;
+    }
+
+    public static class lc_time_data extends Structure {
+        // TODO
     }
 
     @Structure.FieldOrder({ "decimal_point", "thousands_sep", "grouping","int_curr_symbol", "currency_symbol", "mon_decimal_point", "mon_thousands_sep", "mon_grouping", "positive_sign", "negative_sign", "int_frac_digits",
