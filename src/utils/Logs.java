@@ -1,6 +1,20 @@
 package utils;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Logs {
+    private static String output = "null.out";
+    private static FileWriter fileWriter;
+    public static void logFile(String name) {
+        output = name;
+        try {
+            fileWriter = new FileWriter(output);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void infoLn(Object o) {
         info(o);
         info("\n");
@@ -16,6 +30,11 @@ public class Logs {
     }
 
     public static void info(Object o) {
+        try {
+            fileWriter.write(toStr(o));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.print(toStr(o));
     }
 
@@ -25,6 +44,14 @@ public class Logs {
             if (i < os.length - 1) {
                 info(" ");
             }
+        }
+    }
+
+    public static void closeLog() {
+        try {
+            fileWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

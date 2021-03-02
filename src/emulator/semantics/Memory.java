@@ -143,6 +143,8 @@ public class Memory {
     public void setInt(BitVec add, int val) {}
 
     public void setIntReference(BitVec atAdd, int val) {
+        BitVec value = new BitVec(val);
+        DBDriver.updateMemoryDocument(atAdd.getSym(), value.getSym());
     }
     public void setNativeLong(BitVec atAdd, NativeLong val) {
 
@@ -163,7 +165,13 @@ public class Memory {
 
     }
     public void setIntArray(BitVec add, int size, int[] arr){
-
+        int intSize = Configs.getIntSize(); // bytes
+        for (int i = 0; i < size; i++) {
+            String word = add.getSym();
+            BitVec value = new BitVec(arr[i]);
+            DBDriver.updateMemoryDocument(word, value.getSym());
+            add = add.add(intSize);
+        }
     }
     public void setShortArray(BitVec add, int size, short[] arr){
 
@@ -212,7 +220,15 @@ public class Memory {
     }
 
     public int[] getIntArray(BitVec atAddress, int size) {
-        return null;
+        int[] arr = new int[size];
+        int intSize = Configs.getIntSize(); // bytes
+        for (int i = 0; i < size; i++) {
+            String word = atAddress.getSym();
+            String memValue = DBDriver.getValue(word);
+            arr[i] = (int) Arithmetic.hexToInt(memValue);
+            atAddress = atAddress.add(intSize);
+        }
+        return arr;
     }
     public Buffer getBuffer(BitVec atAddress, int size) {
         return null;
@@ -245,15 +261,14 @@ public class Memory {
     public IntByReference getIntRef(BitVec atAddress) {
         String word = atAddress.getSym();
         String memValue = DBDriver.getValue(word);
-        String haftWord = memValue.substring(Configs.wordSize-Configs.getIntSize(), Configs.wordSize);
-        IntByReference ref = new IntByReference((int) Arithmetic.hexToInt(haftWord));
+        //String haftWord = memValue.substring(Configs.wordSize-Configs.getIntSize(), Configs.wordSize);
+        IntByReference ref = new IntByReference((int) Arithmetic.hexToInt(memValue));
         return ref;
     }
     public int getIntFromReference(BitVec atAddress) {
         String word = atAddress.getSym();
         String memValue = DBDriver.getValue(word);
-        String haftWord = memValue.substring(Configs.wordSize-Configs.getIntSize(), Configs.wordSize);
-        return (int ) Arithmetic.hexToInt(haftWord);
+        return (int ) Arithmetic.hexToInt(memValue);
     }
 
     public NativeLong getNativeLongFromReference(BitVec atAddress) {

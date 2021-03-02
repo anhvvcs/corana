@@ -24,7 +24,7 @@ public class Executor {
     private static ArrayList<AsmNode> asmNodes = null;
     private static String jumpFrom = null;
     private static String jumpTo = null;
-    private static int loopLimitation = 50;
+    private static int loopLimitation = 1;
     private static HashMap<String, Integer> countJumpedPair = new HashMap<>();
     private static HashMap<String, EnvModel> labelToEnvModel = new HashMap<>();
     private static Stack<Map.Entry<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
@@ -35,7 +35,7 @@ public class Executor {
     private static long startTime;
 
     public static void execute(Variation variation, String inpFile) {
-
+        Logs.logFile(inpFile + ".out");
         if (!FileUtils.isExist(inpFile)) {
             Logs.infoLn("-> Input file doest not exist.");
         } else if (!isARM(inpFile)) {
@@ -89,6 +89,7 @@ public class Executor {
                 gg();
             }
         }
+        Logs.closeLog();
     }
 
 
@@ -133,7 +134,7 @@ public class Executor {
                 String pair = jumpFrom + " --> " + jumpTo;
                 Logs.info(String.format("\t-> Start Jumping from %s --> %s\n", asmNodes.get(nodeLabelToIndex.get(jumpFrom)).getAddress(), asmNodes.get(nodeLabelToIndex.get(jumpTo)).getAddress()));
                 countJumpedPair.put(pair, countJumpedPair.containsKey(pair) ? countJumpedPair.get(pair) + 1 : 1);
-                if (countJumpedPair.get(pair) <= loopLimitation) {
+                if (countJumpedPair.get(pair) <= loopLimitation ) {
                     jumpTo = null;
                     jumpFrom = null;
                     Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
@@ -220,14 +221,16 @@ public class Executor {
                 // If it is a direct jump
                 if (isConcreteLabel(arrParams[0])) {
                     if (modelTrue != null && modelTrue.envData != null) {
+                        String funcname = ExternalCall.findFunctionName(arrParams[0]);
                         if (!ExternalCall.isExternalFucntion(arrParams[0])) {
                             //Internal Function
+                            if (!funcname.equals("")) Logs.infoLn("\t ==+ Call to: " + funcname);
                             modelTrue.label = strLabel;
                             modelTrue.prevLabel = prevLabel;
                             labelToEnvModel.put(modelTrue.label, modelTrue);
                         }
                         if (ExternalCall.isExternalFucntion(arrParams[0])) {
-                            Logs.infoLn("\t === Call to " + ExternalCall.findFunctionName(arrParams[0]) + " function");
+                            Logs.infoLn("\t === Call to library function: " + funcname);
                             //emulator.write('0', new BitVec(SysUtils.addSymVar()));
                             emulator.call(arrParams[0]);
                             modelTrue.label = nextInst(jumpFrom);
@@ -6105,6 +6108,10 @@ public class Executor {
             label = label.split("\\+")[0];
         }
         return label.contains("-") ? label.replace("-", "+") : String.valueOf(Integer.parseInt(label) + 4);
+    }
+
+    private static boolean isFunctionCall(String jumpFrom, String jumpTo) {
+        return (!ExternalCall.findFunctionName(jumpTo).equals(""));
     }
 
     private static String nextInst(String label) {

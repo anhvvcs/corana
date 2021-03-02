@@ -9,6 +9,7 @@ import com.sun.jna.Pointer;
 import java.nio.Buffer;
 
 import com.sun.jna.ptr.ByReference;
+import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.ptr.PointerByReference;
 import external.jni.CStruct.*;
@@ -19,8 +20,14 @@ public interface CLibrary extends Library {
 //        Native.setProtected(true);
 //    }
     CLibrary INSTANCE = (CLibrary)Native.loadLibrary("c", CLibrary.class);
-    void printf (String __restrict__fmt, Object... args);
+
     //printf (const char __restrict __fmt, ...)
+    void printf (String __restrict__fmt, Object... args);
+
+    //int *__errno_location(void) - not in the source standard; only in the binary standard
+    IntByReference __errno_location();
+    ////int connect(int __fd,sockaddr *__addr,socklen_t __len)
+    int connect(int __fd, sockaddr __addr, int len);
     void _exit(int status);
     void _Exit(int status);
     void _flushlbf();

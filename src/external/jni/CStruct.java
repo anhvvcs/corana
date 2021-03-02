@@ -631,10 +631,14 @@ public class CStruct {
         public byte t_eofc;
         public byte t_brkc;
     }
+    //struct sockaddr {
+    //    u_short sa_family;
+    //    char    sa_data[14];
+    //};
     @Structure.FieldOrder({ "sa_", "sa_data" })
     public static class sockaddr extends Structure {
         public int sa_;
-        public int sa_data;
+        public int[] sa_data = new int[14];
     }
     @Structure.FieldOrder({ "sem_perm", "sem_otime", "sem_ctime", "sem_nsems" })
     public static class semid_ds extends Structure {
@@ -2238,6 +2242,7 @@ public class CStruct {
     public static class lc_time_data extends Structure {
         // TODO
     }
+
 
     @Structure.FieldOrder({ "decimal_point", "thousands_sep", "grouping","int_curr_symbol", "currency_symbol", "mon_decimal_point", "mon_thousands_sep", "mon_grouping", "positive_sign", "negative_sign", "int_frac_digits",
         "frac_digits", "p_cs_precedes", "p_sep_by_space", "n_cs_precedes", "n_sep_by_space", "p_sign_posn", "n_sign_posn"})
