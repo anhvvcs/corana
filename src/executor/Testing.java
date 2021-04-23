@@ -6,15 +6,9 @@
 package executor;
 
 import capstone.Capstone;
-import emulator.semantics.Memory;
 import enums.Variation;
-import external.jni.Typedef;
-import pojos.AsmNode;
-import utils.Arithmetic;
-import utils.SysUtils;
 
 import java.io.File;
-import java.util.ArrayList;
 
 public class Testing {
 
@@ -29,16 +23,15 @@ public class Testing {
             String f = inpFile.getPath();
             String name = inpFile.getName();
             //Logs.initLog("./results/" + name + ".log");
-            //Corana.inpFile = f;
+            Corana.inpFile = name;
             //Corana.outFile = "./results/" + name;
 //            Memory.loadMemory(f, name);
-
             Executor.execute(Variation.M0, f);
             //Logs.endLog();
         }
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)  {
         //37c81e56604c3c55dc652bddbce5229d - mirai
         //d154a62c7926d98f78b974253c03f77c // arbiter
         //e24443e10da03abfbb6c355515400953 // snoopy
@@ -65,7 +58,25 @@ public class Testing {
         //c10c502e115e615609caa3ee4011841d // corona.arm6 - gafgyt variant
         //8617fef86bed2663e0fa55d5247af9a1
 
+        //3466bc7438faa880bd82cc8faabd461c$
+        //341febc5fa4ce975aa0bedc7c33ad132$
+        //3416bcf55e5abd43476f05dd254c1a92$
+        //3451e130d74c8b8f7243bdba8dcfaa5e$
+        //3410541c08d378224661f5d5dafdf8dd$
+        //34a08507e081522291dcda73d828b614$
+        //34a26407025b063a3e81c5bc1a95fdef$
+
+        //f8b512d02c2f17dcd1a58e5ca6dc1c37$
+
         File dir = new File("samples/32caf/32caff26a4dfa373cd0ed869544a30b7$");
-        exeFiles(dir);
+        long startTime = System.nanoTime();
+        try {
+            exeFiles(dir);
+        }
+        catch (Exception e) {
+            System.out.println(e);
+        }
+        long stopTime = System.nanoTime();
+        System.out.println(stopTime - startTime);
     }
 }

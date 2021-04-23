@@ -17,6 +17,8 @@ import java.util.BitSet;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.lang.Character.isDigit;
+
 public class Emulator {
 
     protected ArithmeticMode arithmeticMode = ArithmeticMode.BINARY;
@@ -346,10 +348,10 @@ public class Emulator {
                 return String.format("(not %s)", env.flags.Z.getSym());
             case CS:
             case HS:
-                return env.flags.C.getSym();
+                return env.flags.C.getSym();                                //C == 1
             case CC:
             case LO:
-                return String.format("(not %s)", env.flags.C.getSym());
+                return String.format("(not %s)", env.flags.C.getSym()); // C == 0
             case MI:
                 return env.flags.N.getSym();
             case PL:
@@ -494,6 +496,7 @@ public class Emulator {
     }
 
     protected BitVec zeroExt(BitVec b, int n) {
+        long c = b.getSym().chars().mapToObj(i -> (char) i).filter(Character::isDigit).count();
         String symbolicValue = String.format("((_ zero_extend %s) %s)", n, b.getSym());
         return new BitVec(symbolicValue, b.getVal());
     }
@@ -916,7 +919,8 @@ public class Emulator {
         BitVec res = env.value(r);
         // if the value is number in bitvec < 32 -> change to bitvec 32 (#x0 -> #x00000000)
         String symValue = (res.getSym().charAt(0)  == '#' && res.getSym().length() < 8) ? SysUtils.normalizeNumInHex(res.getSym().trim()) : res.getSym();
-        return new BitVec(symValue, res.getVal());
+        BitVec valBitVec = new BitVec(symValue, res.getVal());
+        return valBitVec;
     }
 
     protected void load(Character d, Character label) {
@@ -1139,8 +1143,16 @@ public class Emulator {
     /**
      * Call an external function
      */
-    public void call(String jmpAdress) {
-        try {
+
+
+    public EnvModel fork(EnvModel cur) {
+        Logs.info("\t-> Fork a new process \n");
+        EnvModel modelChild = new EnvModel(cur);
+        return modelChild;
+    }
+
+    public void call(String jmpAdress) throws Exception{
+       // try {
             String func = ExternalCall.findFunctionName(jmpAdress);
             if ("printf".equals(func)) {
                 APIStub.printf(env);
@@ -2992,6 +3004,10 @@ public class Emulator {
                 APIStub.srandom(env); }
             else if ("srandom_r".equals(func)) {
                 APIStub.srandom_r(env); }
+            else if ("srandom_r".equals(func)) {
+                APIStub.srandom_r(env); }
+            else if ("sprintf".equals(func)) {
+                APIStub.sprintf(env); }
             else if ("ssignal".equals(func)) {
                 APIStub.ssignal(env); }
             else if ("stime".equals(func)) {
@@ -3410,9 +3426,9 @@ public class Emulator {
                 APIStub.ynf(env); }
             else if ("ynl".equals(func)) {
                 APIStub.ynl(env); }
-        } catch (Throwable e){
-            Logs.infoLn("\t -> Error in native thread. " + e);
-        }
+//        } catch (Throwable e){
+//            Logs.infoLn("\t -> Error in native thread. " + e);
+//        }
 
     }
 

@@ -57,7 +57,7 @@ public class Memory {
                 String[] parts = line.split("\\:");
                 String label = parts[0];
                 String[] contents = parts[1].split("\\s+");
-                if (contents.length > 2) {
+                if (contents.length >= 2) {
                     if (contents[1].matches("-?[0-9a-fA-F]+")) {
                             if (parts[1].contains("<")) {
                                 funcLabel = parts[1].contains("+") ? parts[1].substring(parts[1].indexOf('<') + 1, parts[1].indexOf('+')) : parts[1].substring(parts[1].indexOf('<') + 1, parts[1].indexOf('>'));
@@ -162,8 +162,15 @@ public class Memory {
     }
 
     public void setByteArray(BitVec add, int size, byte[] arr){
-
+        int intSize = Configs.getIntSize(); // bytes
+        for (int i = 0; i < size; i++) {
+            String word = add.getSym();
+            BitVec value = new BitVec(arr[i]);
+            DBDriver.updateMemoryDocument(word, value.getSym());
+            add = add.add(intSize);
+        }
     }
+
     public void setIntArray(BitVec add, int size, int[] arr){
         int intSize = Configs.getIntSize(); // bytes
         for (int i = 0; i < size; i++) {
@@ -177,7 +184,15 @@ public class Memory {
 
     }
 
-    public void setBuffer(BitVec add, int size, Buffer buf) {}
+    public void setBuffer(BitVec add, int size, char[] buf) {
+        int intSize = Configs.getIntSize(); // bytes
+        for (int i = 0; i < size; i++) {
+            String word = add.getSym();
+            BitVec value = new BitVec((int) buf[i]);
+            DBDriver.updateMemoryDocument(word, value.getSym());
+            add = add.add(intSize);
+        }
+    }
 
     /*
      GETTERS
@@ -212,9 +227,19 @@ public class Memory {
     public Object[] getArray(BitVec atAddress, int size) {
         return null;
     }
+
     public byte[] getByteArray(BitVec atAddress, int size) {
-        return null;
+        byte[] arr = new byte[size];
+        int intSize = Configs.getIntSize(); // bytes
+        for (int i = 0; i < size; i++) {
+            String word = atAddress.getSym();
+            String memValue = DBDriver.getValue(word);
+            arr[i] = (byte) Arithmetic.hexToInt(memValue);
+            atAddress = atAddress.add(intSize);
+        }
+        return arr;
     }
+
     public short[] getShortArray(BitVec atAddress, int size) {
         return null;
     }
@@ -230,8 +255,16 @@ public class Memory {
         }
         return arr;
     }
-    public Buffer getBuffer(BitVec atAddress, int size) {
-        return null;
+    public char[] getBuffer(BitVec atAddress, int size) {
+        char[] arr = new char[size];
+        int intSize = Configs.getIntSize(); // bytes
+        for (int i = 0; i < size; i++) {
+            String word = atAddress.getSym();
+            String memValue = DBDriver.getValue(word);
+            arr[i] = (char) Arithmetic.hexToInt(memValue);
+            atAddress = atAddress.add(intSize);
+        }
+        return arr;
     }
     //for 32bit machine
     public BitVec getWordMemoryValue(BitVec atAddress) {
@@ -308,6 +341,7 @@ public class Memory {
         String word = atAddress.getSym();
         return (int) Arithmetic.hexToInt(word);
     }
+
     public float getFloat(BitVec atAddress) {
         String word = atAddress.getSym();
         return (float) Arithmetic.hexToInt(word);

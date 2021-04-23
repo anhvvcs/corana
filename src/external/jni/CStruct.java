@@ -2352,6 +2352,4 @@ public class CStruct {
 //        }
     }
 
-
-
 }

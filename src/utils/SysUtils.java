@@ -1,5 +1,6 @@
 package utils;
 
+import executor.Configs;
 import pojos.BitVec;
 
 import java.io.BufferedReader;
@@ -44,6 +45,9 @@ public class SysUtils {
         raw = (raw.charAt(0) == 'x') ? raw.replaceFirst("x", "") : raw;
         while (raw.length() < 8) {
             raw = "0" + raw;
+        }
+        while (raw.length() > 8) {
+            raw = raw.substring(1);
         }
         String symbolicValue = "#x" + raw;
         return symbolicValue;

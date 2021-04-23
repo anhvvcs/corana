@@ -24,14 +24,16 @@ public class Executor {
     private static ArrayList<AsmNode> asmNodes = null;
     private static String jumpFrom = null;
     private static String jumpTo = null;
-    private static int loopLimitation = 1;
+    private static int loopLimitation = 2;
     private static HashMap<String, Integer> countJumpedPair = new HashMap<>();
     private static HashMap<String, EnvModel> labelToEnvModel = new HashMap<>();
     private static Stack<Map.Entry<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
     private static Map.Entry<EnvModel, HashMap<String, EnvModel>> recentPop = null;
     private static String triggerPrevLabelTwoUnsat = null;
     private static List<String> internalFunctions = new ArrayList<>();
-
+    private static String forkFrom = null;
+    private static Stack<Map.Entry<EnvModel, HashMap<String, EnvModel>>> processStack = new Stack<>();
+    private static Map.Entry<EnvModel, HashMap<String, EnvModel>> recentProcess = null;
     private static long startTime;
 
     public static void execute(Variation variation, String inpFile) {
@@ -41,7 +43,6 @@ public class Executor {
         } else if (!isARM(inpFile)) {
             Logs.infoLn("-> Input file is not an ARM variation.");
         } else {
-
             long startCapstone = System.currentTimeMillis();
             asmNodes = BinParser.parseBySection(inpFile);
             internalFunctions = BinParser.getInternalSymbols(inpFile);
@@ -97,24 +98,28 @@ public class Executor {
         AsmNode n = asmNodes.get(nodeLabelToIndex.get(label));
         Logs.info("-> Executing", n.getAddress(), ":", n.getOpcode(), n.getParams(), '\n');
         if (label.equals(String.valueOf(BinParser.end))) {
-            System.exit(0);
-        }
-        if (emulator.getClass() == M0.class) {
-            singleExec((M0) emulator, prevLabel, n);
-        } else if (emulator.getClass() == M0_Plus.class) {
-            singleExec((M0_Plus) emulator, prevLabel, n);
-        } else if (emulator.getClass() == M3.class) {
-            singleExec((M3) emulator, prevLabel, n);
-        } else if (emulator.getClass() == M4.class) {
-            singleExec((M4) emulator, prevLabel, n);
-        } else if (emulator.getClass() == M7.class) {
-            singleExec((M7) emulator, prevLabel, n);
-        } else if (emulator.getClass() == M33.class) {
-            singleExec((M33) emulator, prevLabel, n);
-        } else {
-            Logs.infoLn("-> Wrong Variation!");
+            //gg();
+            Logs.infoLn("-> Process ended. Time elapsed: " + (System.currentTimeMillis() - startTime) + "ms");
             return;
         }
+        try {
+            if (emulator.getClass() == M0.class) {
+                singleExec((M0) emulator, prevLabel, n);
+            } else if (emulator.getClass() == M0_Plus.class) {
+                singleExec((M0_Plus) emulator, prevLabel, n);
+            } else if (emulator.getClass() == M3.class) {
+                singleExec((M3) emulator, prevLabel, n);
+            } else if (emulator.getClass() == M4.class) {
+                singleExec((M4) emulator, prevLabel, n);
+            } else if (emulator.getClass() == M7.class) {
+                singleExec((M7) emulator, prevLabel, n);
+            } else if (emulator.getClass() == M33.class) {
+                singleExec((M33) emulator, prevLabel, n);
+            } else {
+                Logs.infoLn("-> Wrong Variation!");
+                return;
+            }
+
 
         String newLabel = (jumpTo == null) ? nextInst(label) : jumpTo;
         String address = n.getAddress();
@@ -134,7 +139,7 @@ public class Executor {
                 String pair = jumpFrom + " --> " + jumpTo;
                 Logs.info(String.format("\t-> Start Jumping from %s --> %s\n", asmNodes.get(nodeLabelToIndex.get(jumpFrom)).getAddress(), asmNodes.get(nodeLabelToIndex.get(jumpTo)).getAddress()));
                 countJumpedPair.put(pair, countJumpedPair.containsKey(pair) ? countJumpedPair.get(pair) + 1 : 1);
-                if (countJumpedPair.get(pair) <= loopLimitation ) {
+                if (countJumpedPair.get(pair) <= loopLimitation) {
                     jumpTo = null;
                     jumpFrom = null;
                     Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
@@ -168,9 +173,33 @@ public class Executor {
                 execFrom(emulator, label, newLabel);
             }
         }
+        } catch (Exception e) {
+            //return;
+
+            Logs.infoLn("-> Process ended. Time elapsed: " + (System.currentTimeMillis() - startTime) + "ms");
+            Logs.closeLog();
+            Logs.forkLog();
+            if (!processStack.empty()) {
+                Logs.info(String.format("\t-> Start Child process from %s\n", asmNodes.get(nodeLabelToIndex.get(forkFrom)).getAddress()));
+
+                //forkFrom = null;
+                //Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
+
+//                int savedAsmSize = Exporter.savedAsm.size();
+//                String lastSaved = Exporter.savedAsm.get(savedAsmSize - 1);
+//                String[] arr = lastSaved.split(" ");
+//                Exporter.savedAsm.set(savedAsmSize - 1, arr[0] + " " + arr[1] + " " + newLabel);
+
+                Map.Entry<EnvModel, HashMap<String, EnvModel>> model = processStack.pop();
+                recentPop = model;
+                forkFrom = model.getKey().label;
+                labelToEnvModel = model.getValue();
+                execFrom(emulator, forkFrom, nextInst(forkFrom));
+            }
+        }
     }
     
-    private static void singleExec(M0 emulator, String prevLabel, AsmNode n) {
+    private static void singleExec(M0 emulator, String prevLabel, AsmNode n) throws Exception {
         String nLabel = n.getLabel();
         if (nLabel == null) System.exit(0);
         if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel) + 8));
@@ -184,6 +213,8 @@ public class Executor {
             if ("b".equals(opcode) || "bl".equals(opcode) || "bx".equals(opcode) || "blx".equals((opcode))) {
                 Character condSuffix = Mapping.condStrToChar.get(Objects.requireNonNull(n.getCondSuffix()).toUpperCase());
                 String preCond = recentPop == null ? "" : recentPop.getKey().pathCondition;
+                // if preCond is long
+                if (preCond.length() > 8000) preCond = "";
                 jumpFrom = nLabel;
 
                 EnvModel thisEnvModel = new EnvModel(jumpFrom, preCond);
@@ -203,13 +234,13 @@ public class Executor {
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
                         break;
                     case "bl":
-                        envPair = emulator.bl(Integer.parseInt(nLabel), preCond, condSuffix, strLabel == null ? charLabel : strLabel);
+                        envPair = emulator.bl(Integer.parseInt(nextInst(nLabel)), preCond, condSuffix, strLabel == null ? charLabel : strLabel);
                         break;
                     case "bx":
                         envPair = emulator.bx(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
                         break;
                     case "blx":
-                        envPair = emulator.bl(Integer.parseInt(nLabel), preCond, condSuffix, strLabel == null ? charLabel : strLabel);
+                        envPair = emulator.bl(Integer.parseInt(nextInst(nLabel)), preCond, condSuffix, strLabel == null ? charLabel : strLabel);
                         break;
                     default:
                         envPair = null;
@@ -218,6 +249,8 @@ public class Executor {
                 if (envPair == null) {return;}
                 EnvModel modelTrue = envPair.getKey();
                 EnvModel modelFalse = envPair.getValue();
+
+                EnvModel modelFork = null;
                 // If it is a direct jump
                 if (isConcreteLabel(arrParams[0])) {
                     if (modelTrue != null && modelTrue.envData != null) {
@@ -232,7 +265,17 @@ public class Executor {
                         if (ExternalCall.isExternalFucntion(arrParams[0])) {
                             Logs.infoLn("\t === Call to library function: " + funcname);
                             //emulator.write('0', new BitVec(SysUtils.addSymVar()));
-                            emulator.call(arrParams[0]);
+                            if (funcname.equals("fork")) {
+                                Logs.infoLn("\t === Fork a new process. Parent process:");
+                                forkFrom = nextInst(jumpFrom);
+                                modelFork = emulator.fork(thisEnvModel);
+                                modelFork.label = nextInst(jumpFrom);
+                                modelFork.prevLabel = prevLabel;
+                                labelToEnvModel.put(modelFork.label, modelFork);
+                                decideToFork(modelFork);
+                            } else {
+                                emulator.call(arrParams[0]);
+                            }
                             modelTrue.label = nextInst(jumpFrom);
                             modelTrue.prevLabel = prevLabel;
                             labelToEnvModel.put(modelTrue.label, modelTrue);
@@ -520,6 +563,7 @@ public class Executor {
             } else if ("svc".equals(opcode)) {
                 Integer imSvc = arrParams[0].contains("#") ? SysUtils.normalizeNumInParam(arrParams[0].trim()) : null;
                 emulator.svc(imSvc);
+
             } else if ("pop".equals(opcode)) {
                 for (String p : arrParams) {
                     p = p.replace("{", "").replace("}", "");
@@ -1258,8 +1302,6 @@ public class Executor {
                         modelTrue.label = modelTrue.envData.eval;
                         modelTrue.prevLabel = prevLabel;
                         if (modelTrue.label == null) {
-                            
-                            
                             int foundLabel = Arithmetic.bitSetToInt(emulator.getEnv().register.regs.get('l').getVal());
                             if (foundLabel != 0 && foundLabel % 4 == 0) {
                                 modelTrue.label = String.valueOf(foundLabel);
@@ -1525,6 +1567,7 @@ public class Executor {
             } else if ("svc".equals(opcode)) {
                 Integer imSvc = arrParams[0].contains("#") ? SysUtils.normalizeNumInParam(arrParams[0].trim()) : null;
                 emulator.svc(imSvc);
+                gg();
             } else if ("pop".equals(opcode)) {
                 for (String p : arrParams) {
                     p = p.replace("{", "").replace("}", "");
@@ -2505,6 +2548,7 @@ public class Executor {
             } else if ("svc".equals(opcode)) {
                 Integer imSvc = arrParams[0].contains("#") ? SysUtils.normalizeNumInParam(arrParams[0].trim()) : null;
                 emulator.svc(imSvc);
+                gg();
             } else if ("pop".equals(opcode)) {
                 for (String p : arrParams) {
                     p = p.replace("{", "").replace("}", "");
@@ -6068,6 +6112,19 @@ public class Executor {
         }
     }
 
+    private static void decideToFork(EnvModel modelShare) {
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(labelToEnvModel);
+        Type type = new TypeToken<HashMap<String, EnvModel>>() {}.getType();
+        HashMap<String, EnvModel> clonedMap = gson.fromJson(jsonString, type);
+        if (modelShare != null && labelToEnvModel.containsKey(modelShare.label)) {
+            if (modelShare.label != null) {
+                processStack.push(Pair.of(new EnvModel(modelShare), clonedMap));
+            }
+        }
+        if (processStack.empty()) gg();
+    }
+
     private static void decideToJump(EnvModel modelTrue, EnvModel modelFalse) {
         Gson gson = new Gson();
         String jsonString = gson.toJson(labelToEnvModel);
@@ -6132,5 +6189,23 @@ public class Executor {
     private static void gg() {
         Logs.infoLn("-> Time elapsed: " + (System.currentTimeMillis() - startTime) + "ms");
         System.exit(0);
+    }
+
+    private static void gg(Emulator emulator) {
+        Logs.infoLn("-> Time elapsed: " + (System.currentTimeMillis() - startTime) + "ms");
+        System.exit(0);
+        if (!processStack.empty()) {
+            Logs.info(String.format("\t-> Start Child process from %s\n", asmNodes.get(nodeLabelToIndex.get(forkFrom)).getAddress()));
+
+            forkFrom = null;
+            //Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
+
+//                int savedAsmSize = Exporter.savedAsm.size();
+//                String lastSaved = Exporter.savedAsm.get(savedAsmSize - 1);
+//                String[] arr = lastSaved.split(" ");
+//                Exporter.savedAsm.set(savedAsmSize - 1, arr[0] + " " + arr[1] + " " + newLabel);
+
+            execFrom(emulator, forkFrom, nextInst(forkFrom));
+        }
     }
 }

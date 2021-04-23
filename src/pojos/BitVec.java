@@ -3,11 +3,13 @@ package pojos;
 import com.sun.jna.NativeLong;
 import executor.Configs;
 import utils.Arithmetic;
+import utils.SysUtils;
 import utils.Z3Solver;
 
 import java.math.BigInteger;
 import java.util.BitSet;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class BitVec {
     private String sym;
@@ -21,16 +23,13 @@ public class BitVec {
 
     public BitVec(String sym, BitSet val) {
         String result = (sym.matches("[01][01]+") || sym.matches("^(0x|0X|#x)?[a-fA-F0-9]+$")) ? sym: Z3Solver.solveBitVecArithmetic(sym);
-        this.sym = (!result.equals("ERROR")) ? result : sym;
+        this.sym = (!result.equals("ERROR")) ? SysUtils.normalizeNumInHex(result) : sym;
         this.val = val;
     }
 
     public BitVec(byte bv) {
-        //TODO
-    }
-
-    public BitVec(Object bv) {
-        //TODO
+        this.sym = Arithmetic.intToHexSmt(bv);
+        this.val = Arithmetic.longToBitSet(bv);
     }
 
     public BitVec(NativeLong n) {
@@ -53,6 +52,14 @@ public class BitVec {
     public BitVec(Integer n) {
         this.sym = Arithmetic.intToHexSmt(n);
         this.val = Arithmetic.intToBitSet(n);
+    }
+
+    public BitVec(Object n) {
+    }
+
+    public BitVec(Short n) {
+        this.sym = Arithmetic.intToHexSmt(n);
+        this.val = Arithmetic.longToBitSet(n);
     }
 
     public BitVec(Long n) {
@@ -100,4 +107,16 @@ public class BitVec {
         String hex = this.sym;
         return Arithmetic.fromHexStr(Arithmetic.intToHex(Arithmetic.hexToInt(hex) + byte_step));
     }
+
+//    public String normalizeZeros(String s) {
+//        long digits = s.length() - (s.indexOf('x') + 1);
+//        if (digits > 8) {
+//            long zeros =  s.chars().mapToObj(i -> (char) i).filter(i -> i == '0').count();
+//            long notNeed = digits - (8 - zeros);
+//            for (int i = 0; i < notNeed; i++) {
+//                s = s.replaceFirst("0", "");
+//            }
+//        }
+//        return s;
+//    }
 }

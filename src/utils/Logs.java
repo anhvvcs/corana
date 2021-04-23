@@ -1,15 +1,27 @@
 package utils;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 
 public class Logs {
-    private static String output = "null.out";
+    private static String output = "./output.out";
     private static FileWriter fileWriter;
+    private static int processNo = 0;
+
     public static void logFile(String name) {
-        output = name;
+        //output = name;
         try {
             fileWriter = new FileWriter(output);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void forkLog() {
+        try {
+            fileWriter = new FileWriter(output + "_fork" + toStr(processNo));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,6 +61,7 @@ public class Logs {
 
     public static void closeLog() {
         try {
+            fileWriter.flush();
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();

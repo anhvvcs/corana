@@ -10,24 +10,24 @@ import java.nio.Buffer;
 
 import com.sun.jna.ptr.ByReference;
 import com.sun.jna.ptr.IntByReference;
-import com.sun.jna.ptr.LongByReference;
-import com.sun.jna.ptr.PointerByReference;
 import external.jni.CStruct.*;
 
 public interface CLibrary extends Library {
-//    static {
-//        Native.register("c");
-//        Native.setProtected(true);
-//    }
+
     CLibrary INSTANCE = (CLibrary)Native.loadLibrary("c", CLibrary.class);
 
     //printf (const char __restrict __fmt, ...)
     void printf (String __restrict__fmt, Object... args);
 
+    //int sprintf ( char * str, const char * format, ... );
+    int sprintf (char[] str, String format, Object ... args);
+
     //int *__errno_location(void) - not in the source standard; only in the binary standard
     IntByReference __errno_location();
-    ////int connect(int __fd,sockaddr *__addr,socklen_t __len)
+
+    //int connect(int __fd,sockaddr *__addr,socklen_t __len)
     int connect(int __fd, sockaddr __addr, int len);
+
     void _exit(int status);
     void _Exit(int status);
     void _flushlbf();
@@ -383,7 +383,7 @@ public interface CLibrary extends Library {
     double fmal(NativeLong x, NativeLong y, NativeLong z);
     double fmax(double x, double y);
   
-    int fmemopen(Buffer buf, int size, byte[] mode);
+    int fmemopen(char[] buf, int size, byte[] mode);
     double fmin(double x, double y);
     float fminf(float x, float y);
     double fminl(NativeLong x, NativeLong y);
@@ -442,9 +442,9 @@ public interface CLibrary extends Library {
     tm getdate(String string);
     int getdate_r(String string, tm res);
     int getdelim(String[] lineptr, int[] n, int delim, int[] stream);
-    int getdents64(int __fd, Buffer __buffer, int __length);
+    int getdents64(int __fd, char[] __buffer, int __length);
     int getegid();
-    int getentropy(Buffer buffer, int length);
+    int getentropy(char[] buffer, int length);
     byte getenv(String name);
     int geteuid();
     fstab getfsent();
@@ -490,7 +490,7 @@ public interface CLibrary extends Library {
     int getpwnam_r(String __name);
     passwd getpwuid(int uid);
     int getpwuid_r(int __uid);
-    int getrandom(Buffer buf, int buflen, int flags);
+    int getrandom(char[] buf, int buflen, int flags);
     int getrlimit(int resource, rlimit rlim);
     int getrlimit64(int __resource);
     int getrusage(int who, rusage usage);
@@ -786,8 +786,8 @@ public interface CLibrary extends Library {
     double pow(double x, double y);
     float powf(float x, float y);
     double powl(NativeLong x, NativeLong y);
-    int pread(int fd, Buffer buf, int count, NativeLong offset);
-    int pread64(int __fd, Buffer __buf, int __nbytes);
+    int pread(int fd, char[] buf, int count, NativeLong offset);
+    int pread64(int __fd, char[] __buf, int __nbytes);
     int preadv(int __fd, iovec __iovec, int __count);
     int preadv2(int __fp, iovec __iovec, int __count);
     int preadv64(int __fd, iovec __iovec, int __count);
@@ -819,8 +819,8 @@ public interface CLibrary extends Library {
     int putwchar(byte wc);
     int putwchar_unlocked(byte wc);
     int fputwc_unlocked(byte wc, ByReference stream);
-    int pwrite(int fd, Buffer buf, int count, NativeLong offset);
-    int pwrite64(int __fd, Buffer __buf, int __n);
+    int pwrite(int fd, char[] buf, int count, NativeLong offset);
+    int pwrite64(int __fd, char[] __buf, int __n);
     int pwritev(int __fd, iovec __iovec, int __count);
     int pwritev2(int __fd, iovec __iodev, int __count);
     int pwritev64(int __fd, iovec __iovec, int __count);
@@ -837,7 +837,7 @@ public interface CLibrary extends Library {
     int random_r(random_data buf, ByReference result);
     int rand_r(ByReference seedp);
     void rawmemchr(ByReference s, int c);
-    int read(int fd, Buffer buf, int count);
+    int read(int fd, char[] buf, int count);
 //    dirent readdir(ByReference dirp);
 //    dirent64 readdir64(ByReference __dirp);
     int readdir64_r(ByReference __dirp);
@@ -846,7 +846,7 @@ public interface CLibrary extends Library {
     void realloc(ByReference ptr, int size);
     void reallocarray(ByReference ptr, int nmemb, int size);
     byte realpath(String __name);
-    int recv(int sockfd, Buffer buf, int len, int flags);
+    int recv(int sockfd, char[] buf, int len, int flags);
     int regcomp(ByReference preg, String regex, int cflags);
     void regfree(ByReference preg);
     int register_printf_function(int __spec, int __func);
@@ -904,7 +904,7 @@ public interface CLibrary extends Library {
     int sem_trywait(ByReference sem);
     int sem_unlink(String name);
     int sem_wait(ByReference sem);
-    int send(int sockfd, Buffer buf, int len, int flags);
+    int send(int sockfd, char[] buf, int len, int flags);
     void setbuf(ByReference stream, String buf);
     void setbuffer(int[] stream, byte[] buf, int size);
     int setcontext(ByReference ucp);
@@ -1127,7 +1127,7 @@ public interface CLibrary extends Library {
     int vlimit(int __resource, int __value);
     int vprintf(String format, int ap);
     int vscanf(String format, int ap);
-    int vsnprintf(byte[] str, int size, byte[] format, int ap);
+    int vsnprintf(char[] str, int size, String format, int ap);
     int vsprintf(String str, String format, int ap);
     int vsscanf(String str, String format, int ap);
     int vswprintf(byte[] __s, int __n);
