@@ -20,11 +20,11 @@ public class Logs {
     }
 
     public static void forkLog() {
-        try {
-            fileWriter = new FileWriter(output + "_fork" + toStr(processNo));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            fileWriter = new FileWriter(output + "_fork" + toStr(processNo));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static void infoLn(Object o) {
@@ -73,6 +73,6 @@ public class Logs {
     }
 
     public static String shorten(String s) {
-        return s.length() > 100 ? s.substring(0, 100) : s;
+        return s.length() > 100 ? s.substring(s.length()-80, s.length()) : s;
     }
 }

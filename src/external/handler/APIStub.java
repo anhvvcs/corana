@@ -3868,15 +3868,15 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void exit (Environment env) {
+    public static void exit (Environment env) throws  Exception {
         BitVec t0 = env.register.get('0');
 
         int param0 ;
 
         param0 = env.memory.getInt(t0);
 
-        CLibrary.INSTANCE.exit(param0);
-
+        //CLibrary.INSTANCE.exit(param0);
+        throw new Exception("exit");
         //env.memory.setInt(t0, param0);
     }
 
@@ -6875,25 +6875,54 @@ public class APIStub {
         env.register.set('0', new BitVec(ret));
     }
 
+//    public static void gettimeofday (Environment env) {
+//        BitVec t0 = env.register.get('0');
+//        BitVec t1 = env.register.get('1');
+//
+//        timeval param0 = new timeval();
+//        timezone param1 = new timezone();
+//
+//        param0.tv_sec = env.memory.getIntFromReference(t0);
+//        param0.tv_usec = env.memory.getNativeLongFromReference(t0.add(4));
+//        param1.tz_minuteswest = env.memory.getIntFromReference(t1);
+//        param1.tz_dsttime = env.memory.getIntFromReference(t1.add(4));
+//
+//        int ret = CLibrary.INSTANCE.gettimeofday(param0, param1);
+//        env.register.set('0', new BitVec(ret));
+//
+//        env.memory.setIntReference(t0, param0.tv_sec);
+//        env.memory.setNativeLongReference(t0.add(4), param0.tv_usec);
+//        env.memory.setIntReference(t1, param1.tz_minuteswest);
+//        env.memory.setIntReference(t1.add(4), param1.tz_dsttime);
+//    }
+
+    public interface CLibrary extends Library {
+        external.jni.CLibrary INSTANCE = Native.loadLibrary("c", external.jni.CLibrary.class);
+        int gettimeofday(timeval tv, timezone tz);
+    }
+
     public static void gettimeofday (Environment env) {
+        // Load parameters from memory
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
         timeval param0 = new timeval();
         timezone param1 = new timezone();
 
-        param0.tv_sec = env.memory.getIntFromReference(t0);
-        param0.tv_usec = env.memory.getNativeLongFromReference(t0.add(4));
-        param1.tz_minuteswest = env.memory.getIntFromReference(t1);
-        param1.tz_dsttime = env.memory.getIntFromReference(t1.add(4));
+        param0.tv_sec = env.memory.getInt(t0);
+        param0.tv_usec = env.memory.getNativeLong(t0.add(4));
+        param1.tz_minuteswest = env.memory.getInt(t1);
+        param1.tz_dsttime = env.memory.getInt(t1.add(4));
 
+        // Invoke JNA interface
         int ret = CLibrary.INSTANCE.gettimeofday(param0, param1);
-        env.register.set('0', new BitVec(ret));
 
-        env.memory.setIntReference(t0, param0.tv_sec);
-        env.memory.setNativeLongReference(t0.add(4), param0.tv_usec);
-        env.memory.setIntReference(t1, param1.tz_minuteswest);
-        env.memory.setIntReference(t1.add(4), param1.tz_dsttime);
+        // Update the memory
+        env.register.set('0', new BitVec(ret));
+        env.memory.setInt(t0, param0.tv_sec);
+        env.memory.setNativeLong(t0.add(4), param0.tv_usec);
+        env.memory.setInt(t1, param1.tz_minuteswest);
+        env.memory.setInt(t1.add(4), param1.tz_dsttime);
     }
 
     public static void getuid (Environment env) {
@@ -7960,7 +7989,7 @@ public class APIStub {
 
         int param0 ;
 
-        param0 = env.memory.getInt(t0);
+        param0 = env.memory.getIntFromReference(t0);
 
         int ret = CLibrary.INSTANCE.isspace(param0);
         env.register.set('0', new BitVec(ret));
@@ -11519,6 +11548,17 @@ public class APIStub {
         env.memory.setPointer(t0.add(20), param0.pw_dir);
         env.memory.setPointer(t0.add(24), param0.pw_shell);
         env.memory.setIntReference(t1, param1.getValue());
+    }
+
+    public static void puts (Environment env) {
+        BitVec t0 = env.register.get('0');
+
+        // Set parameters
+        String param0 = env.memory.getTextFromReference(t0) + "\n";
+
+        // Call API function
+        CLibrary.INSTANCE.puts(param0);
+        // Update memory and r0 register
     }
 
     public static void fputs (Environment env) {

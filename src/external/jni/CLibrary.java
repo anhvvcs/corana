@@ -15,10 +15,13 @@ import external.jni.CStruct.*;
 public interface CLibrary extends Library {
 
     CLibrary INSTANCE = (CLibrary)Native.loadLibrary("c", CLibrary.class);
+    int gettimeofday(timeval tv, timezone tz);
 
     //printf (const char __restrict __fmt, ...)
     void printf (String __restrict__fmt, Object... args);
 
+    //int puts(const char *str)
+    int puts(String str);
     //int sprintf ( char * str, const char * format, ... );
     int sprintf (char[] str, String format, Object ... args);
 
@@ -504,7 +507,7 @@ public interface CLibrary extends Library {
     int getsubopt(String[] optionp, String tokens, String[] valuep);
     byte gettext(String __msgid);
     int gettid();
-    int gettimeofday(timeval tv, timezone tz);
+    //int gettimeofday(timeval tv, timezone tz);
     int getuid();
     int getumask();
     utmp getutent();

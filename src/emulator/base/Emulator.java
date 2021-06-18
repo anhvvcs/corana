@@ -364,7 +364,7 @@ public class Emulator {
                 return String.format("(and %s(not %s))",
                         env.flags.C.getSym(), env.flags.Z.getSym());
             case LS:
-                return String.format("(and %s(not %s))",
+                return String.format("(or %s(not %s))",
                         env.flags.Z.getSym(), env.flags.C.getSym());
             case GE:
                 return String.format("(= %s %s)",
@@ -376,7 +376,7 @@ public class Emulator {
                 return String.format("(and (not %s) (= %s %s))",
                         env.flags.Z.getSym(), env.flags.N.getSym(), env.flags.V.getSym());
             case LE:
-                return String.format("(and %s(not (= %s %s)))",
+                return String.format("(or %s (not (= %s %s)))",
                         env.flags.Z.getSym(), env.flags.N.getSym(), env.flags.V.getSym());
             default:
                 return "";
@@ -1146,8 +1146,10 @@ public class Emulator {
 
 
     public EnvModel fork(EnvModel cur) {
-        Logs.info("\t-> Fork a new process \n");
+        env.register.set('0', new BitVec(10));
+        // Create new process
         EnvModel modelChild = new EnvModel(cur);
+        modelChild.envData.registersModel.replace("0", "#x00000010");
         return modelChild;
     }
 

@@ -13,6 +13,7 @@ import external.handler.ExternalCall;
 import pojos.AsmNode;
 import pojos.BitVec;
 import utils.*;
+import java.util.Random;
 
 
 import java.lang.reflect.Type;
@@ -20,23 +21,27 @@ import java.util.*;
 
 public class Executor {
 
-    private static HashMap<String, Integer> nodeLabelToIndex = new HashMap<>();
-    private static ArrayList<AsmNode> asmNodes = null;
-    private static String jumpFrom = null;
-    private static String jumpTo = null;
-    private static int loopLimitation = 2;
-    private static HashMap<String, Integer> countJumpedPair = new HashMap<>();
-    private static HashMap<String, EnvModel> labelToEnvModel = new HashMap<>();
-    private static Stack<Map.Entry<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
-    private static Map.Entry<EnvModel, HashMap<String, EnvModel>> recentPop = null;
-    private static String triggerPrevLabelTwoUnsat = null;
-    private static List<String> internalFunctions = new ArrayList<>();
-    private static String forkFrom = null;
-    private static Stack<Map.Entry<EnvModel, HashMap<String, EnvModel>>> processStack = new Stack<>();
-    private static Map.Entry<EnvModel, HashMap<String, EnvModel>> recentProcess = null;
-    private static long startTime;
+    protected static HashMap<String, Integer> nodeLabelToIndex = new HashMap<>();
+    protected static ArrayList<AsmNode> asmNodes = null;
+    protected static String jumpFrom = null;
+    protected static String jumpTo = null;
+    protected static int loopLimitation = 10;
+    protected static HashMap<String, Integer> countJumpedPair = new HashMap<>();
+    protected static HashMap<String, EnvModel> labelToEnvModel = new HashMap<>();
+    protected static Stack<Map.Entry<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
+    protected static Map.Entry<EnvModel, HashMap<String, EnvModel>> recentPop = null;
+    protected static String triggerPrevLabelTwoUnsat = null;
+    protected static List<String> internalFunctions = new ArrayList<>();
+    protected static String forkFrom = null;
+    protected static String waitFrom = null;
+    protected static Stack<Map.Entry<EnvModel, HashMap<String, EnvModel>>> processStack = new Stack<>();
+    protected static Stack<Environment> forkEnv = new Stack<>();
+    protected static Stack<Environment> waitEnv = new Stack<>();
+    protected static long startTime;
+    protected static int processCount = 1;
+    protected static Variation variation;
 
-    public static void execute(Variation variation, String inpFile) {
+    public static void execute(Variation var, String inpFile) {
         Logs.logFile(inpFile + ".out");
         if (!FileUtils.isExist(inpFile)) {
             Logs.infoLn("-> Input file doest not exist.");
@@ -65,43 +70,88 @@ public class Executor {
                 EnvModel genesis = new EnvModel("-", "");
                 labelToEnvModel.put(genesis.label, genesis);
                 startTime = System.currentTimeMillis();
-
+                variation = var;
                 //Load memory and initialize stack pointer
                 Environment env = new Environment();
                 Memory.loadMemory(inpFile);
 
-                // TODO: Start from asmNodes.get(_start), not the first node
-                if (variation == Variation.M0) {
-                    execFrom(new M0(env), genesis.label, String.valueOf(BinParser.get_start()));
-                } else if (variation == Variation.M0_PLUS) {
-                    execFrom(new M0_Plus(env), genesis.label, String.valueOf(BinParser.get_start()));
-                } else if (variation == Variation.M3) {
-                    execFrom(new M3(env), genesis.label, String.valueOf(BinParser.get_start()));
-                } else if (variation == Variation.M4) {
-                    execFrom(new M4(env), genesis.label, String.valueOf(BinParser.get_start()));
-                } else if (variation == Variation.M7) {
-                    execFrom(new M7(env), genesis.label, String.valueOf(BinParser.get_start()));
-                } else if (variation == Variation.M33) {
-                    execFrom(new M33(env), genesis.label, String.valueOf(BinParser.get_start()));
-                } else {
-                    Logs.infoLn("-> Unsupported ARM Variation.");
-                    return;
-                }
-                gg();
+                Thread t = new Thread(new Process(variation, env, genesis.label, String.valueOf(BinParser.get_start())));
+                t.start();
+//                // TODO: Start from asmNodes.get(_start), not the first node
+//                if (variation == Variation.M0) {
+//                    execFrom(new M0(env), genesis.label, String.valueOf(BinParser.get_start()));
+//                    //execFrom(new M0(env), genesis.label, String.valueOf(Arithmetic.hexToInt("0000e854")));
+//                } else if (variation == Variation.M0_PLUS) {
+//                    execFrom(new M0_Plus(env), genesis.label, String.valueOf(BinParser.get_start()));
+//                } else if (variation == Variation.M3) {
+//                    execFrom(new M3(env), genesis.label, String.valueOf(BinParser.get_start()));
+//                } else if (variation == Variation.M4) {
+//                    execFrom(new M4(env), genesis.label, String.valueOf(BinParser.get_start()));
+//                } else if (variation == Variation.M7) {
+//                    execFrom(new M7(env), genesis.label, String.valueOf(BinParser.get_start()));
+//                } else if (variation == Variation.M33) {
+//                    execFrom(new M33(env), genesis.label, String.valueOf(BinParser.get_start()));
+//                } else {
+//                    Logs.infoLn("-> Unsupported ARM Variation.");
+//                    return;
+//                }
+//                gg();
             }
         }
-        Logs.closeLog();
+        //Logs.closeLog();
     }
 
 
-    private static void execFrom(Emulator emulator, String prevLabel, String label) {
+    protected static void execFrom(Emulator emulator, String prevLabel, String label) {
         AsmNode n = asmNodes.get(nodeLabelToIndex.get(label));
-        Logs.info("-> Executing", n.getAddress(), ":", n.getOpcode(), n.getParams(), '\n');
-        if (label.equals(String.valueOf(BinParser.end))) {
+
+        if (label.equals(String.valueOf(BinParser.end)) ) {
             //gg();
             Logs.infoLn("-> Process ended. Time elapsed: " + (System.currentTimeMillis() - startTime) + "ms");
-            return;
+            processCount--;
+                if (!processStack.empty() && !waitEnv.empty() && processCount > 0) {
+                    //Corana.inpFile += "_fork";
+                    Logs.info(String.format("\t-> Continue parent process from %s\n", asmNodes.get(nodeLabelToIndex.get(waitFrom)).getAddress()));
+                    //Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
+
+//                int savedAsmSize = Exporter.savedAsm.size();
+//                String lastSaved = Exporter.savedAsm.get(savedAsmSize - 1);
+//                String[] arr = lastSaved.split(" ");
+//                Exporter.savedAsm.set(savedAsmSize - 1, arr[0] + " " + arr[1] + " " + newLabel);
+
+                    Map.Entry<EnvModel, HashMap<String, EnvModel>> model = processStack.pop(); /// PROBABLY NOT CORRECT
+                    Environment env = waitEnv.pop();
+                    recentPop = model;
+                    labelToEnvModel = model.getValue();
+                    Thread t = new Thread(new Process(variation, env, waitFrom,waitFrom));
+                    t.start();
+                    //execFrom(new M0(env), waitFrom, waitFrom); // ??? prev
+                } else {
+                    //Logs.closeLog();
+                    gg();
+                }
+        } else if (label.equals(waitFrom)) {
+            if (!processStack.empty() && !forkEnv.empty() && processCount > 0) {
+                //Corana.inpFile += "_fork";
+                Logs.info(String.format("\t-> Run child process from %s\n", asmNodes.get(nodeLabelToIndex.get(forkFrom)).getAddress()));
+                //Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
+
+//                int savedAsmSize = Exporter.savedAsm.size();
+//                String lastSaved = Exporter.savedAsm.get(savedAsmSize - 1);
+//                String[] arr = lastSaved.split(" ");
+//                Exporter.savedAsm.set(savedAsmSize - 1, arr[0] + " " + arr[1] + " " + newLabel);
+
+                Map.Entry<EnvModel, HashMap<String, EnvModel>> model = processStack.pop();
+                Environment env = forkEnv.pop();
+                recentPop = model;
+                //forkFrom = model.getKey().label;
+                labelToEnvModel = model.getValue();
+                //execFrom(new M0(env), forkFrom, forkFrom); // ??? prev
+                Thread t = new Thread(new Process(variation, env, forkFrom,forkFrom));
+                t.start();
+            }
         }
+        Logs.info("-> Executing", n.getAddress(), ":", n.getOpcode(), n.getParams(), '\n');
         try {
             if (emulator.getClass() == M0.class) {
                 singleExec((M0) emulator, prevLabel, n);
@@ -175,14 +225,11 @@ public class Executor {
         }
         } catch (Exception e) {
             //return;
-
             Logs.infoLn("-> Process ended. Time elapsed: " + (System.currentTimeMillis() - startTime) + "ms");
-            Logs.closeLog();
-            Logs.forkLog();
-            if (!processStack.empty()) {
-                Logs.info(String.format("\t-> Start Child process from %s\n", asmNodes.get(nodeLabelToIndex.get(forkFrom)).getAddress()));
-
-                //forkFrom = null;
+            processCount--;
+            if (!processStack.empty() && !waitEnv.empty() && processCount > 0) {
+                //Corana.inpFile += "_fork";
+                Logs.info(String.format("\t-> Continute parent process from %s\n", asmNodes.get(nodeLabelToIndex.get(waitFrom)).getAddress()));
                 //Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
 
 //                int savedAsmSize = Exporter.savedAsm.size();
@@ -191,15 +238,36 @@ public class Executor {
 //                Exporter.savedAsm.set(savedAsmSize - 1, arr[0] + " " + arr[1] + " " + newLabel);
 
                 Map.Entry<EnvModel, HashMap<String, EnvModel>> model = processStack.pop();
+                Environment env = waitEnv.pop();
                 recentPop = model;
-                forkFrom = model.getKey().label;
+                //waitFrom = model.getKey().label;
                 labelToEnvModel = model.getValue();
-                execFrom(emulator, forkFrom, nextInst(forkFrom));
+                execFrom(new M0(env), waitFrom, waitFrom); // ??? prev
+            } else if (!processStack.empty() && !forkEnv.empty() && processCount > 0) {
+                //Corana.inpFile += "_fork";
+                Logs.info(String.format("\t-> Run child process from %s\n", asmNodes.get(nodeLabelToIndex.get(forkFrom)).getAddress()));
+                //Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
+
+//                int savedAsmSize = Exporter.savedAsm.size();
+//                String lastSaved = Exporter.savedAsm.get(savedAsmSize - 1);
+//                String[] arr = lastSaved.split(" ");
+//                Exporter.savedAsm.set(savedAsmSize - 1, arr[0] + " " + arr[1] + " " + newLabel);
+
+                Map.Entry<EnvModel, HashMap<String, EnvModel>> model = processStack.pop();
+                Environment env = forkEnv.pop();
+                recentPop = model;
+                //forkFrom = model.getKey().label;
+                labelToEnvModel = model.getValue();
+                execFrom(new M0(env), forkFrom, forkFrom); // ??? prev
+            }
+            else {
+                //Logs.closeLog();
+                gg();
             }
         }
     }
     
-    private static void singleExec(M0 emulator, String prevLabel, AsmNode n) throws Exception {
+    protected static void singleExec(M0 emulator, String prevLabel, AsmNode n) throws Exception {
         String nLabel = n.getLabel();
         if (nLabel == null) System.exit(0);
         if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel) + 8));
@@ -214,7 +282,7 @@ public class Executor {
                 Character condSuffix = Mapping.condStrToChar.get(Objects.requireNonNull(n.getCondSuffix()).toUpperCase());
                 String preCond = recentPop == null ? "" : recentPop.getKey().pathCondition;
                 // if preCond is long
-                if (preCond.length() > 8000) preCond = "";
+                if (preCond.length() > 5000) preCond = "";
                 jumpFrom = nLabel;
 
                 EnvModel thisEnvModel = new EnvModel(jumpFrom, preCond);
@@ -251,7 +319,9 @@ public class Executor {
                 EnvModel modelFalse = envPair.getValue();
 
                 EnvModel modelFork = null;
+                EnvModel modelWait = null;
                 // If it is a direct jump
+                boolean isFunctionCall = false;
                 if (isConcreteLabel(arrParams[0])) {
                     if (modelTrue != null && modelTrue.envData != null) {
                         String funcname = ExternalCall.findFunctionName(arrParams[0]);
@@ -263,17 +333,32 @@ public class Executor {
                             labelToEnvModel.put(modelTrue.label, modelTrue);
                         }
                         if (ExternalCall.isExternalFucntion(arrParams[0])) {
+                            isFunctionCall = true;
                             Logs.infoLn("\t === Call to library function: " + funcname);
                             //emulator.write('0', new BitVec(SysUtils.addSymVar()));
                             if (funcname.equals("fork")) {
-                                Logs.infoLn("\t === Fork a new process. Parent process:");
+                                Logs.infoLn("\t === Fork a new process. Run parent process:");
+                                processCount++;
                                 forkFrom = nextInst(jumpFrom);
                                 modelFork = emulator.fork(thisEnvModel);
                                 modelFork.label = nextInst(jumpFrom);
                                 modelFork.prevLabel = prevLabel;
+                                int randomId = (new Random()).nextInt(100);
+                                emulator.write('0',  new BitVec(randomId));
                                 labelToEnvModel.put(modelFork.label, modelFork);
-                                decideToFork(modelFork);
-                            } else {
+
+                                decideToFork(modelFork, emulator);
+                            } else if (funcname.equals("wait")) {
+                                Logs.infoLn("\t === Wait for child process.");
+                                waitFrom = nextInst(jumpFrom);
+                                modelWait = new EnvModel(modelTrue);
+                                modelWait.prevLabel = prevLabel;
+                                modelWait.label = nextInst(jumpFrom);
+                                labelToEnvModel.put(modelWait.label, modelWait);
+
+                                decideToWait(modelWait, emulator);
+                            }
+                            else {
                                 emulator.call(arrParams[0]);
                             }
                             modelTrue.label = nextInst(jumpFrom);
@@ -294,6 +379,25 @@ public class Executor {
                                 Logs.infoLn("\t-> Found the destination: " + foundLabel);
                             } else {
                                 Logs.infoLn("\t-> Destination is undetectable.");
+
+                                if (!processStack.empty() && !forkEnv.empty() && processCount > 0) {
+                                    //Corana.inpFile += "_fork";
+                                    Logs.info(String.format("\t-> Run child process from %s\n", asmNodes.get(nodeLabelToIndex.get(forkFrom)).getAddress()));
+                                    //Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
+
+                    //                int savedAsmSize = Exporter.savedAsm.size();
+                    //                String lastSaved = Exporter.savedAsm.get(savedAsmSize - 1);
+                    //                String[] arr = lastSaved.split(" ");
+                    //                Exporter.savedAsm.set(savedAsmSize - 1, arr[0] + " " + arr[1] + " " + newLabel);
+
+                                    Map.Entry<EnvModel, HashMap<String, EnvModel>> model = processStack.pop();
+                                    Environment env = forkEnv.pop();
+                                    recentPop = model;
+                                    //forkFrom = model.getKey().label;
+                                    labelToEnvModel = model.getValue();
+                                    execFrom(new M0(env), forkFrom, forkFrom); // ??? prev
+                                }
+
                             }
                         } else {
                             if (modelTrue.label.substring(0, 2).equals("#x")) {
@@ -308,7 +412,7 @@ public class Executor {
                     modelFalse.prevLabel = prevLabel;
                     labelToEnvModel.put(modelFalse.label, modelFalse);
                 }
-                decideToJump(modelTrue, modelFalse);
+                if (!isFunctionCall) decideToJump(modelTrue, modelFalse);
             } else if ("nop".equals(opcode)) {
                 emulator.nop(suffix);
             } else if ("bic".equals(opcode)) {
@@ -1248,7 +1352,7 @@ public class Executor {
         }
     }
 
-    private static void singleExec(M0_Plus emulator, String prevLabel, AsmNode n) {
+    protected static void singleExec(M0_Plus emulator, String prevLabel, AsmNode n) {
         String nLabel = n.getLabel();
         if (nLabel == null) System.exit(0);
         if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel)));
@@ -2199,7 +2303,7 @@ public class Executor {
         }
     }
 
-    private static void singleExec(M3 emulator, String prevLabel, AsmNode n) {
+    protected static void singleExec(M3 emulator, String prevLabel, AsmNode n) {
         String nLabel = n.getLabel();
         if (nLabel == null) System.exit(0);
         if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel)));
@@ -3180,7 +3284,7 @@ public class Executor {
         }
     }
 
-    private static void singleExec(M4 emulator, String prevLabel, AsmNode n) {
+    protected static void singleExec(M4 emulator, String prevLabel, AsmNode n) {
         String nLabel = n.getLabel();
         if (nLabel == null) System.exit(0);
         if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel)));
@@ -4158,7 +4262,7 @@ public class Executor {
         }
     }
 
-    private static void singleExec(M7 emulator, String prevLabel, AsmNode n) {
+    protected static void singleExec(M7 emulator, String prevLabel, AsmNode n) {
         String nLabel = n.getLabel();
         if (nLabel == null) System.exit(0);
         if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel)));
@@ -5136,7 +5240,7 @@ public class Executor {
         }
     }
 
-    private static void singleExec(M33 emulator, String prevLabel, AsmNode n) {
+    protected static void singleExec(M33 emulator, String prevLabel, AsmNode n) {
         String nLabel = n.getLabel();
         if (nLabel == null) System.exit(0);
         if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel)));
@@ -6112,7 +6216,7 @@ public class Executor {
         }
     }
 
-    private static void decideToFork(EnvModel modelShare) {
+    protected static void decideToFork(EnvModel modelShare, Emulator emulator) {
         Gson gson = new Gson();
         String jsonString = gson.toJson(labelToEnvModel);
         Type type = new TypeToken<HashMap<String, EnvModel>>() {}.getType();
@@ -6123,9 +6227,40 @@ public class Executor {
             }
         }
         if (processStack.empty()) gg();
+
+        String jsonEmulator = gson.toJson(emulator.getEnv());
+        Type typeEmu = new TypeToken<Environment>() {}.getType();
+        Environment clonedEnv = gson.fromJson(jsonEmulator, typeEmu);
+        if (modelShare != null && labelToEnvModel.containsKey(modelShare.label)) {
+            //Add fork result of child process to register
+            int randomId = (new Random()).nextInt(100);
+            clonedEnv.register.set('0', new BitVec(0));
+            forkEnv.push(clonedEnv);
+        }
     }
 
-    private static void decideToJump(EnvModel modelTrue, EnvModel modelFalse) {
+    protected static void decideToWait(EnvModel modelShare, Emulator emulator) {
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(labelToEnvModel);
+        Type type = new TypeToken<HashMap<String, EnvModel>>() {}.getType();
+        HashMap<String, EnvModel> clonedMap = gson.fromJson(jsonString, type);
+        if (modelShare != null && labelToEnvModel.containsKey(modelShare.label)) {
+            if (modelShare.label != null) {
+                processStack.push(Pair.of(new EnvModel(modelShare), clonedMap));
+            }
+        }
+        if (processStack.empty()) gg();
+
+        String jsonEmulator = gson.toJson(emulator.getEnv());
+        Type typeEmu = new TypeToken<Environment>() {}.getType();
+        Environment clonedEnv = gson.fromJson(jsonEmulator, typeEmu);
+        if (modelShare != null && labelToEnvModel.containsKey(modelShare.label)) {
+            waitEnv.push(clonedEnv);
+        }
+    }
+
+    //labelToEnvModel: EnvModel is never changed???
+    protected static void decideToJump(EnvModel modelTrue, EnvModel modelFalse) {
         Gson gson = new Gson();
         String jsonString = gson.toJson(labelToEnvModel);
         Type type = new TypeToken<HashMap<String, EnvModel>>() {
@@ -6155,11 +6290,11 @@ public class Executor {
     }
 
     
-    private static boolean isARM(String inpFile) {
+    protected static boolean isARM(String inpFile) {
         return Objects.requireNonNull(SysUtils.execCmd("file " + inpFile)).contains("ARM");
     }
     
-    private static String nextInstLabel(String label) {
+    protected static String nextInstLabel(String label) {
         //TODO: temporary skip external call
         if (label.contains("+")) {
             label = label.split("\\+")[0];
@@ -6167,35 +6302,53 @@ public class Executor {
         return label.contains("-") ? label.replace("-", "+") : String.valueOf(Integer.parseInt(label) + 4);
     }
 
-    private static boolean isFunctionCall(String jumpFrom, String jumpTo) {
+    protected static boolean isFunctionCall(String jumpFrom, String jumpTo) {
         return (!ExternalCall.findFunctionName(jumpTo).equals(""));
     }
 
-    private static String nextInst(String label) {
+    protected static String nextInst(String label) {
         label = nextInstLabel(label);
         while (nodeLabelToIndex.get(label) == null) {
             label = nextInstLabel(label);
         }
         return label;
     }
-    private static String prevInst(String label) {
+    protected static String prevInst(String label) {
         return label.contains("+") ? label.replace("+", "-") : String.valueOf(Integer.parseInt(label) - 4);
     }
 
-    private static boolean isConcreteLabel(String label) {
+    protected static boolean isConcreteLabel(String label) {
         return label.contains("0x") || label.contains("-") || label.contains("+");
     }
 
-    private static void gg() {
+    protected static void gg() {
         Logs.infoLn("-> Time elapsed: " + (System.currentTimeMillis() - startTime) + "ms");
-        System.exit(0);
+        if (!processStack.empty() && !forkEnv.empty() && processCount > 0) {
+            //Corana.inpFile += "_fork";
+            Logs.info(String.format("\t-> Run child process from %s\n", asmNodes.get(nodeLabelToIndex.get(forkFrom)).getAddress()));
+            //Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
+
+//                int savedAsmSize = Exporter.savedAsm.size();
+//                String lastSaved = Exporter.savedAsm.get(savedAsmSize - 1);
+//                String[] arr = lastSaved.split(" ");
+//                Exporter.savedAsm.set(savedAsmSize - 1, arr[0] + " " + arr[1] + " " + newLabel);
+
+            Map.Entry<EnvModel, HashMap<String, EnvModel>> model = processStack.pop();
+            Environment env = forkEnv.pop();
+            recentPop = model;
+            //forkFrom = model.getKey().label;
+            labelToEnvModel = model.getValue();
+            execFrom(new M0(env), forkFrom, forkFrom); // ??? prev
+        } else {
+            System.exit(0);
+        }
     }
 
-    private static void gg(Emulator emulator) {
+    protected static void gg(Emulator emulator) {
         Logs.infoLn("-> Time elapsed: " + (System.currentTimeMillis() - startTime) + "ms");
         System.exit(0);
         if (!processStack.empty()) {
-            Logs.info(String.format("\t-> Start Child process from %s\n", asmNodes.get(nodeLabelToIndex.get(forkFrom)).getAddress()));
+            Logs.info(String.format("\t-> Continue parent process from %s\n", asmNodes.get(nodeLabelToIndex.get(forkFrom)).getAddress()));
 
             forkFrom = null;
             //Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");

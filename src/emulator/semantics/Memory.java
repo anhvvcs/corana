@@ -32,6 +32,10 @@ public class Memory {
         memory.put(address.trim(), value);
     }
 
+    public static void loadMemory() {
+        DBDriver.startConnection("tmp");
+    }
+
     public static void loadMemory(String filePath) {
         String[] nparts = filePath.split("[\\/]");
         String dbname = nparts[nparts.length - 1];
@@ -118,9 +122,11 @@ public class Memory {
     @Override
     public String toString() {
         MyStr result = new MyStr("+ Memory:\n");
-        Logs.infoLn(memory.size());
-        for (String k : memory.keySet()) {
-            result.append("\t- ", k, " : ", memory.get(k).toString(), "\n");
+        //Logs.infoLn(memory.size());
+        if (memory != null && memory.size() > 0) {
+            for (String k : memory.keySet()) {
+                result.append("\t- ", k, " : ", memory.get(k).toString(), "\n");
+            }
         }
         return result.value();
     }
@@ -300,8 +306,19 @@ public class Memory {
     }
     public int getIntFromReference(BitVec atAddress) {
         String word = atAddress.getSym();
-        String memValue = DBDriver.getValue(word);
-        return (int ) Arithmetic.hexToInt(memValue);
+        try {
+            String memValue = DBDriver.getValue(word);
+            return (int ) Arithmetic.hexToInt(memValue);
+        } catch (Exception e) {
+            String address = atAddress.getSym();
+            String hexStr = address;
+            if (address.charAt(0) == '#') {
+                hexStr = Arithmetic.intToHex(Arithmetic.hexToInt(address));
+            }
+            String memValue = memory.get("0x"+hexStr).getSym();
+            return (int ) Arithmetic.hexToInt(memValue);
+        }
+
     }
 
     public NativeLong getNativeLongFromReference(BitVec atAddress) {

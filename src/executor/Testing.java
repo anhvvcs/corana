@@ -9,6 +9,8 @@ import capstone.Capstone;
 import enums.Variation;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 
 public class Testing {
 
@@ -31,7 +33,7 @@ public class Testing {
         }
     }
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) throws FileNotFoundException {
         //37c81e56604c3c55dc652bddbce5229d - mirai
         //d154a62c7926d98f78b974253c03f77c // arbiter
         //e24443e10da03abfbb6c355515400953 // snoopy
@@ -68,8 +70,10 @@ public class Testing {
 
         //f8b512d02c2f17dcd1a58e5ca6dc1c37$
 
-        File dir = new File("samples/32caf/32caff26a4dfa373cd0ed869544a30b7$");
+        //File dir = new File("samples/32caf/32caff26a4dfa373cd0ed869544a30b7$");
+        File dir = new File("samples/fork");
         long startTime = System.nanoTime();
+
         try {
             exeFiles(dir);
         }

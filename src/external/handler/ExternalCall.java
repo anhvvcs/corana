@@ -29,6 +29,7 @@ public class ExternalCall {
 
     public static String findFunctionName(String jmpAddress){
     // find Function name from jmpAddress
+        List<String> prefixes = Arrays.asList("__libc");
         String fullSym = jmpAddress.replace("#0x","");
 
         while (fullSym.length() < 8) {

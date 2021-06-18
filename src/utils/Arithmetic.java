@@ -94,9 +94,13 @@ public class Arithmetic {
 
 
     public static BitVec fromHexStr(final String s) {
-        String bin = hexToBinary(s);
-        BitSet concreteValue = BitSet.valueOf(new long[]{Long.parseLong(bin, 2)});
-        return new BitVec(s.contains("#x") ? s : "#x" + s, concreteValue);
+        try {
+            String bin = hexToBinary(s);
+            BitSet concreteValue = BitSet.valueOf(new long[]{Long.parseLong(bin, 2)});
+            return new BitVec(s.contains("#x") ? s.replace("0x","") : "#x" + s.replace("0x",""), concreteValue);
+        } catch (Exception e) {
+            return new BitVec(s);
+        }
     }
 
     public static BitSet floatToBitSet(float v) {

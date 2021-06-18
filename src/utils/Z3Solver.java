@@ -78,30 +78,37 @@ public class Z3Solver {
      * @return raw result returned by Z3 if SAT, null if UNSAT
      */
     public static String checkSAT(String pathConstrain, String eval) {
-        Logs.info("\t-> Checking path constrains by Z3", Logs.shorten(pathConstrain), "... ");
+        try {
+            Logs.info("\t-> Checking path constrains by Z3",  "... ", Logs.shorten(pathConstrain));
 
-        ArrayList<String> bvVars = new ArrayList<>(Mapping.regStrToChar.keySet());
-        bvVars.addAll(new ArrayList<>(Mapping.intToSymVariable.values()));
+            ArrayList<String> bvVars = new ArrayList<>(Mapping.regStrToChar.keySet());
+            bvVars.addAll(new ArrayList<>(Mapping.intToSymVariable.values()));
 
-        ArrayList<String> boolVars = new ArrayList<>();
-        Field[] fields = Flags.class.getFields();
-        for (Field f : fields) {
-            boolVars.add(f.getName().toLowerCase());
-        }
-
-        String declaration = declareEvalAndVars(eval, bvVars, boolVars);
-        String finalConstraint = pathConstrain.equals("") ? "" : "(assert " + pathConstrain + ")";
-        String z3Clause = getPredefinedFunctions() + declaration.replace("$mainAssert", finalConstraint);
-        FileUtils.write(Configs.tempZ3Script, z3Clause);
-        String result = SysUtils.execCmd("z3 -smt2 " + Configs.tempZ3Script);
-        FileUtils.delete(Configs.tempZ3Script);
-        if (result != null) {
-            if (result.split("\n")[0].equalsIgnoreCase("sat")) {
-                Logs.infoLn("SAT");
-                return result;
+            ArrayList<String> boolVars = new ArrayList<>();
+            Field[] fields = Flags.class.getFields();
+            for (Field f : fields) {
+                boolVars.add(f.getName().toLowerCase());
             }
+
+            String declaration = declareEvalAndVars(eval, bvVars, boolVars);
+            String finalConstraint = pathConstrain.equals("") ? "" : "(assert " + pathConstrain + ")";
+            String z3Clause = getPredefinedFunctions() + declaration.replace("$mainAssert", finalConstraint);
+            FileUtils.write(Configs.tempZ3Script, z3Clause);
+            String result = SysUtils.execCmd("z3 -smt2 " + Configs.tempZ3Script);
+            FileUtils.delete(Configs.tempZ3Script);
+            if (result != null) {
+                if (result.split("\n")[0].equalsIgnoreCase("sat")) {
+                    Logs.infoLn("SAT");
+                    return result;
+                }
+            }
+            Logs.infoLn("UNSAT");
+
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
+            System.out.println(pathConstrain);
         }
-        Logs.infoLn("UNSAT");
         return null;
     }
+
 }
