@@ -2502,7 +2502,8 @@ public class APIStub {
 
         param0 = env.memory.getInt(t0);
 
-        int ret = CLibrary.INSTANCE.close(param0);
+        //int ret = CLibrary.INSTANCE.close(param0);
+        int ret = 0;
         env.register.set('0', new BitVec(ret));
 
         //env.memory.setInt(t0, param0);
@@ -5407,7 +5408,7 @@ public class APIStub {
 
         param0 = env.memory.getPointer(t0);
 
-        CLibrary.INSTANCE.free(param0);
+        //CLibrary.INSTANCE.free(param0);
 
         env.memory.setPointer(t0, param0.getValue());
     }
@@ -6875,55 +6876,50 @@ public class APIStub {
         env.register.set('0', new BitVec(ret));
     }
 
-//    public static void gettimeofday (Environment env) {
-//        BitVec t0 = env.register.get('0');
-//        BitVec t1 = env.register.get('1');
-//
-//        timeval param0 = new timeval();
-//        timezone param1 = new timezone();
-//
-//        param0.tv_sec = env.memory.getIntFromReference(t0);
-//        param0.tv_usec = env.memory.getNativeLongFromReference(t0.add(4));
-//        param1.tz_minuteswest = env.memory.getIntFromReference(t1);
-//        param1.tz_dsttime = env.memory.getIntFromReference(t1.add(4));
-//
-//        int ret = CLibrary.INSTANCE.gettimeofday(param0, param1);
-//        env.register.set('0', new BitVec(ret));
-//
-//        env.memory.setIntReference(t0, param0.tv_sec);
-//        env.memory.setNativeLongReference(t0.add(4), param0.tv_usec);
-//        env.memory.setIntReference(t1, param1.tz_minuteswest);
-//        env.memory.setIntReference(t1.add(4), param1.tz_dsttime);
-//    }
-
-    public interface CLibrary extends Library {
-        external.jni.CLibrary INSTANCE = Native.loadLibrary("c", external.jni.CLibrary.class);
-        int gettimeofday(timeval tv, timezone tz);
-    }
-
     public static void gettimeofday (Environment env) {
-        // Load parameters from memory
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
         timeval param0 = new timeval();
         timezone param1 = new timezone();
 
-        param0.tv_sec = env.memory.getInt(t0);
-        param0.tv_usec = env.memory.getNativeLong(t0.add(4));
-        param1.tz_minuteswest = env.memory.getInt(t1);
-        param1.tz_dsttime = env.memory.getInt(t1.add(4));
+        param0.tv_sec = env.memory.getIntFromReference(t0);
+        param0.tv_usec = env.memory.getNativeLongFromReference(t0.add(4));
+        param1.tz_minuteswest = env.memory.getIntFromReference(t1);
+        param1.tz_dsttime = env.memory.getIntFromReference(t1.add(4));
 
-        // Invoke JNA interface
         int ret = CLibrary.INSTANCE.gettimeofday(param0, param1);
-
-        // Update the memory
         env.register.set('0', new BitVec(ret));
-        env.memory.setInt(t0, param0.tv_sec);
-        env.memory.setNativeLong(t0.add(4), param0.tv_usec);
-        env.memory.setInt(t1, param1.tz_minuteswest);
-        env.memory.setInt(t1.add(4), param1.tz_dsttime);
+
+        env.memory.setIntReference(t0, param0.tv_sec);
+        env.memory.setNativeLongReference(t0.add(4), param0.tv_usec);
+        env.memory.setIntReference(t1, param1.tz_minuteswest);
+        env.memory.setIntReference(t1.add(4), param1.tz_dsttime);
     }
+
+//    public static void gettimeofday (Environment env) {
+//        // Load parameters from memory
+//        BitVec t0 = env.register.get('0');
+//        BitVec t1 = env.register.get('1');
+//
+//        timeval param0 = new timeval();
+//        timezone param1 = new timezone();
+//
+//        param0.tv_sec = env.memory.getInt(t0);
+//        param0.tv_usec = env.memory.getNativeLong(t0.add(4));
+//        param1.tz_minuteswest = env.memory.getInt(t1);
+//        param1.tz_dsttime = env.memory.getInt(t1.add(4));
+//
+//        // Invoke JNA interface
+//        int ret = CLibrary.INSTANCE.gettimeofday(param0, param1);
+//
+//        // Update the memory
+//        env.register.set('0', new BitVec(ret));
+//        env.memory.setInt(t0, param0.tv_sec);
+//        env.memory.setNativeLong(t0.add(4), param0.tv_usec);
+//        env.memory.setInt(t1, param1.tz_minuteswest);
+//        env.memory.setInt(t1.add(4), param1.tz_dsttime);
+//    }
 
     public static void getuid (Environment env) {
         int ret = CLibrary.INSTANCE.getuid();
@@ -9400,8 +9396,8 @@ public class APIStub {
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
 
-        int ret = CLibrary.INSTANCE.mallopt(param0, param1);
-        env.register.set('0', new BitVec(ret));
+//        int ret = CLibrary.INSTANCE.mallopt(param0, param1);
+//        env.register.set('0', new BitVec(ret));
 
         //env.memory.setInt(t0, param0);
         ////env.memory.setInt(t1, param1);
@@ -9712,10 +9708,10 @@ public class APIStub {
         param1 = env.memory.getPointer(t1);
         param2 = env.memory.getInt(t2);
 
-        CLibrary.INSTANCE.memmove(param0, param1, param2);
-
-        env.memory.setPointer(t0, param0.getValue());
-        env.memory.setPointer(t1, param1.getValue());
+//        CLibrary.INSTANCE.memmove(param0, param1, param2);
+//
+//        env.memory.setPointer(t0, param0.getValue());
+//        env.memory.setPointer(t1, param1.getValue());
         //env.memory.setInt(t2, param2);
     }
 
@@ -11932,8 +11928,9 @@ public class APIStub {
         param0 = env.memory.getInt(t0);
 
         //int ret = CLibrary.INSTANCE.raise(param0);
-        throw new Exception("raise");
-        //env.register.set('0', new BitVec(ret));
+        int ret = 0;
+        //throw new Exception("raise");
+        env.register.set('0', new BitVec(ret));
         //env.memory.setInt(t0, param0);
     }
 

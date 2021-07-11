@@ -7,6 +7,8 @@ package executor;
 
 import capstone.Capstone;
 import enums.Variation;
+import utils.Arithmetic;
+import utils.Logs;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -70,8 +72,13 @@ public class Testing {
 
         //f8b512d02c2f17dcd1a58e5ca6dc1c37$
 
-        //File dir = new File("samples/32caf/32caff26a4dfa373cd0ed869544a30b7$");
-        File dir = new File("samples/fork");
+        File dir = new File("samples/arm-malware/41fff9d3c82c08f5de950acaea20a6ec$");
+        //File dir = new File("samples/time");
+//        File file = new File("./stream.txt");
+//        //Instantiating the PrintStream class
+//
+//        PrintStream stream = new PrintStream(file);
+//        System.setOut(stream);
         long startTime = System.nanoTime();
 
         try {

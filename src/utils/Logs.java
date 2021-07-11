@@ -11,12 +11,12 @@ public class Logs {
     private static int processNo = 0;
 
     public static void logFile(String name) {
-        //output = name;
-        try {
-            fileWriter = new FileWriter(output);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        output = name;
+//        try {
+//            fileWriter = new FileWriter(output);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static void forkLog() {
@@ -42,11 +42,11 @@ public class Logs {
     }
 
     public static void info(Object o) {
-        try {
-            fileWriter.write(toStr(o));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            fileWriter.write(toStr(o));
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         System.out.print(toStr(o));
     }
 
@@ -60,12 +60,12 @@ public class Logs {
     }
 
     public static void closeLog() {
-        try {
-            fileWriter.flush();
-            fileWriter.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            fileWriter.flush();
+//            fileWriter.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private static String toStr(Object o) {

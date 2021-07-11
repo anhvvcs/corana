@@ -11,7 +11,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
 
-public class Process implements Runnable {
+//implements Runnable
+public class Process {
     Variation variation;
     Environment env;
     String genesis;
@@ -26,13 +27,14 @@ public class Process implements Runnable {
 
     public void run() {
         //Instantiating the File class
-        File file = new File("./stream_"+Arithmetic.intToHex(Integer.valueOf(startAddress))+".txt");
+        //File file = new File("./stream_"+Corana.inpFile+"_"+Arithmetic.intToHex(Integer.valueOf(startAddress))+".txt");
         //Instantiating the PrintStream class
         try {
-            while (! Thread.interrupted()) {
-                Thread.sleep(10);
-                PrintStream stream = new PrintStream(file);
-                System.setOut(stream);
+
+            //while (!Thread.currentThread().isInterrupted()) {
+                //Thread.sleep(10);
+//                PrintStream stream = new PrintStream(file);
+//                System.setOut(stream);
                 // TODO: Start from asmNodes.get(_start), not the first node
                 if (variation == Variation.M0) {
                     Executor.execFrom(new M0(env), genesis, startAddress);
@@ -52,9 +54,11 @@ public class Process implements Runnable {
                     return;
                 }
                 Executor.gg();
-            }
+            //}
         } catch (Exception e) {
+            //Thread.currentThread().interrupt();
             Executor.gg();
         }
+        //Logs.closeLog();
     }
 }
