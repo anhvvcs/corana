@@ -49,7 +49,7 @@ public class Arithmetic {
     }
 
     public static String intToHex(long l) {
-        return Integer.toHexString( (int) l); //Integer because using 32 bit
+        return Integer.toHexString((int) l); //Integer because using 32 bit
     }
 
     public static String longToHex(long l) {
@@ -97,7 +97,7 @@ public class Arithmetic {
         try {
             String bin = hexToBinary(s);
             BitSet concreteValue = BitSet.valueOf(new long[]{Long.parseLong(bin, 2)});
-            return new BitVec(s.contains("#x") ? s.replace("0x","") : "#x" + s.replace("0x",""), concreteValue);
+            return new BitVec(s.contains("#x") ? s.replace("0x", "") : "#x" + s.replace("0x", ""), concreteValue);
         } catch (Exception e) {
             return new BitVec(s);
         }

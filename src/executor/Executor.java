@@ -13,8 +13,8 @@ import external.handler.ExternalCall;
 import pojos.AsmNode;
 import pojos.BitVec;
 import utils.*;
-import java.util.Random;
 
+import java.util.Random;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -26,7 +26,7 @@ public class Executor {
     protected static ArrayList<AsmNode> asmNodes = null;
     protected static String jumpFrom = null;
     protected static String jumpTo = null;
-    protected static int loopLimitation = 10;
+    protected static int loopLimitation = 1000;
     protected static HashMap<String, Integer> countJumpedPair = new HashMap<>();
     protected static HashMap<String, EnvModel> labelToEnvModel = new HashMap<>();
     protected static Stack<Map.Entry<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
@@ -41,22 +41,14 @@ public class Executor {
     protected static long startTime;
     protected static int processCount = 1;
     protected static Variation variation;
+    protected static List<String> callFunctions = new ArrayList<>();
     //protected static ScheduledExecutorService executor = Executors.newScheduledThreadPool(10);
-    private static Future<?> handler = null;
+    private static final Future<?> handler = null;
     private static long procEnd;
 
     private static void fork(Environment env, String prev, String from) {
         long procCheckpoint = System.currentTimeMillis();
-        procEnd = procCheckpoint + 2*60*60*1000;
-//        if (handler != null) handler.cancel(true);
-//        handler = executor.submit(new Process(variation, env, prev, from));
-//        executor.schedule(new Runnable(){
-//            public void run(){
-//                handler.cancel(true);
-//            }
-//        }, 20, TimeUnit.MINUTES);
-//        Thread t = new Thread(new Process(variation, env, prev, from));
-//        t.start();
+        procEnd = procCheckpoint + 2 * 60 * 60 * 1000;
         processCount++;
         Process p = new Process(variation, env, prev, from);
         p.run();
@@ -98,25 +90,6 @@ public class Executor {
                 Memory.loadMemory(inpFile);
                 fork(env, genesis.label, String.valueOf(BinParser.get_start()));
 
-//                // TODO: Start from asmNodes.get(_start), not the first node
-//                if (variation == Variation.M0) {
-//                    execFrom(new M0(env), genesis.label, String.valueOf(BinParser.get_start()));
-//                    //execFrom(new M0(env), genesis.label, String.valueOf(Arithmetic.hexToInt("0000e854")));
-//                } else if (variation == Variation.M0_PLUS) {
-//                    execFrom(new M0_Plus(env), genesis.label, String.valueOf(BinParser.get_start()));
-//                } else if (variation == Variation.M3) {
-//                    execFrom(new M3(env), genesis.label, String.valueOf(BinParser.get_start()));
-//                } else if (variation == Variation.M4) {
-//                    execFrom(new M4(env), genesis.label, String.valueOf(BinParser.get_start()));
-//                } else if (variation == Variation.M7) {
-//                    execFrom(new M7(env), genesis.label, String.valueOf(BinParser.get_start()));
-//                } else if (variation == Variation.M33) {
-//                    execFrom(new M33(env), genesis.label, String.valueOf(BinParser.get_start()));
-//                } else {
-//                    Logs.infoLn("-> Unsupported ARM Variation.");
-//                    return;
-//                }
-//                gg();
             }
         }
         //Logs.closeLog();
@@ -126,26 +99,26 @@ public class Executor {
     protected static void execFrom(Emulator emulator, String prevLabel, String label) {
         AsmNode n = asmNodes.get(nodeLabelToIndex.get(label));
 
-        if (label.equals(String.valueOf(BinParser.end)) ) {
+        if (label.equals(String.valueOf(BinParser.end))) {
             //gg();
             Logs.infoLn("-> Process ended. Time elapsed: " + (System.currentTimeMillis() - startTime) + "ms");
             processCount--;
-                if (!processStack.empty() && !waitEnv.empty() && processCount > 0) {
-                    //Corana.inpFile += "_fork";
-                    Logs.info(String.format("\t-> Continue parent process from %s\n", asmNodes.get(nodeLabelToIndex.get(waitFrom)).getAddress()));
-                    //Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
+            if (!processStack.empty() && !waitEnv.empty() && processCount > 0) {
+                //Corana.inpFile += "_fork";
+                Logs.info(String.format("\t-> Continue parent process from %s\n", asmNodes.get(nodeLabelToIndex.get(waitFrom)).getAddress()));
+                //Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
 
-                    Map.Entry<EnvModel, HashMap<String, EnvModel>> model = processStack.pop(); /// PROBABLY NOT CORRECT
-                    Environment env = waitEnv.pop();
-                    recentPop = model;
-                    labelToEnvModel = model.getValue();
-                    fork(env, waitFrom, waitFrom);
+                Map.Entry<EnvModel, HashMap<String, EnvModel>> model = processStack.pop(); /// PROBABLY NOT CORRECT
+                Environment env = waitEnv.pop();
+                recentPop = model;
+                labelToEnvModel = model.getValue();
+                fork(env, waitFrom, waitFrom);
 
-                    //execFrom(new M0(env), waitFrom, waitFrom); // ??? prev
-                } else {
-                    //Logs.closeLog();
-                    gg();
-                }
+                //execFrom(new M0(env), waitFrom, waitFrom); // ??? prev
+            } else {
+                //Logs.closeLog();
+                gg();
+            }
         } else if (label.equals(waitFrom)) {
             if (!processStack.empty() && !forkEnv.empty() && processCount > 0) {
                 //Corana.inpFile += "_fork";
@@ -184,60 +157,61 @@ public class Executor {
                 return;
             }
 
-        String newLabel = (jumpTo == null) ? nextInst(label) : jumpTo;
-        String address = n.getAddress();
-        String newAddress = "";
-        // Check if function call is external
-        if (nodeLabelToIndex.get(newLabel) == null) {
-            // Deal with external call
-            newAddress = asmNodes.get(nodeLabelToIndex.get(nextInst(label))).getAddress();
-        } else {
-            newAddress = asmNodes.get(nodeLabelToIndex.get(newLabel)).getAddress();
-        }
+            String newLabel = (jumpTo == null) ? nextInst(label) : jumpTo;
+            String address = n.getAddress();
+            String newAddress = "";
+            // Check if function call is external
+            if (nodeLabelToIndex.get(newLabel) == null) {
+                // Deal with external call
+                newAddress = asmNodes.get(nodeLabelToIndex.get(nextInst(label))).getAddress();
+            } else {
+                newAddress = asmNodes.get(nodeLabelToIndex.get(newLabel)).getAddress();
+            }
 
-        boolean isFault = false;
+            boolean isFault = false;
 
-        if (jumpTo != null) {
-            if (nodeLabelToIndex.containsKey(newLabel)) {
-                String pair = jumpFrom + " --> " + jumpTo;
-                Logs.info(String.format("\t-> Start Jumping from %s --> %s\n", asmNodes.get(nodeLabelToIndex.get(jumpFrom)).getAddress(), asmNodes.get(nodeLabelToIndex.get(jumpTo)).getAddress()));
-                countJumpedPair.put(pair, countJumpedPair.containsKey(pair) ? countJumpedPair.get(pair) + 1 : 1);
-                if (countJumpedPair.get(pair) <= loopLimitation) {
-                    jumpTo = null;
-                    jumpFrom = null;
-                    Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
+            if (jumpTo != null) {
+                if (nodeLabelToIndex.containsKey(newLabel)) {
+                    String pair = jumpFrom + " --> " + jumpTo;
+                    Logs.info(String.format("\t-> Start Jumping from %s --> %s\n", asmNodes.get(nodeLabelToIndex.get(jumpFrom)).getAddress(), asmNodes.get(nodeLabelToIndex.get(jumpTo)).getAddress()));
+                    countJumpedPair.put(pair, countJumpedPair.containsKey(pair) ? countJumpedPair.get(pair) + 1 : 1);
+                    if (countJumpedPair.get(pair) <= loopLimitation) {
+                        jumpTo = null;
+                        jumpFrom = null;
+                        Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
 
-                    int savedAsmSize = Exporter.savedAsm.size();
-                    String lastSaved = Exporter.savedAsm.get(savedAsmSize - 1);
-                    String[] arr = lastSaved.split(" ");
-                    Exporter.savedAsm.set(savedAsmSize - 1, arr[0] + " " + arr[1] + " " + newLabel);
+                        int savedAsmSize = Exporter.savedAsm.size();
+                        String lastSaved = Exporter.savedAsm.get(savedAsmSize - 1);
+                        String[] arr = lastSaved.split(" ");
+                        Exporter.savedAsm.set(savedAsmSize - 1, arr[0] + " " + arr[1] + " " + newLabel);
 
-                    String finalPrevLabel = triggerPrevLabelTwoUnsat == null ? label : triggerPrevLabelTwoUnsat;
-                    triggerPrevLabelTwoUnsat = null;
-                    execFrom(emulator, finalPrevLabel, newLabel);
+                        String finalPrevLabel = triggerPrevLabelTwoUnsat == null ? label : triggerPrevLabelTwoUnsat;
+                        triggerPrevLabelTwoUnsat = null;
+                        execFrom(emulator, finalPrevLabel, newLabel);
+                    } else {
+                        Logs.infoLn("\t-> Loop limitation exceeded, break.");
+                        isFault = true;
+                    }
                 } else {
-                    Logs.infoLn("\t-> Loop limitation exceeded, break.");
+                    Logs.infoLn("\t-> Non-existing label, break.");
                     isFault = true;
                 }
             } else {
-                Logs.infoLn("\t-> Non-existing label, break.");
                 isFault = true;
             }
-        } else {
-            isFault = true;
-        }
-        if (isFault) {
-            jumpTo = null;
-            jumpFrom = null;
-            newLabel = nextInst(label);
-            newAddress = asmNodes.get(nodeLabelToIndex.get(newLabel)).getAddress();
-            if (nodeLabelToIndex.containsKey(newLabel)) {
-                Exporter.add(address + "," + newAddress);
-                execFrom(emulator, label, newLabel);
+            if (isFault) {
+                jumpTo = null;
+                jumpFrom = null;
+                newLabel = nextInst(label);
+                newAddress = asmNodes.get(nodeLabelToIndex.get(newLabel)).getAddress();
+                if (nodeLabelToIndex.containsKey(newLabel)) {
+                    Exporter.add(address + "," + newAddress);
+                    execFrom(emulator, label, newLabel);
+                }
             }
-        }
         } catch (Exception e) {
             //return;
+            Logs.infoLn(e);
             Logs.infoLn("-> Process ended. Time elapsed: " + (System.currentTimeMillis() - startTime) + "ms");
             processCount--;
             if (!processStack.empty() && !waitEnv.empty() && processCount > 0) {
@@ -262,17 +236,17 @@ public class Executor {
                 //forkFrom = model.getKey().label;
                 labelToEnvModel = model.getValue();
                 fork(env, forkFrom, forkFrom); // ??? prev
-            }
-            else {
+            } else {
                 gg();
             }
         }
     }
-    
+
     protected static void singleExec(M0 emulator, String prevLabel, AsmNode n) throws Exception {
         String nLabel = n.getLabel();
         if (nLabel == null) System.exit(0);
-        if (!nLabel.contains("+") && !nLabel.contains("-")) emulator.write('p', new BitVec(Integer.parseInt(nLabel) + 8));
+        if (!nLabel.contains("+") && !nLabel.contains("-"))
+            emulator.write('p', new BitVec(Integer.parseInt(nLabel) + 8));
         Exporter.addAsm(n.getLabel() + " " + n.getOpcode() + n.getCondSuffix() + (n.isUpdateFlag() ? "s" : "") + " " + n.getParams());
         Exporter.exportDot(Corana.inpFile + ".dot");
 
@@ -295,7 +269,7 @@ public class Executor {
                 if (isConcreteLabel(arrParams[0])) {
                     strLabel = arrParams[0].contains("-") ? arrParams[0] :
                             String.valueOf(Arithmetic.hexToInt(arrParams[0].replace("#0x", "").replace("0x", "")));
-                } else { 
+                } else {
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
                 Map.Entry<EnvModel, EnvModel> envPair;
@@ -316,7 +290,9 @@ public class Executor {
                         envPair = null;
                         break;
                 }
-                if (envPair == null) {return;}
+                if (envPair == null) {
+                    return;
+                }
                 EnvModel modelTrue = envPair.getKey();
                 EnvModel modelFalse = envPair.getValue();
 
@@ -335,6 +311,7 @@ public class Executor {
                             labelToEnvModel.put(modelTrue.label, modelTrue);
                         }
                         if (ExternalCall.isExternalFucntion(arrParams[0])) {
+                            if (!callFunctions.contains(funcname)) callFunctions.add(funcname);
                             isFunctionCall = true;
                             Logs.infoLn("\t === Call to library function: " + funcname);
                             //emulator.write('0', new BitVec(SysUtils.addSymVar()));
@@ -346,7 +323,7 @@ public class Executor {
                                 modelFork.label = nextInst(jumpFrom);
                                 modelFork.prevLabel = prevLabel;
                                 int randomId = (new Random()).nextInt(100);
-                                emulator.write('0',  new BitVec(randomId));
+                                emulator.write('0', new BitVec(randomId));
                                 labelToEnvModel.put(modelFork.label, modelFork);
                                 decideToFork(modelFork, emulator);
                             } else if (funcname.equals("wait")) {
@@ -357,8 +334,7 @@ public class Executor {
                                 modelWait.label = nextInst(jumpFrom);
                                 labelToEnvModel.put(modelWait.label, modelWait);
                                 decideToWait(modelWait, emulator);
-                            }
-                            else {
+                            } else {
                                 emulator.call(arrParams[0]);
                             }
                             modelTrue.label = nextInst(jumpFrom);
@@ -368,7 +344,7 @@ public class Executor {
                     }
                 } else {
                     // Indirect jump
-                    if (modelTrue != null && modelTrue.envData != null) { 
+                    if (modelTrue != null && modelTrue.envData != null) {
                         modelTrue.label = modelTrue.envData.eval;
                         modelTrue.prevLabel = prevLabel;
                         if (modelTrue.label == null) {
@@ -385,10 +361,10 @@ public class Executor {
                                     Logs.info(String.format("\t-> Run child process from %s\n", asmNodes.get(nodeLabelToIndex.get(forkFrom)).getAddress()));
                                     //Exporter.add(address + "," + newAddress + "," + countJumpedPair.get(pair) + "\n");
 
-                    //                int savedAsmSize = Exporter.savedAsm.size();
-                    //                String lastSaved = Exporter.savedAsm.get(savedAsmSize - 1);
-                    //                String[] arr = lastSaved.split(" ");
-                    //                Exporter.savedAsm.set(savedAsmSize - 1, arr[0] + " " + arr[1] + " " + newLabel);
+                                    //                int savedAsmSize = Exporter.savedAsm.size();
+                                    //                String lastSaved = Exporter.savedAsm.get(savedAsmSize - 1);
+                                    //                String[] arr = lastSaved.split(" ");
+                                    //                Exporter.savedAsm.set(savedAsmSize - 1, arr[0] + " " + arr[1] + " " + newLabel);
 
                                     Map.Entry<EnvModel, HashMap<String, EnvModel>> model = processStack.pop();
                                     Environment env = forkEnv.pop();
@@ -399,14 +375,14 @@ public class Executor {
                                 }
                             }
                         } else {
-                            if (modelTrue.label.substring(0, 2).equals("#x")) {
+                            if (modelTrue.label.startsWith("#x")) {
                                 modelTrue.label = String.valueOf(Arithmetic.hexToInt(modelTrue.label.replace("#x", "")));
                             }
                             labelToEnvModel.put(modelTrue.label, modelTrue);
                         }
                     }
                 }
-                if (modelFalse != null && modelFalse.envData != null) { 
+                if (modelFalse != null && modelFalse.envData != null) {
                     modelFalse.label = nextInst(jumpFrom);
                     modelFalse.prevLabel = prevLabel;
                     labelToEnvModel.put(modelFalse.label, modelFalse);
@@ -424,19 +400,19 @@ public class Executor {
                 } else {
                     emulator.bic(p0, p1, im, suffix);
                 }
-            } else if ("lsl".equals(opcode)) { 
+            } else if ("lsl".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                 Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 emulator.lsls(p0, p1, p2, im, suffix);
-            } else if ("lsr".equals(opcode)) { 
+            } else if ("lsr".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                 Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 emulator.lsrs(p0, p1, p2, im, suffix);
-            } else if ("mul".equals(opcode)) { 
+            } else if ("mul".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
@@ -466,7 +442,7 @@ public class Executor {
                         break;
                 }
 
-            } else if ("adc".equals(opcode)) { 
+            } else if ("adc".equals(opcode)) {
                 Integer im;
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
@@ -697,7 +673,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldrb(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -721,7 +697,7 @@ public class Executor {
                         }
                         emulator.ldrb(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -750,7 +726,7 @@ public class Executor {
                         emulator.ldrb(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -804,7 +780,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldr(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -858,38 +834,38 @@ public class Executor {
                         emulator.write(p1, extValue);
                         break;
                     case 3: //@address mode: offset
-                            p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
-                            p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
+                        p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
+                        p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
-                            i2 = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
-                            p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
-                            extValue = (i2 == null) ? emulator.valCheckNeg(p2, arrParams[2].contains("-")) : new BitVec(i2);
+                        i2 = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
+                        p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
+                        extValue = (i2 == null) ? emulator.valCheckNeg(p2, arrParams[2].contains("-")) : new BitVec(i2);
 
-                            newValue = emulator.valCheckNeg(p1, arrParams[1].contains("-"));
-                            if (arrParams.length == 3) {
-                                newValue = newValue;
-                                extValue = emulator.add(newValue, extValue);
-                            } else {
-                                String[] extArr = arrParams[3].split("\\s+");
-                                String extType = extArr[0];
-                                Integer extraNum = null;
-                                Character extraChar = null;
-                                if (extArr.length > 1) {
-                                    extraNum = extArr[1].contains("#") ? Integer.parseInt(extArr[1].replace("#", "")) : null;
-                                    extraChar = extArr[1].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(extArr[1]));
-                                }
-                                BitVec handledExt = emulator.handleExtra(extValue, extType, extraChar, extraNum);
-
-                                newValue = newValue;
-                                extValue = emulator.add(newValue, handledExt);
+                        newValue = emulator.valCheckNeg(p1, arrParams[1].contains("-"));
+                        if (arrParams.length == 3) {
+                            newValue = newValue;
+                            extValue = emulator.add(newValue, extValue);
+                        } else {
+                            String[] extArr = arrParams[3].split("\\s+");
+                            String extType = extArr[0];
+                            Integer extraNum = null;
+                            Character extraChar = null;
+                            if (extArr.length > 1) {
+                                extraNum = extArr[1].contains("#") ? Integer.parseInt(extArr[1].replace("#", "")) : null;
+                                extraChar = extArr[1].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(extArr[1]));
                             }
+                            BitVec handledExt = emulator.handleExtra(extValue, extType, extraChar, extraNum);
+
+                            newValue = newValue;
+                            extValue = emulator.add(newValue, handledExt);
+                        }
                         emulator.ldr(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
                     case 4: //@address mode: post-indexed
                         // ldr r3, [r1], #4    Load the value at memory address found in R1 to register R3. Base register (R1) modified: R1 = R1+4
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
-                        p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].replace("[", "").replace("]","")));
+                        p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].replace("[", "").replace("]", "")));
 
                         i2 = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                         p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
@@ -899,7 +875,7 @@ public class Executor {
                         if (arrParams.length == 3) {
                             newValue = emulator.val(p1);
                             extValue = emulator.add(newValue, extValue);
-                        } else  {
+                        } else {
                             String[] extArr = arrParams[3].split("\\s+");
                             String extType = extArr[0];
                             Integer extraNum = null;
@@ -935,7 +911,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldrh(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -959,7 +935,7 @@ public class Executor {
                         }
                         emulator.ldrh(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -988,7 +964,7 @@ public class Executor {
                         emulator.ldrh(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1037,7 +1013,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.str(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1092,7 +1068,7 @@ public class Executor {
                         emulator.str(emulator.val(p0), newValue);
                         emulator.write(p1, extValue); //base register is unmodified
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1154,7 +1130,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.strb(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1178,7 +1154,7 @@ public class Executor {
                         }
                         emulator.strb(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1207,7 +1183,7 @@ public class Executor {
                         emulator.strb(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1256,7 +1232,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.strh(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1280,7 +1256,7 @@ public class Executor {
                         }
                         emulator.strh(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1309,7 +1285,7 @@ public class Executor {
                         emulator.strh(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1345,8 +1321,7 @@ public class Executor {
             }
             // Added instructions
 
-        }
-        else {
+        } else {
             Logs.infoLn("Error: Opcode is null!");
         }
     }
@@ -1374,7 +1349,7 @@ public class Executor {
                 if (isConcreteLabel(arrParams[0])) {
                     strLabel = arrParams[0].contains("-") ? arrParams[0] :
                             String.valueOf(Arithmetic.hexToInt(arrParams[0].replace("#0x", "").replace("0x", "")));
-                } else { 
+                } else {
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
                 Map.Entry<EnvModel, EnvModel> envPair;
@@ -1395,13 +1370,13 @@ public class Executor {
                 EnvModel modelTrue = envPair.getKey();
                 EnvModel modelFalse = envPair.getValue();
                 if (isConcreteLabel(arrParams[0])) {
-                    if (modelTrue != null && modelTrue.envData != null) { 
+                    if (modelTrue != null && modelTrue.envData != null) {
                         modelTrue.label = strLabel;
                         modelTrue.prevLabel = prevLabel;
                         labelToEnvModel.put(modelTrue.label, modelTrue);
                     }
                 } else {
-                    if (modelTrue != null && modelTrue.envData != null) { 
+                    if (modelTrue != null && modelTrue.envData != null) {
                         modelTrue.label = modelTrue.envData.eval;
                         modelTrue.prevLabel = prevLabel;
                         if (modelTrue.label == null) {
@@ -1414,14 +1389,14 @@ public class Executor {
                                 Logs.infoLn("\t-> Destination is undetectable.");
                             }
                         } else {
-                            if (modelTrue.label.substring(0, 2).equals("#x")) {
+                            if (modelTrue.label.startsWith("#x")) {
                                 modelTrue.label = String.valueOf(Arithmetic.hexToInt(modelTrue.label.replace("#x", "")));
                             }
                             labelToEnvModel.put(modelTrue.label, modelTrue);
                         }
                     }
                 }
-                if (modelFalse != null && modelFalse.envData != null) { 
+                if (modelFalse != null && modelFalse.envData != null) {
                     modelFalse.label = nextInst(jumpFrom);
                     modelFalse.prevLabel = prevLabel;
                     labelToEnvModel.put(modelFalse.label, modelFalse);
@@ -1439,19 +1414,19 @@ public class Executor {
                 } else {
                     emulator.bic(p0, p1, im, suffix);
                 }
-            } else if ("lsl".equals(opcode)) { 
+            } else if ("lsl".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                 Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 emulator.lsls(p0, p1, p2, im, suffix);
-            } else if ("lsr".equals(opcode)) { 
+            } else if ("lsr".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                 Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 emulator.lsrs(p0, p1, p2, im, suffix);
-            } else if ("mul".equals(opcode)) { 
+            } else if ("mul".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
@@ -1465,12 +1440,12 @@ public class Executor {
                 } else {
                     emulator.mvn(p0, im, suffix);
                 }
-            } else if ("mov".equals(opcode)) { 
+            } else if ("mov".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = arrParams[1].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[1].contains("#") ? SysUtils.normalizeNumInParam(arrParams[1].trim()) : null;
                 emulator.mov(p0, p1, im, suffix);
-            } else if ("adc".equals(opcode)) { 
+            } else if ("adc".equals(opcode)) {
                 Integer im;
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
@@ -1700,7 +1675,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldrb(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1724,7 +1699,7 @@ public class Executor {
                         }
                         emulator.ldrb(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1753,7 +1728,7 @@ public class Executor {
                         emulator.ldrb(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1802,7 +1777,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldr(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1826,7 +1801,7 @@ public class Executor {
                         }
                         emulator.ldr(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1855,7 +1830,7 @@ public class Executor {
                         emulator.ldr(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1904,7 +1879,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldrh(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1928,7 +1903,7 @@ public class Executor {
                         }
                         emulator.ldrh(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -1957,7 +1932,7 @@ public class Executor {
                         emulator.ldrh(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2006,7 +1981,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.str(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2030,7 +2005,7 @@ public class Executor {
                         }
                         emulator.str(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2059,7 +2034,7 @@ public class Executor {
                         emulator.str(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2108,7 +2083,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.strb(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2132,7 +2107,7 @@ public class Executor {
                         }
                         emulator.strb(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2161,7 +2136,7 @@ public class Executor {
                         emulator.strb(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2210,7 +2185,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.strh(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2234,7 +2209,7 @@ public class Executor {
                         }
                         emulator.strh(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2263,7 +2238,7 @@ public class Executor {
                         emulator.strh(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2365,7 +2340,7 @@ public class Executor {
                                 Logs.infoLn("\t-> Destination is undetectable.");
                             }
                         } else {
-                            if (modelTrue.label.substring(0, 2).equals("#x")) {
+                            if (modelTrue.label.startsWith("#x")) {
                                 modelTrue.label = String.valueOf(Arithmetic.hexToInt(modelTrue.label.replace("#x", "")));
                             }
                             labelToEnvModel.put(modelTrue.label, modelTrue);
@@ -2390,13 +2365,13 @@ public class Executor {
                 } else {
                     emulator.bic(p0, p1, im, suffix);
                 }
-            } else if ("lsl".equals(opcode)) { 
+            } else if ("lsl".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                 Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 emulator.lsl(p0, p1, p2, im, suffix);
-            } else if ("lsr".equals(opcode)) { 
+            } else if ("lsr".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
@@ -2408,7 +2383,7 @@ public class Executor {
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                 Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 emulator.asr(p0, p1, p2, im, suffix);
-            } else if ("mul".equals(opcode)) { 
+            } else if ("mul".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
@@ -2422,7 +2397,7 @@ public class Executor {
                 } else {
                     emulator.mvn(p0, im, suffix);
                 }
-            } else if ("mov".equals(opcode)) { 
+            } else if ("mov".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = arrParams[1].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[1].contains("#") ? SysUtils.normalizeNumInParam(arrParams[1].trim()) : null;
@@ -2431,23 +2406,23 @@ public class Executor {
                 } else {
                     emulator.movw(p0, im, suffix);
                 }
-            } else if ("movw".equals(opcode)) { 
+            } else if ("movw".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Integer im = SysUtils.normalizeNumInParam(arrParams[1].trim());
                 emulator.movw(p0, im, suffix);
-            } else if ("umull".equals(opcode)) { 
+            } else if ("umull".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 Character p3 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[3].trim()));
                 emulator.umull(p0, p1, p2, p3);
-            } else if ("smull".equals(opcode)) { 
+            } else if ("smull".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 Character p3 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[3].trim()));
                 emulator.smull(p0, p1, p2, p3);
-            } else if ("adc".equals(opcode)) { 
+            } else if ("adc".equals(opcode)) {
                 Integer im;
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
@@ -2681,7 +2656,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldrb(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2705,7 +2680,7 @@ public class Executor {
                         }
                         emulator.ldrb(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2734,7 +2709,7 @@ public class Executor {
                         emulator.ldrb(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2783,7 +2758,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldr(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2807,7 +2782,7 @@ public class Executor {
                         }
                         emulator.ldr(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2836,7 +2811,7 @@ public class Executor {
                         emulator.ldr(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2885,7 +2860,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldrh(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2909,7 +2884,7 @@ public class Executor {
                         }
                         emulator.ldrh(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2938,7 +2913,7 @@ public class Executor {
                         emulator.ldrh(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -2987,7 +2962,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.str(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3011,7 +2986,7 @@ public class Executor {
                         }
                         emulator.str(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3040,7 +3015,7 @@ public class Executor {
                         emulator.str(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3089,7 +3064,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.strb(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3113,7 +3088,7 @@ public class Executor {
                         }
                         emulator.strb(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3142,7 +3117,7 @@ public class Executor {
                         emulator.strb(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3191,7 +3166,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.strh(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3215,7 +3190,7 @@ public class Executor {
                         }
                         emulator.strh(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3244,7 +3219,7 @@ public class Executor {
                         emulator.strh(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3306,7 +3281,7 @@ public class Executor {
                 if (isConcreteLabel(arrParams[0])) {
                     strLabel = arrParams[0].contains("-") ? arrParams[0] :
                             String.valueOf(Arithmetic.hexToInt(arrParams[0].replace("#0x", "").replace("0x", "")));
-                } else { 
+                } else {
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
                 Map.Entry<EnvModel, EnvModel> envPair;
@@ -3327,18 +3302,18 @@ public class Executor {
                 EnvModel modelTrue = envPair.getKey();
                 EnvModel modelFalse = envPair.getValue();
                 if (isConcreteLabel(arrParams[0])) {
-                    if (modelTrue != null && modelTrue.envData != null) { 
+                    if (modelTrue != null && modelTrue.envData != null) {
                         modelTrue.label = strLabel;
                         modelTrue.prevLabel = prevLabel;
                         labelToEnvModel.put(modelTrue.label, modelTrue);
                     }
                 } else {
-                    if (modelTrue != null && modelTrue.envData != null) { 
+                    if (modelTrue != null && modelTrue.envData != null) {
                         modelTrue.label = modelTrue.envData.eval;
                         modelTrue.prevLabel = prevLabel;
                         if (modelTrue.label == null) {
-                            
-                            
+
+
                             int foundLabel = Arithmetic.bitSetToInt(emulator.getEnv().register.regs.get('l').getVal());
                             if (foundLabel != 0 && foundLabel % 4 == 0) {
                                 modelTrue.label = String.valueOf(foundLabel);
@@ -3348,14 +3323,14 @@ public class Executor {
                                 Logs.infoLn("\t-> Destination is undetectable.");
                             }
                         } else {
-                            if (modelTrue.label.substring(0, 2).equals("#x")) {
+                            if (modelTrue.label.startsWith("#x")) {
                                 modelTrue.label = String.valueOf(Arithmetic.hexToInt(modelTrue.label.replace("#x", "")));
                             }
                             labelToEnvModel.put(modelTrue.label, modelTrue);
                         }
                     }
                 }
-                if (modelFalse != null && modelFalse.envData != null) { 
+                if (modelFalse != null && modelFalse.envData != null) {
                     modelFalse.label = nextInst(jumpFrom);
                     modelFalse.prevLabel = prevLabel;
                     labelToEnvModel.put(modelFalse.label, modelFalse);
@@ -3373,13 +3348,13 @@ public class Executor {
                 } else {
                     emulator.bic(p0, p1, im, suffix);
                 }
-            } else if ("lsl".equals(opcode)) { 
+            } else if ("lsl".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                 Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 emulator.lsl(p0, p1, p2, im, suffix);
-            } else if ("lsr".equals(opcode)) { 
+            } else if ("lsr".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
@@ -3391,7 +3366,7 @@ public class Executor {
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                 Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 emulator.asr(p0, p1, p2, im, suffix);
-            } else if ("mul".equals(opcode)) { 
+            } else if ("mul".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
@@ -3405,28 +3380,28 @@ public class Executor {
                 } else {
                     emulator.mvn(p0, im, suffix);
                 }
-            } else if ("mov".equals(opcode)) { 
+            } else if ("mov".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = arrParams[1].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[1].contains("#") ? SysUtils.normalizeNumInParam(arrParams[1].trim()) : null;
                 emulator.mov(p0, p1, im, suffix);
-            } else if ("movw".equals(opcode)) { 
+            } else if ("movw".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Integer im = SysUtils.normalizeNumInParam(arrParams[1].trim());
                 emulator.movw(p0, im, suffix);
-            } else if ("umull".equals(opcode)) { 
+            } else if ("umull".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 Character p3 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[3].trim()));
                 emulator.umull(p0, p1, p2, p3);
-            } else if ("smull".equals(opcode)) { 
+            } else if ("smull".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 Character p3 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[3].trim()));
                 emulator.smull(p0, p1, p2, p3);
-            } else if ("adc".equals(opcode)) { 
+            } else if ("adc".equals(opcode)) {
                 Integer im;
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
@@ -3659,7 +3634,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldrb(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3683,7 +3658,7 @@ public class Executor {
                         }
                         emulator.ldrb(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3712,7 +3687,7 @@ public class Executor {
                         emulator.ldrb(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3761,7 +3736,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldr(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3785,7 +3760,7 @@ public class Executor {
                         }
                         emulator.ldr(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3814,7 +3789,7 @@ public class Executor {
                         emulator.ldr(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3863,7 +3838,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldrh(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3887,7 +3862,7 @@ public class Executor {
                         }
                         emulator.ldrh(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3916,7 +3891,7 @@ public class Executor {
                         emulator.ldrh(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3965,7 +3940,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.str(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -3989,7 +3964,7 @@ public class Executor {
                         }
                         emulator.str(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4018,7 +3993,7 @@ public class Executor {
                         emulator.str(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4067,7 +4042,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.strb(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4091,7 +4066,7 @@ public class Executor {
                         }
                         emulator.strb(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4120,7 +4095,7 @@ public class Executor {
                         emulator.strb(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4169,7 +4144,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.strh(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4193,7 +4168,7 @@ public class Executor {
                         }
                         emulator.strh(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4222,7 +4197,7 @@ public class Executor {
                         emulator.strh(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4284,7 +4259,7 @@ public class Executor {
                 if (isConcreteLabel(arrParams[0])) {
                     strLabel = arrParams[0].contains("-") ? arrParams[0] :
                             String.valueOf(Arithmetic.hexToInt(arrParams[0].replace("#0x", "").replace("0x", "")));
-                } else { 
+                } else {
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
                 Map.Entry<EnvModel, EnvModel> envPair;
@@ -4305,18 +4280,18 @@ public class Executor {
                 EnvModel modelTrue = envPair.getKey();
                 EnvModel modelFalse = envPair.getValue();
                 if (isConcreteLabel(arrParams[0])) {
-                    if (modelTrue != null && modelTrue.envData != null) { 
+                    if (modelTrue != null && modelTrue.envData != null) {
                         modelTrue.label = strLabel;
                         modelTrue.prevLabel = prevLabel;
                         labelToEnvModel.put(modelTrue.label, modelTrue);
                     }
                 } else {
-                    if (modelTrue != null && modelTrue.envData != null) { 
+                    if (modelTrue != null && modelTrue.envData != null) {
                         modelTrue.label = modelTrue.envData.eval;
                         modelTrue.prevLabel = prevLabel;
                         if (modelTrue.label == null) {
-                            
-                            
+
+
                             int foundLabel = Arithmetic.bitSetToInt(emulator.getEnv().register.regs.get('l').getVal());
                             if (foundLabel != 0 && foundLabel % 4 == 0) {
                                 modelTrue.label = String.valueOf(foundLabel);
@@ -4326,14 +4301,14 @@ public class Executor {
                                 Logs.infoLn("\t-> Destination is undetectable.");
                             }
                         } else {
-                            if (modelTrue.label.substring(0, 2).equals("#x")) {
+                            if (modelTrue.label.startsWith("#x")) {
                                 modelTrue.label = String.valueOf(Arithmetic.hexToInt(modelTrue.label.replace("#x", "")));
                             }
                             labelToEnvModel.put(modelTrue.label, modelTrue);
                         }
                     }
                 }
-                if (modelFalse != null && modelFalse.envData != null) { 
+                if (modelFalse != null && modelFalse.envData != null) {
                     modelFalse.label = nextInst(jumpFrom);
                     modelFalse.prevLabel = prevLabel;
                     labelToEnvModel.put(modelFalse.label, modelFalse);
@@ -4351,13 +4326,13 @@ public class Executor {
                 } else {
                     emulator.bic(p0, p1, im, suffix);
                 }
-            } else if ("lsl".equals(opcode)) { 
+            } else if ("lsl".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                 Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 emulator.lsl(p0, p1, p2, im, suffix);
-            } else if ("lsr".equals(opcode)) { 
+            } else if ("lsr".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
@@ -4369,7 +4344,7 @@ public class Executor {
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                 Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 emulator.asr(p0, p1, p2, im, suffix);
-            } else if ("mul".equals(opcode)) { 
+            } else if ("mul".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
@@ -4383,28 +4358,28 @@ public class Executor {
                 } else {
                     emulator.mvn(p0, im, suffix);
                 }
-            } else if ("mov".equals(opcode)) { 
+            } else if ("mov".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = arrParams[1].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[1].contains("#") ? SysUtils.normalizeNumInParam(arrParams[1].trim()) : null;
                 emulator.mov(p0, p1, im, suffix);
-            } else if ("movw".equals(opcode)) { 
+            } else if ("movw".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Integer im = SysUtils.normalizeNumInParam(arrParams[1].trim());
                 emulator.movw(p0, im, suffix);
-            } else if ("umull".equals(opcode)) { 
+            } else if ("umull".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 Character p3 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[3].trim()));
                 emulator.umull(p0, p1, p2, p3);
-            } else if ("smull".equals(opcode)) { 
+            } else if ("smull".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 Character p3 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[3].trim()));
                 emulator.smull(p0, p1, p2, p3);
-            } else if ("adc".equals(opcode)) { 
+            } else if ("adc".equals(opcode)) {
                 Integer im;
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
@@ -4637,7 +4612,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldrb(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4661,7 +4636,7 @@ public class Executor {
                         }
                         emulator.ldrb(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4690,7 +4665,7 @@ public class Executor {
                         emulator.ldrb(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4739,7 +4714,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldr(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4763,7 +4738,7 @@ public class Executor {
                         }
                         emulator.ldr(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4792,7 +4767,7 @@ public class Executor {
                         emulator.ldr(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4841,7 +4816,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldrh(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4865,7 +4840,7 @@ public class Executor {
                         }
                         emulator.ldrh(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4894,7 +4869,7 @@ public class Executor {
                         emulator.ldrh(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4943,7 +4918,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.str(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4967,7 +4942,7 @@ public class Executor {
                         }
                         emulator.str(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -4996,7 +4971,7 @@ public class Executor {
                         emulator.str(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5045,7 +5020,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.strb(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5069,7 +5044,7 @@ public class Executor {
                         }
                         emulator.strb(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5098,7 +5073,7 @@ public class Executor {
                         emulator.strb(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5147,7 +5122,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.strh(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5171,7 +5146,7 @@ public class Executor {
                         }
                         emulator.strh(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5200,7 +5175,7 @@ public class Executor {
                         emulator.strh(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5262,7 +5237,7 @@ public class Executor {
                 if (isConcreteLabel(arrParams[0])) {
                     strLabel = arrParams[0].contains("-") ? arrParams[0] :
                             String.valueOf(Arithmetic.hexToInt(arrParams[0].replace("#0x", "").replace("0x", "")));
-                } else { 
+                } else {
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
                 Map.Entry<EnvModel, EnvModel> envPair;
@@ -5283,13 +5258,13 @@ public class Executor {
                 EnvModel modelTrue = envPair.getKey();
                 EnvModel modelFalse = envPair.getValue();
                 if (isConcreteLabel(arrParams[0])) {
-                    if (modelTrue != null && modelTrue.envData != null) { 
+                    if (modelTrue != null && modelTrue.envData != null) {
                         modelTrue.label = strLabel;
                         modelTrue.prevLabel = prevLabel;
                         labelToEnvModel.put(modelTrue.label, modelTrue);
                     }
                 } else {
-                    if (modelTrue != null && modelTrue.envData != null) { 
+                    if (modelTrue != null && modelTrue.envData != null) {
                         modelTrue.label = modelTrue.envData.eval;
                         modelTrue.prevLabel = prevLabel;
                         if (modelTrue.label == null) {
@@ -5302,14 +5277,14 @@ public class Executor {
                                 Logs.infoLn("\t-> Destination is undetectable.");
                             }
                         } else {
-                            if (modelTrue.label.substring(0, 2).equals("#x")) {
+                            if (modelTrue.label.startsWith("#x")) {
                                 modelTrue.label = String.valueOf(Arithmetic.hexToInt(modelTrue.label.replace("#x", "")));
                             }
                             labelToEnvModel.put(modelTrue.label, modelTrue);
                         }
                     }
                 }
-                if (modelFalse != null && modelFalse.envData != null) { 
+                if (modelFalse != null && modelFalse.envData != null) {
                     modelFalse.label = nextInst(jumpFrom);
                     modelFalse.prevLabel = prevLabel;
                     labelToEnvModel.put(modelFalse.label, modelFalse);
@@ -5327,13 +5302,13 @@ public class Executor {
                 } else {
                     emulator.bic(p0, p1, im, suffix);
                 }
-            } else if ("lsl".equals(opcode)) { 
+            } else if ("lsl".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                 Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 emulator.lsl(p0, p1, p2, im, suffix);
-            } else if ("lsr".equals(opcode)) { 
+            } else if ("lsr".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
@@ -5345,7 +5320,7 @@ public class Executor {
                 Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
                 Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 emulator.asr(p0, p1, p2, im, suffix);
-            } else if ("mul".equals(opcode)) { 
+            } else if ("mul".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
@@ -5359,28 +5334,28 @@ public class Executor {
                 } else {
                     emulator.mvn(p0, im, suffix);
                 }
-            } else if ("mov".equals(opcode)) { 
+            } else if ("mov".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = arrParams[1].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Integer im = arrParams[1].contains("#") ? SysUtils.normalizeNumInParam(arrParams[1].trim()) : null;
                 emulator.mov(p0, p1, im, suffix);
-            } else if ("movw".equals(opcode)) { 
+            } else if ("movw".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Integer im = SysUtils.normalizeNumInParam(arrParams[1].trim());
                 emulator.movw(p0, im, suffix);
-            } else if ("umull".equals(opcode)) { 
+            } else if ("umull".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 Character p3 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[3].trim()));
                 emulator.umull(p0, p1, p2, p3);
-            } else if ("smull".equals(opcode)) { 
+            } else if ("smull".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
                 Character p2 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
                 Character p3 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[3].trim()));
                 emulator.smull(p0, p1, p2, p3);
-            } else if ("adc".equals(opcode)) { 
+            } else if ("adc".equals(opcode)) {
                 Integer im;
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
@@ -5613,7 +5588,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldrb(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5637,7 +5612,7 @@ public class Executor {
                         }
                         emulator.ldrb(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5666,7 +5641,7 @@ public class Executor {
                         emulator.ldrb(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5715,7 +5690,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldr(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5739,7 +5714,7 @@ public class Executor {
                         }
                         emulator.ldr(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5768,7 +5743,7 @@ public class Executor {
                         emulator.ldr(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5817,7 +5792,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.ldrh(p0, p1);
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5841,7 +5816,7 @@ public class Executor {
                         }
                         emulator.ldrh(p0, newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5870,7 +5845,7 @@ public class Executor {
                         emulator.ldrh(p0, newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5919,7 +5894,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.str(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5943,7 +5918,7 @@ public class Executor {
                         }
                         emulator.str(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -5972,7 +5947,7 @@ public class Executor {
                         emulator.str(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -6021,7 +5996,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.strb(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -6045,7 +6020,7 @@ public class Executor {
                         }
                         emulator.strb(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -6074,7 +6049,7 @@ public class Executor {
                         emulator.strb(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -6123,7 +6098,7 @@ public class Executor {
                         Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
                         emulator.strh(emulator.val(p0), emulator.val(p1));
                         break;
-                    case 1: 
+                    case 1:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -6147,7 +6122,7 @@ public class Executor {
                         }
                         emulator.strh(emulator.val(p0), newValue);
                         break;
-                    case 2: 
+                    case 2:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -6176,7 +6151,7 @@ public class Executor {
                         emulator.strh(emulator.val(p0), newValue);
                         emulator.write(p1, extValue);
                         break;
-                    case 3: 
+                    case 3:
                         p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0]));
                         p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1]));
 
@@ -6218,7 +6193,8 @@ public class Executor {
     protected static void decideToFork(EnvModel modelShare, Emulator emulator) {
         Gson gson = new Gson();
         String jsonString = gson.toJson(labelToEnvModel);
-        Type type = new TypeToken<HashMap<String, EnvModel>>() {}.getType();
+        Type type = new TypeToken<HashMap<String, EnvModel>>() {
+        }.getType();
         HashMap<String, EnvModel> clonedMap = gson.fromJson(jsonString, type);
         if (modelShare != null && labelToEnvModel.containsKey(modelShare.label)) {
             if (modelShare.label != null) {
@@ -6228,7 +6204,8 @@ public class Executor {
         if (processStack.empty()) gg();
 
         String jsonEmulator = gson.toJson(emulator.getEnv());
-        Type typeEmu = new TypeToken<Environment>() {}.getType();
+        Type typeEmu = new TypeToken<Environment>() {
+        }.getType();
         Environment clonedEnv = gson.fromJson(jsonEmulator, typeEmu);
         if (modelShare != null && labelToEnvModel.containsKey(modelShare.label)) {
             //Add fork result of child process to register
@@ -6241,7 +6218,8 @@ public class Executor {
     protected static void decideToWait(EnvModel modelShare, Emulator emulator) {
         Gson gson = new Gson();
         String jsonString = gson.toJson(labelToEnvModel);
-        Type type = new TypeToken<HashMap<String, EnvModel>>() {}.getType();
+        Type type = new TypeToken<HashMap<String, EnvModel>>() {
+        }.getType();
         HashMap<String, EnvModel> clonedMap = gson.fromJson(jsonString, type);
         if (modelShare != null && labelToEnvModel.containsKey(modelShare.label)) {
             if (modelShare.label != null) {
@@ -6251,7 +6229,8 @@ public class Executor {
         if (processStack.empty()) gg();
 
         String jsonEmulator = gson.toJson(emulator.getEnv());
-        Type typeEmu = new TypeToken<Environment>() {}.getType();
+        Type typeEmu = new TypeToken<Environment>() {
+        }.getType();
         Environment clonedEnv = gson.fromJson(jsonEmulator, typeEmu);
         if (modelShare != null && labelToEnvModel.containsKey(modelShare.label)) {
             waitEnv.push(clonedEnv);
@@ -6278,8 +6257,8 @@ public class Executor {
         if (envStack.empty()) gg();
         Map.Entry<EnvModel, HashMap<String, EnvModel>> model = envStack.pop();
         recentPop = model;
-        jumpTo = model.getKey().label; 
-        labelToEnvModel = model.getValue(); 
+        jumpTo = model.getKey().label;
+        labelToEnvModel = model.getValue();
         if ((modelTrue == null || modelTrue.label == null || !jumpTo.equals(modelTrue.label))
                 && (modelFalse == null || modelFalse.label == null || !jumpTo.equals(modelFalse.label))) {
             String triggerPrevLabelTwoUnsat = prevInst(jumpTo);
@@ -6288,11 +6267,11 @@ public class Executor {
         }
     }
 
-    
+
     protected static boolean isARM(String inpFile) {
         return Objects.requireNonNull(SysUtils.execCmd("file " + inpFile)).contains("ARM");
     }
-    
+
     protected static String nextInstLabel(String label) {
         //TODO: temporary skip external call
         if (label.contains("+")) {
@@ -6312,6 +6291,7 @@ public class Executor {
         }
         return label;
     }
+
     protected static String prevInst(String label) {
         return label.contains("+") ? label.replace("+", "-") : String.valueOf(Integer.parseInt(label) - 4);
     }
@@ -6342,7 +6322,7 @@ public class Executor {
             //execFrom(new M0(env), forkFrom, forkFrom); // ??? prev
             fork(env, forkFrom, forkFrom);
         } else {
-           System.exit(0);
+            System.exit(0);
         }
     }
 }

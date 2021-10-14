@@ -15,8 +15,8 @@ import java.nio.Buffer;
 import java.util.HashMap;
 
 public class Memory {
-    private HashMap<String, BitVec> memory;
-    private int length;
+    private final HashMap<String, BitVec> memory;
+    private final int length;
 
     public Memory(int length) {
         this.memory = new HashMap<>();
@@ -39,7 +39,7 @@ public class Memory {
     public static void loadMemory(String filePath) {
         String[] nparts = filePath.split("[\\/]");
         String dbname = nparts[nparts.length - 1];
-        String colname = dbname.length() < 6 ? "col_" + dbname :  "col_" + dbname.substring(0, 6);
+        String colname = dbname.length() < 6 ? "col_" + dbname : "col_" + dbname.substring(0, 6);
         DBDriver.startConnection(colname);
         Logs.infoLn(" + Parsing " + filePath + " ...");
         String disassembleCmd = "arm-none-eabi-objdump -D -S ";
@@ -63,12 +63,12 @@ public class Memory {
                 String[] contents = parts[1].split("\\s+");
                 if (contents.length >= 2) {
                     if (contents[1].matches("-?[0-9a-fA-F]+")) {
-                            if (parts[1].contains("<")) {
-                                funcLabel = parts[1].contains("+") ? parts[1].substring(parts[1].indexOf('<') + 1, parts[1].indexOf('+')) : parts[1].substring(parts[1].indexOf('<') + 1, parts[1].indexOf('>'));
-                                DBDriver.addMemoryDocument(label, contents[1], funcLabel);
-                            } else {
-                                DBDriver.addMemoryDocument(label, contents[1]);
-                            }
+                        if (parts[1].contains("<")) {
+                            funcLabel = parts[1].contains("+") ? parts[1].substring(parts[1].indexOf('<') + 1, parts[1].indexOf('+')) : parts[1].substring(parts[1].indexOf('<') + 1, parts[1].indexOf('>'));
+                            DBDriver.addMemoryDocument(label, contents[1], funcLabel);
+                        } else {
+                            DBDriver.addMemoryDocument(label, contents[1]);
+                        }
                     }
                 }
             }
@@ -105,12 +105,13 @@ public class Memory {
         return findRes.matches("-?[0-9a-fA-F]+") ? Arithmetic.fromHexStr(findRes) : new BitVec(findRes);
         //return memory.containsKey(key) ? memory.get(key) : new BitVec(0);
     }
+
     /*
         Get the value at an address (address can contain #x)
      */
     public static BitVec get(String address) {
         String findRes = DBDriver.getValue(SysUtils.getAddressValue(address)); //hex value
-      //  System.out.println(findRes);
+        //  System.out.println(findRes);
         return findRes.matches("-?[0-9a-fA-F]+") ? Arithmetic.fromHexStr(findRes) : new BitVec(findRes);
         //return memory.containsKey(key) ? memory.get(key) : new BitVec(0);
     }
@@ -136,38 +137,47 @@ public class Memory {
      */
     public void setTextReference(BitVec atAdd, String text) {
     }
+
     public void setStringReference(BitVec atAdd, String text) {
     }
+
     public void setPointer(BitVec add, Object p) {
         //int val = ((IntByReference) p).getValue();
         //long val =
         //memory.put(add.getSym(), new BitVec(val));
     }
 
-    public void setByte(BitVec add, byte val) {}
+    public void setByte(BitVec add, byte val) {
+    }
 
-    public void setInt(BitVec add, int val) {}
+    public void setInt(BitVec add, int val) {
+    }
 
     public void setIntReference(BitVec atAdd, int val) {
         BitVec value = new BitVec(val);
         DBDriver.updateMemoryDocument(atAdd.getSym(), value.getSym());
     }
+
     public void setNativeLong(BitVec atAdd, NativeLong val) {
 
     }
+
     public void setNativeLongReference(BitVec atAdd, NativeLong val) {
 
     }
+
     public void setShortReference(BitVec atAdd, short val) {
     }
+
     public void setLongReference(BitVec atAdd, long val) {
 
     }
+
     public void setArray(BitVec add, int size, Object[] arr) {
 
     }
 
-    public void setByteArray(BitVec add, int size, byte[] arr){
+    public void setByteArray(BitVec add, int size, byte[] arr) {
         int intSize = Configs.getIntSize(); // bytes
         for (int i = 0; i < size; i++) {
             String word = add.getSym();
@@ -177,7 +187,7 @@ public class Memory {
         }
     }
 
-    public void setIntArray(BitVec add, int size, int[] arr){
+    public void setIntArray(BitVec add, int size, int[] arr) {
         int intSize = Configs.getIntSize(); // bytes
         for (int i = 0; i < size; i++) {
             String word = add.getSym();
@@ -186,7 +196,8 @@ public class Memory {
             add = add.add(intSize);
         }
     }
-    public void setShortArray(BitVec add, int size, short[] arr){
+
+    public void setShortArray(BitVec add, int size, short[] arr) {
 
     }
 
@@ -216,10 +227,11 @@ public class Memory {
         }
         return text;
     }
+
     private String HexToASCII(String memstr) {
         StringBuilder result = new StringBuilder();
         for (int i = memstr.length() - 1; i > 0; i -= 2) {
-            String hexStr = memstr.substring(i-1, i+1);
+            String hexStr = memstr.substring(i - 1, i + 1);
             if (hexStr.equals("00")) break;
             char c = (char) Integer.parseInt(hexStr, 16);
             result.append(c);
@@ -230,8 +242,9 @@ public class Memory {
     public String getStringFromReference(BitVec add) {
         return getTextFromReference(add);
     }
+
     public Object[] getArray(BitVec atAddress, int size) {
-        return null;
+        return new Object[size];
     }
 
     public byte[] getByteArray(BitVec atAddress, int size) {
@@ -261,6 +274,7 @@ public class Memory {
         }
         return arr;
     }
+
     public char[] getBuffer(BitVec atAddress, int size) {
         char[] arr = new char[size];
         int intSize = Configs.getIntSize(); // bytes
@@ -272,6 +286,7 @@ public class Memory {
         }
         return arr;
     }
+
     //for 32bit machine
     public BitVec getWordMemoryValue(BitVec atAddress) {
         String word = atAddress.getSym();
@@ -304,19 +319,20 @@ public class Memory {
         IntByReference ref = new IntByReference((int) Arithmetic.hexToInt(memValue));
         return ref;
     }
+
     public int getIntFromReference(BitVec atAddress) {
         String word = atAddress.getSym();
         try {
             String memValue = DBDriver.getValue(word);
-            return (int ) Arithmetic.hexToInt(memValue);
+            return (int) Arithmetic.hexToInt(memValue);
         } catch (Exception e) {
             String address = atAddress.getSym();
             String hexStr = address;
             if (address.charAt(0) == '#') {
                 hexStr = Arithmetic.intToHex(Arithmetic.hexToInt(address));
             }
-            String memValue = memory.get("0x"+hexStr).getSym();
-            return (int ) Arithmetic.hexToInt(memValue);
+            String memValue = memory.get("0x" + hexStr).getSym();
+            return (int) Arithmetic.hexToInt(memValue);
         }
 
     }
@@ -324,7 +340,7 @@ public class Memory {
     public NativeLong getNativeLongFromReference(BitVec atAddress) {
         String word = atAddress.getSym();
         String memValue = DBDriver.getValue(word);
-        return (NativeLong) new NativeLong(Arithmetic.hexToInt(memValue));
+        return new NativeLong(Arithmetic.hexToInt(memValue));
     }
 
     public NativeLongByReference getNativeLongRef(BitVec atAddress) {
@@ -336,18 +352,21 @@ public class Memory {
     public long getLongFromReference(BitVec atAddress) {
         String word = atAddress.getSym();
         String memValue = DBDriver.getValue(word);
-        return (long) Arithmetic.hexToInt(memValue);
+        return Arithmetic.hexToInt(memValue);
     }
+
     public short getShortFromReference(BitVec atAddress) {
         String word = atAddress.getSym();
         String memValue = DBDriver.getValue(word);
         return (short) Arithmetic.hexToInt(memValue);
     }
+
     public ShortByReference getShortRef(BitVec atAddress) {
         String word = atAddress.getSym();
         String memValue = DBDriver.getValue(word);
         return new ShortByReference((short) Arithmetic.hexToInt(memValue));
     }
+
     public FloatByReference getFloatRef(BitVec atAddress) {
         String word = atAddress.getSym();
         String memValue = DBDriver.getValue(word);
@@ -363,32 +382,41 @@ public class Memory {
         String word = atAddress.getSym();
         return (float) Arithmetic.hexToInt(word);
     }
+
     public short getShort(BitVec atAddress) {
         String word = atAddress.getSym();
         return (short) Arithmetic.hexToInt(word);
     }
+
     public byte getByte(BitVec atAddress) {
         String word = atAddress.getSym();
         return (byte) Arithmetic.hexToInt(word);
     }
+
     public double getDouble(BitVec address) {
         String word = address.getSym();
         return (int) Arithmetic.hexToInt(word);
     }
+
     public DoubleByReference getDoubleRef(BitVec address) {
         String word = address.getSym();
         return new DoubleByReference((double) Arithmetic.hexToInt(word));
     }
-    public void setDouble(BitVec add, double val) {}
-    public void setFloat(BitVec add, float val) {}
+
+    public void setDouble(BitVec add, double val) {
+    }
+
+    public void setFloat(BitVec add, float val) {
+    }
 
     public NativeLong getNativeLong(BitVec atAddress) {
         String word = atAddress.getSym();
         return new NativeLong(Arithmetic.hexToInt(word));
     }
+
     public long getLong(BitVec atAddress) {
         String word = atAddress.getSym();
-        return (long) Arithmetic.hexToInt(word);
+        return Arithmetic.hexToInt(word);
     }
 
 }

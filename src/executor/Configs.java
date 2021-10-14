@@ -14,8 +14,19 @@ public class Configs {
     public static int envVarCount = 17; // default in GCC
     public static int wordSize = architecture / 8;
 
-    public static byte getCharSize() { return 1; }
-    public static byte getShortSize() { return 2; }
-    public static byte getIntSize() { return 4; }
-    public static byte getLongSize() { return (byte) ((byte) architecture / 8); }
+    public static byte getCharSize() {
+        return 1;
+    }
+
+    public static byte getShortSize() {
+        return 2;
+    }
+
+    public static byte getIntSize() {
+        return 4;
+    }
+
+    public static byte getLongSize() {
+        return (byte) ((byte) architecture / 8);
+    }
 }

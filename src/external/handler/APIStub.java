@@ -1,21 +1,23 @@
 package external.handler;
+
 import com.sun.jna.*;
 import com.sun.jna.ptr.*;
 import emulator.semantics.Environment;
-import executor.Configs;
-import executor.Executor;
+import emulator.semantics.Memory;
 import external.jni.CStruct.*;
 import external.jni.*;
 import pojos.BitVec;
-import utils.Arithmetic;
 import utils.SysUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.BitSet;
 import java.util.List;
 
 public class APIStub {
+
+    public static void __clear_cache(Environment env) {
+
+    }
 
     //int connect(int __fd,sockaddr *__addr,socklen_t __len)
     public static void connect(Environment env) {
@@ -23,7 +25,7 @@ public class APIStub {
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         sockaddr param1 = new sockaddr();
         int param2;
 
@@ -140,18 +142,19 @@ public class APIStub {
 //        env.memory.put(t0, new BitVec(param0.getValue()));
 //        System.out.println(param0.getValue());
 //    }
-    public static void _exit (Environment env) {
+    public static void _exit(Environment env) {
         BitVec t0 = env.register.get('0');
-        int param0 ;
+        int param0;
         param0 = env.memory.getInt(t0);
 
         CLibrary.INSTANCE._exit(param0);
         //env.memory.setInt(t0, param0);
     }
-    public static void _Exit (Environment env) {
+
+    public static void _Exit(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
         CLibrary.INSTANCE._Exit(param0);
@@ -159,16 +162,16 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void _flushlbf (Environment env) {
+    public static void _flushlbf(Environment env) {
 
         CLibrary.INSTANCE._flushlbf();
 
     }
 
-    public static void __fbufsize (Environment env) {
+    public static void __fbufsize(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -178,10 +181,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void __flbf (Environment env) {
+    public static void __flbf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -191,10 +194,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void __fpending (Environment env) {
+    public static void __fpending(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -204,10 +207,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void __fpurge (Environment env) {
+    public static void __fpurge(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -216,10 +219,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void __freadable (Environment env) {
+    public static void __freadable(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -229,10 +232,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void __freading (Environment env) {
+    public static void __freading(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -242,12 +245,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void __fsetlocking (Environment env) {
+    public static void __fsetlocking(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
-        int param1 ;
+        IntByReference param0;
+        int param1;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getInt(t1);
@@ -259,10 +262,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void __fwritable (Environment env) {
+    public static void __fwritable(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -272,10 +275,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void __fwriting (Environment env) {
+    public static void __fwriting(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -285,72 +288,72 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void __ppc_get_timebase (Environment env) {
+    public static void __ppc_get_timebase(Environment env) {
 
         long ret = CLibrary.INSTANCE.__ppc_get_timebase();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void __ppc_get_timebase_freq (Environment env) {
+    public static void __ppc_get_timebase_freq(Environment env) {
 
         long ret = CLibrary.INSTANCE.__ppc_get_timebase_freq();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void __ppc_mdoio (Environment env) {
+    public static void __ppc_mdoio(Environment env) {
 
         CLibrary.INSTANCE.__ppc_mdoio();
 
     }
 
-    public static void __ppc_mdoom (Environment env) {
+    public static void __ppc_mdoom(Environment env) {
 
         CLibrary.INSTANCE.__ppc_mdoom();
 
     }
 
-    public static void __ppc_set_ppr_low (Environment env) {
+    public static void __ppc_set_ppr_low(Environment env) {
 
         CLibrary.INSTANCE.__ppc_set_ppr_low();
 
     }
 
-    public static void __ppc_set_ppr_med (Environment env) {
+    public static void __ppc_set_ppr_med(Environment env) {
 
         CLibrary.INSTANCE.__ppc_set_ppr_med();
 
     }
 
-    public static void __ppc_set_ppr_med_high (Environment env) {
+    public static void __ppc_set_ppr_med_high(Environment env) {
 
         CLibrary.INSTANCE.__ppc_set_ppr_med_high();
 
     }
 
-    public static void __ppc_set_ppr_med_low (Environment env) {
+    public static void __ppc_set_ppr_med_low(Environment env) {
 
         CLibrary.INSTANCE.__ppc_set_ppr_med_low();
 
     }
 
-    public static void __ppc_set_ppr_very_low (Environment env) {
+    public static void __ppc_set_ppr_very_low(Environment env) {
 
         CLibrary.INSTANCE.__ppc_set_ppr_very_low();
 
     }
 
-    public static void __ppc_yield (Environment env) {
+    public static void __ppc_yield(Environment env) {
 
         CLibrary.INSTANCE.__ppc_yield();
 
     }
 
-    public static void a64l (Environment env) {
+    public static void a64l(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -360,16 +363,16 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void abort (Environment env) {
+    public static void abort(Environment env) {
 
         CLibrary.INSTANCE.abort();
 
     }
 
-    public static void abs (Environment env) {
+    public static void abs(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -379,14 +382,14 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void accept (Environment env) {
+    public static void accept(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         sockaddr param1 = new sockaddr();
-        IntByReference param2 ;
+        IntByReference param2;
 
         param0 = env.memory.getInt(t0);
         param1.sa_ = env.memory.getInt(t1);
@@ -402,12 +405,12 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void access (Environment env) {
+    public static void access(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -419,10 +422,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void acos (Environment env) {
+    public static void acos(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -432,10 +435,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void acosf (Environment env) {
+    public static void acosf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -445,10 +448,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void acosh (Environment env) {
+    public static void acosh(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -458,10 +461,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void acoshf (Environment env) {
+    public static void acoshf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -471,10 +474,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void acoshl (Environment env) {
+    public static void acoshl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -484,10 +487,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void acosl (Environment env) {
+    public static void acosl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -497,11 +500,11 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void addmntent (Environment env) {
+    public static void addmntent(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
+        IntByReference param0;
         mntent param1 = new mntent();
 
         param0 = env.memory.getIntRef(t0);
@@ -524,12 +527,12 @@ public class APIStub {
         env.memory.setIntReference(t1.add(20), param1.mnt_passno);
     }
 
-    public static void addseverity (Environment env) {
+    public static void addseverity(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        String param1 ;
+        int param0;
+        String param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -541,7 +544,7 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void adjtime (Environment env) {
+    public static void adjtime(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
@@ -562,7 +565,7 @@ public class APIStub {
         env.memory.setNativeLongReference(t1.add(4), param1.tv_usec);
     }
 
-    public static void adjtimex (Environment env) {
+    public static void adjtimex(Environment env) {
         BitVec t0 = env.register.get('0');
 
         timex param0 = new timex();
@@ -613,11 +616,11 @@ public class APIStub {
         env.memory.setIntReference(t0.add(76), param0.tai);
     }
 
-    public static void aio_cancel (Environment env) {
+    public static void aio_cancel(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         aiocb param1 = new aiocb();
 
         param0 = env.memory.getInt(t0);
@@ -628,11 +631,11 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void aio_cancel64 (Environment env) {
+    public static void aio_cancel64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         aiocb64 param1 = new aiocb64();
 
         param0 = env.memory.getInt(t0);
@@ -643,7 +646,7 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void aio_error (Environment env) {
+    public static void aio_error(Environment env) {
         BitVec t0 = env.register.get('0');
 
         aiocb param0 = new aiocb();
@@ -653,7 +656,7 @@ public class APIStub {
 
     }
 
-    public static void aio_error64 (Environment env) {
+    public static void aio_error64(Environment env) {
         BitVec t0 = env.register.get('0');
 
         aiocb64 param0 = new aiocb64();
@@ -663,11 +666,11 @@ public class APIStub {
 
     }
 
-    public static void aio_fsync (Environment env) {
+    public static void aio_fsync(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         aiocb param1 = new aiocb();
 
         param0 = env.memory.getInt(t0);
@@ -678,11 +681,11 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void aio_fsync64 (Environment env) {
+    public static void aio_fsync64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         aiocb64 param1 = new aiocb64();
 
         param0 = env.memory.getInt(t0);
@@ -693,7 +696,7 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void aio_init (Environment env) {
+    public static void aio_init(Environment env) {
         BitVec t0 = env.register.get('0');
 
         aioinit param0 = new aioinit();
@@ -719,7 +722,7 @@ public class APIStub {
         env.memory.setIntReference(t0.add(28), param0.aio_reserved);
     }
 
-    public static void aio_read (Environment env) {
+    public static void aio_read(Environment env) {
         BitVec t0 = env.register.get('0');
 
         aiocb param0 = new aiocb();
@@ -729,7 +732,7 @@ public class APIStub {
 
     }
 
-    public static void aio_read64 (Environment env) {
+    public static void aio_read64(Environment env) {
         BitVec t0 = env.register.get('0');
 
         aiocb64 param0 = new aiocb64();
@@ -739,7 +742,7 @@ public class APIStub {
 
     }
 
-    public static void aio_return (Environment env) {
+    public static void aio_return(Environment env) {
         BitVec t0 = env.register.get('0');
 
         aiocb param0 = new aiocb();
@@ -749,7 +752,7 @@ public class APIStub {
 
     }
 
-    public static void aio_return64 (Environment env) {
+    public static void aio_return64(Environment env) {
         BitVec t0 = env.register.get('0');
 
         aiocb64 param0 = new aiocb64();
@@ -759,12 +762,12 @@ public class APIStub {
 
     }
 
-    public static void aio_suspend (Environment env) {
+    public static void aio_suspend(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        aiocb[] param0 ;
-        int param1 ;
+        aiocb[] param0;
+        int param1;
 
         param0 = (aiocb[]) env.memory.getArray(t0, -1);
         param1 = env.memory.getInt(t1);
@@ -776,12 +779,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void aio_suspend64 (Environment env) {
+    public static void aio_suspend64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        aiocb64[] param0 ;
-        int param1 ;
+        aiocb64[] param0;
+        int param1;
 
         param0 = (aiocb64[]) env.memory.getArray(t0, -1);
         param1 = env.memory.getInt(t1);
@@ -793,7 +796,7 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void aio_write (Environment env) {
+    public static void aio_write(Environment env) {
         BitVec t0 = env.register.get('0');
 
         aiocb param0 = new aiocb();
@@ -803,7 +806,7 @@ public class APIStub {
 
     }
 
-    public static void aio_write64 (Environment env) {
+    public static void aio_write64(Environment env) {
         BitVec t0 = env.register.get('0');
 
         aiocb64 param0 = new aiocb64();
@@ -813,10 +816,10 @@ public class APIStub {
 
     }
 
-    public static void alarm (Environment env) {
+    public static void alarm(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -826,12 +829,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void aligned_alloc (Environment env) {
+    public static void aligned_alloc(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -842,10 +845,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void alloca (Environment env) {
+    public static void alloca(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -892,10 +895,10 @@ public class APIStub {
 //        env.memory.setByteArray(t2, param1, param2);
 //    }
 
-    public static void argz_add_sep (Environment env) {
+    public static void argz_add_sep(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String[] param0 ;
+        String[] param0;
 
         param0 = (String[]) env.memory.getArray(t0, -1);
 
@@ -905,10 +908,10 @@ public class APIStub {
         env.memory.setArray(t0, -1, param0);
     }
 
-    public static void argz_append (Environment env) {
+    public static void argz_append(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String[] param0 ;
+        String[] param0;
 
         param0 = (String[]) env.memory.getArray(t0, -1);
 
@@ -918,12 +921,12 @@ public class APIStub {
         env.memory.setArray(t0, -1, param0);
     }
 
-    public static void argz_count (Environment env) {
+    public static void argz_count(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -935,10 +938,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void argz_create (Environment env) {
+    public static void argz_create(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String[] param0 ;
+        String[] param0;
 
         param0 = (String[]) env.memory.getArray(t0, -1);
 
@@ -948,10 +951,10 @@ public class APIStub {
         env.memory.setArray(t0, -1, param0);
     }
 
-    public static void argz_create_sep (Environment env) {
+    public static void argz_create_sep(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -982,14 +985,14 @@ public class APIStub {
 //        env.memory.setByteArray(t2, param1, param2);
 //    }
 
-    public static void argz_extract (Environment env) {
+    public static void argz_extract(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        int param1 ;
-        byte param2 ;
+        byte[] param0;
+        int param1;
+        byte param2;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -1002,10 +1005,10 @@ public class APIStub {
         env.memory.setByte(t2, param2);
     }
 
-    public static void argz_insert (Environment env) {
+    public static void argz_insert(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String[] param0 ;
+        String[] param0;
 
         param0 = (String[]) env.memory.getArray(t0, -1);
 
@@ -1015,14 +1018,14 @@ public class APIStub {
         env.memory.setArray(t0, -1, param0);
     }
 
-    public static void argz_next (Environment env) {
+    public static void argz_next(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        int param1 ;
-        byte[] param2 ;
+        byte[] param0;
+        int param1;
+        byte[] param2;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -1036,14 +1039,14 @@ public class APIStub {
         env.memory.setByteArray(t2, param1, param2);
     }
 
-    public static void argz_stringify (Environment env) {
+    public static void argz_stringify(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        int param1 ;
-        int param2 ;
+        byte[] param0;
+        int param1;
+        int param2;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -1056,10 +1059,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void asin (Environment env) {
+    public static void asin(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -1069,10 +1072,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void asinf (Environment env) {
+    public static void asinf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -1082,10 +1085,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void asinh (Environment env) {
+    public static void asinh(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -1095,10 +1098,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void asinhf (Environment env) {
+    public static void asinhf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -1108,10 +1111,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void asinhl (Environment env) {
+    public static void asinhl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -1121,10 +1124,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void asinl (Environment env) {
+    public static void asinl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -1134,10 +1137,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void asserT (Environment env) {
+    public static void asserT(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1146,10 +1149,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void assert_perror (Environment env) {
+    public static void assert_perror(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1158,10 +1161,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void atan (Environment env) {
+    public static void atan(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -1171,12 +1174,12 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void atan2 (Environment env) {
+    public static void atan2(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        double param1 ;
+        double param0;
+        double param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -1188,12 +1191,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void atan2f (Environment env) {
+    public static void atan2f(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        float param1 ;
+        float param0;
+        float param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloat(t1);
@@ -1205,12 +1208,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void atan2l (Environment env) {
+    public static void atan2l(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -1222,10 +1225,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void atanf (Environment env) {
+    public static void atanf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -1235,10 +1238,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void atanh (Environment env) {
+    public static void atanh(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -1248,10 +1251,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void atanhf (Environment env) {
+    public static void atanhf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -1261,10 +1264,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void atanhl (Environment env) {
+    public static void atanhl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -1274,10 +1277,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void atanl (Environment env) {
+    public static void atanl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -1301,10 +1304,10 @@ public class APIStub {
 //        env.memory.setVoid(t0, param0);
 //    }
 
-    public static void atof (Environment env) {
+    public static void atof(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -1314,10 +1317,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void atoi (Environment env) {
+    public static void atoi(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -1327,10 +1330,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void atol (Environment env) {
+    public static void atol(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -1340,10 +1343,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void atoll (Environment env) {
+    public static void atoll(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -1353,12 +1356,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void backtrace (Environment env) {
+    public static void backtrace(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        int param1 ;
+        LongByReference param0;
+        int param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -1370,12 +1373,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void backtrace_symbols (Environment env) {
+    public static void backtrace_symbols(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        int param1 ;
+        LongByReference param0;
+        int param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -1387,14 +1390,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void backtrace_symbols_fd (Environment env) {
+    public static void backtrace_symbols_fd(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -1407,10 +1410,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void basename (Environment env) {
+    public static void basename(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -1420,14 +1423,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void bcmp (Environment env) {
+    public static void bcmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        LongByReference param1 ;
-        int param2 ;
+        LongByReference param0;
+        LongByReference param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getPointer(t1);
@@ -1441,14 +1444,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void bcopy (Environment env) {
+    public static void bcopy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        LongByReference param1 ;
-        int param2 ;
+        LongByReference param0;
+        LongByReference param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getPointer(t1);
@@ -1461,14 +1464,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void bind (Environment env) {
+    public static void bind(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        int param1 ;
-        int param2 ;
+        int param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -1483,12 +1486,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void bindtextdomain (Environment env) {
+    public static void bindtextdomain(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -1500,10 +1503,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void bind_textdomain_codeset (Environment env) {
+    public static void bind_textdomain_codeset(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -1513,10 +1516,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void brk (Environment env) {
+    public static void brk(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        LongByReference param0 ;
+        LongByReference param0;
 
         param0 = env.memory.getPointer(t0);
 
@@ -1526,12 +1529,12 @@ public class APIStub {
         env.memory.setPointer(t0, param0.getValue());
     }
 
-    public static void bsearch (Environment env) {
+    public static void bsearch(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        LongByReference param1 ;
+        LongByReference param0;
+        LongByReference param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getPointer(t1);
@@ -1542,10 +1545,10 @@ public class APIStub {
         env.memory.setPointer(t1, param1.getValue());
     }
 
-    public static void btowc (Environment env) {
+    public static void btowc(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1555,12 +1558,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void bzero (Environment env) {
+    public static void bzero(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        int param1 ;
+        LongByReference param0;
+        int param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -1571,10 +1574,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void cabs (Environment env) {
+    public static void cabs(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1584,10 +1587,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cabsf (Environment env) {
+    public static void cabsf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1597,10 +1600,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cabsl (Environment env) {
+    public static void cabsl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -1610,10 +1613,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void cacos (Environment env) {
+    public static void cacos(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1623,10 +1626,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cacosf (Environment env) {
+    public static void cacosf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1636,10 +1639,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cacosh (Environment env) {
+    public static void cacosh(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1649,10 +1652,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cacoshf (Environment env) {
+    public static void cacoshf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1662,10 +1665,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cacoshl (Environment env) {
+    public static void cacoshl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -1675,10 +1678,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void cacosl (Environment env) {
+    public static void cacosl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -1688,12 +1691,12 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void calloc (Environment env) {
+    public static void calloc(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -1704,10 +1707,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void canonicalize_file_name (Environment env) {
+    public static void canonicalize_file_name(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -1717,10 +1720,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void carg (Environment env) {
+    public static void carg(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1730,10 +1733,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cargf (Environment env) {
+    public static void cargf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1743,10 +1746,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cargl (Environment env) {
+    public static void cargl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -1756,10 +1759,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void casin (Environment env) {
+    public static void casin(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1769,10 +1772,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void casinf (Environment env) {
+    public static void casinf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1782,10 +1785,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void casinh (Environment env) {
+    public static void casinh(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1795,10 +1798,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void casinhf (Environment env) {
+    public static void casinhf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1808,10 +1811,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void casinhl (Environment env) {
+    public static void casinhl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -1821,10 +1824,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void casinl (Environment env) {
+    public static void casinl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -1834,10 +1837,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void catan (Environment env) {
+    public static void catan(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1847,10 +1850,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void catanf (Environment env) {
+    public static void catanf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1860,10 +1863,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void catanh (Environment env) {
+    public static void catanh(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1873,10 +1876,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void catanhf (Environment env) {
+    public static void catanhf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1886,10 +1889,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void catanhl (Environment env) {
+    public static void catanhl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -1899,10 +1902,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void catanl (Environment env) {
+    public static void catanl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -1912,10 +1915,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void catclose (Environment env) {
+    public static void catclose(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -1925,14 +1928,14 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void catgets (Environment env) {
+    public static void catgets(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        int param1 ;
-        int param2 ;
+        int param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -1946,12 +1949,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void catopen (Environment env) {
+    public static void catopen(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -1963,10 +1966,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void cbrt (Environment env) {
+    public static void cbrt(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -1976,10 +1979,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void cbrtf (Environment env) {
+    public static void cbrtf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -1989,10 +1992,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void cbrtl (Environment env) {
+    public static void cbrtl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2002,10 +2005,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void ccos (Environment env) {
+    public static void ccos(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2015,10 +2018,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ccosf (Environment env) {
+    public static void ccosf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2028,10 +2031,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ccosh (Environment env) {
+    public static void ccosh(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2041,10 +2044,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ccoshf (Environment env) {
+    public static void ccoshf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2054,10 +2057,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ccoshl (Environment env) {
+    public static void ccoshl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2067,10 +2070,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void ccosl (Environment env) {
+    public static void ccosl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2080,10 +2083,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void ceil (Environment env) {
+    public static void ceil(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -2093,10 +2096,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void ceilf (Environment env) {
+    public static void ceilf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -2106,10 +2109,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void ceill (Environment env) {
+    public static void ceill(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2119,10 +2122,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void cexp (Environment env) {
+    public static void cexp(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2132,10 +2135,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cexpf (Environment env) {
+    public static void cexpf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2145,10 +2148,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cexpl (Environment env) {
+    public static void cexpl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2158,7 +2161,7 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void cfgetispeed (Environment env) {
+    public static void cfgetispeed(Environment env) {
         BitVec t0 = env.register.get('0');
 
         termios param0 = new termios();
@@ -2168,7 +2171,7 @@ public class APIStub {
 
     }
 
-    public static void cfgetospeed (Environment env) {
+    public static void cfgetospeed(Environment env) {
         BitVec t0 = env.register.get('0');
 
         termios param0 = new termios();
@@ -2178,7 +2181,7 @@ public class APIStub {
 
     }
 
-    public static void cfmakeraw (Environment env) {
+    public static void cfmakeraw(Environment env) {
         BitVec t0 = env.register.get('0');
 
         termios param0 = new termios();
@@ -2187,12 +2190,12 @@ public class APIStub {
 
     }
 
-    public static void cfsetispeed (Environment env) {
+    public static void cfsetispeed(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
         termios param0 = new termios();
-        int param1 ;
+        int param1;
 
         param1 = env.memory.getInt(t1);
 
@@ -2202,12 +2205,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void cfsetospeed (Environment env) {
+    public static void cfsetospeed(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
         termios param0 = new termios();
-        int param1 ;
+        int param1;
 
         param1 = env.memory.getInt(t1);
 
@@ -2217,12 +2220,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void cfsetspeed (Environment env) {
+    public static void cfsetspeed(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
         termios param0 = new termios();
-        int param1 ;
+        int param1;
 
         param1 = env.memory.getInt(t1);
 
@@ -2232,25 +2235,25 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void chdir (Environment env) {
+    public static void chdir(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
-        int ret = CLibrary.INSTANCE.chdir(param0);
-        env.register.set('0', new BitVec(ret));
+        //int ret = CLibrary.INSTANCE.chdir(param0);
+        env.register.set('0', new BitVec(0));
 
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void chmod (Environment env) {
+    public static void chmod(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -2262,14 +2265,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void chown (Environment env) {
+    public static void chown(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        int param1 ;
-        int param2 ;
+        String param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -2283,10 +2286,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void cimag (Environment env) {
+    public static void cimag(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2296,10 +2299,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cimagf (Environment env) {
+    public static void cimagf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2309,10 +2312,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cimagl (Environment env) {
+    public static void cimagl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2322,17 +2325,17 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void clearenv (Environment env) {
+    public static void clearenv(Environment env) {
 
         int ret = CLibrary.INSTANCE.clearenv();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void clearerr (Environment env) {
+    public static void clearerr(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -2341,10 +2344,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void clearerr_unlocked (Environment env) {
+    public static void clearerr_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -2353,18 +2356,18 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void clock (Environment env) {
+    public static void clock(Environment env) {
 
         NativeLong ret = CLibrary.INSTANCE.clock();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void clock_getres (Environment env) {
+    public static void clock_getres(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         timespec param1 = new timespec();
 
         param0 = env.memory.getInt(t0);
@@ -2379,11 +2382,11 @@ public class APIStub {
         env.memory.setNativeLongReference(t1.add(4), param1.tv_nsec);
     }
 
-    public static void clock_gettime (Environment env) {
+    public static void clock_gettime(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         timespec param1 = new timespec();
 
         param0 = env.memory.getInt(t0);
@@ -2398,11 +2401,11 @@ public class APIStub {
         env.memory.setNativeLongReference(t1.add(4), param1.tv_nsec);
     }
 
-    public static void clock_settime (Environment env) {
+    public static void clock_settime(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         timespec param1 = new timespec();
 
         param0 = env.memory.getInt(t0);
@@ -2417,10 +2420,10 @@ public class APIStub {
         env.memory.setNativeLongReference(t1.add(4), param1.tv_nsec);
     }
 
-    public static void clog (Environment env) {
+    public static void clog(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2430,10 +2433,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void clog10 (Environment env) {
+    public static void clog10(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2443,10 +2446,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void clog10f (Environment env) {
+    public static void clog10f(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2456,10 +2459,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void clog10l (Environment env) {
+    public static void clog10l(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2469,10 +2472,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void clogf (Environment env) {
+    public static void clogf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2482,10 +2485,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void clogl (Environment env) {
+    public static void clogl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2495,10 +2498,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void close (Environment env) {
+    public static void close(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2509,10 +2512,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void closedir (Environment env) {
+    public static void closedir(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -2522,20 +2525,18 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void closelog (Environment env) {
-
+    public static void closelog(Environment env) {
         CLibrary.INSTANCE.closelog();
-
     }
 
-    public static void confstr (Environment env) {
+    public static void confstr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        byte[] param1 ;
-        int param2 ;
+        int param0;
+        byte[] param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param2 = env.memory.getInt(t2);
@@ -2549,10 +2550,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void conj (Environment env) {
+    public static void conj(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2562,10 +2563,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void conjf (Environment env) {
+    public static void conjf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2575,10 +2576,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void conjl (Environment env) {
+    public static void conjl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2588,12 +2589,12 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void copysign (Environment env) {
+    public static void copysign(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        double param1 ;
+        double param0;
+        double param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -2605,12 +2606,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void copysignf (Environment env) {
+    public static void copysignf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        float param1 ;
+        float param0;
+        float param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloat(t1);
@@ -2622,12 +2623,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void copysignl (Environment env) {
+    public static void copysignl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -2639,10 +2640,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void cos (Environment env) {
+    public static void cos(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -2652,10 +2653,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void cosf (Environment env) {
+    public static void cosf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -2665,10 +2666,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void cosh (Environment env) {
+    public static void cosh(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -2678,10 +2679,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void coshf (Environment env) {
+    public static void coshf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -2691,10 +2692,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void coshl (Environment env) {
+    public static void coshl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2704,10 +2705,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void cosl (Environment env) {
+    public static void cosl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2717,12 +2718,12 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void cpow (Environment env) {
+    public static void cpow(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -2734,12 +2735,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void cpowf (Environment env) {
+    public static void cpowf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -2751,10 +2752,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void cproj (Environment env) {
+    public static void cproj(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2764,10 +2765,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cprojf (Environment env) {
+    public static void cprojf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2777,10 +2778,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void cprojl (Environment env) {
+    public static void cprojl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2790,12 +2791,12 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void CPU_CLR (Environment env) {
+    public static void CPU_CLR(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        IntByReference param1 ;
+        int param0;
+        IntByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -2806,12 +2807,12 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void CPU_ISSET (Environment env) {
+    public static void CPU_ISSET(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        IntByReference param1 ;
+        int param0;
+        IntByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -2823,12 +2824,12 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void CPU_SET (Environment env) {
+    public static void CPU_SET(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        IntByReference param1 ;
+        int param0;
+        IntByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -2839,10 +2840,10 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void CPU_ZERO (Environment env) {
+    public static void CPU_ZERO(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -2851,10 +2852,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void creal (Environment env) {
+    public static void creal(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2864,10 +2865,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void crealf (Environment env) {
+    public static void crealf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2877,10 +2878,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void creall (Environment env) {
+    public static void creall(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -2890,12 +2891,12 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void creat (Environment env) {
+    public static void creat(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -2907,12 +2908,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void creat64 (Environment env) {
+    public static void creat64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -2924,12 +2925,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void crypt (Environment env) {
+    public static void crypt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -2941,12 +2942,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void crypt_r (Environment env) {
+    public static void crypt_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -2958,10 +2959,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void csin (Environment env) {
+    public static void csin(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2971,10 +2972,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void csinf (Environment env) {
+    public static void csinf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2984,10 +2985,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void csinh (Environment env) {
+    public static void csinh(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -2997,10 +2998,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void csinhf (Environment env) {
+    public static void csinhf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -3010,10 +3011,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void csinhl (Environment env) {
+    public static void csinhl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -3023,10 +3024,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void csinl (Environment env) {
+    public static void csinl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -3036,10 +3037,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void csqrt (Environment env) {
+    public static void csqrt(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -3049,10 +3050,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void csqrtf (Environment env) {
+    public static void csqrtf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -3062,10 +3063,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void csqrtl (Environment env) {
+    public static void csqrtl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -3075,10 +3076,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void ctan (Environment env) {
+    public static void ctan(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -3088,10 +3089,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ctanf (Environment env) {
+    public static void ctanf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -3101,10 +3102,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ctanh (Environment env) {
+    public static void ctanh(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -3114,10 +3115,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ctanhf (Environment env) {
+    public static void ctanhf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -3127,10 +3128,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ctanhl (Environment env) {
+    public static void ctanhl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -3140,10 +3141,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void ctanl (Environment env) {
+    public static void ctanl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -3153,10 +3154,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void ctermid (Environment env) {
+    public static void ctermid(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -3166,7 +3167,7 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void asctime (Environment env) {
+    public static void asctime(Environment env) {
         BitVec t0 = env.register.get('0');
 
         tm param0 = new tm();
@@ -3199,12 +3200,12 @@ public class APIStub {
         env.memory.setStringReference(t0.add(40), param0.__tm_zone);
     }
 
-    public static void asctime_r (Environment env) {
+    public static void asctime_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
         tm param0 = new tm();
-        String param1 ;
+        String param1;
 
         param0.tm_sec = env.memory.getIntFromReference(t0);
         param0.tm_min = env.memory.getIntFromReference(t0.add(4));
@@ -3236,10 +3237,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void cuserid (Environment env) {
+    public static void cuserid(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -3249,10 +3250,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void dcgettext (Environment env) {
+    public static void dcgettext(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -3262,12 +3263,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void dcngettext (Environment env) {
+    public static void dcngettext(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -3279,12 +3280,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void dgettext (Environment env) {
+    public static void dgettext(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -3296,12 +3297,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void difftime (Environment env) {
+    public static void difftime(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -3313,10 +3314,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void dirfd (Environment env) {
+    public static void dirfd(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -3326,10 +3327,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void dirname (Environment env) {
+    public static void dirname(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -3339,12 +3340,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void div (Environment env) {
+    public static void div(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -3356,12 +3357,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void dngettext (Environment env) {
+    public static void dngettext(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -3373,7 +3374,7 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void drand48 (Environment env) {
+    public static void drand48(Environment env) {
 
         double ret = CLibrary.INSTANCE.drand48();
         env.register.set('0', new BitVec(ret));
@@ -3406,12 +3407,12 @@ public class APIStub {
 //        env.memory.setDoubleReference(t1, param1.getValue());
 //    }
 
-    public static void drem (Environment env) {
+    public static void drem(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        double param1 ;
+        double param0;
+        double param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -3423,12 +3424,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void dremf (Environment env) {
+    public static void dremf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        float param1 ;
+        float param0;
+        float param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloat(t1);
@@ -3440,12 +3441,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void dreml (Environment env) {
+    public static void dreml(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -3457,10 +3458,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void dup (Environment env) {
+    public static void dup(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -3470,12 +3471,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void dup2 (Environment env) {
+    public static void dup2(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -3487,16 +3488,16 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void ecvt (Environment env) {
+    public static void ecvt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        double param0 ;
-        int param1 ;
-        IntByReference param2 ;
-        IntByReference param3 ;
+        double param0;
+        int param1;
+        IntByReference param2;
+        IntByReference param3;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getInt(t1);
@@ -3512,14 +3513,14 @@ public class APIStub {
         env.memory.setIntReference(t3, param3.getValue());
     }
 
-    public static void ecvt_r (Environment env) {
+    public static void ecvt_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        double param0 ;
-        int param1 ;
-        IntByReference param2 ;
+        double param0;
+        int param1;
+        IntByReference param2;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getInt(t1);
@@ -3533,28 +3534,28 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void endfsent (Environment env) {
+    public static void endfsent(Environment env) {
 
         CLibrary.INSTANCE.endfsent();
 
     }
 
-    public static void endgrent (Environment env) {
+    public static void endgrent(Environment env) {
 
         CLibrary.INSTANCE.endgrent();
 
     }
 
-    public static void endhostent (Environment env) {
+    public static void endhostent(Environment env) {
 
         CLibrary.INSTANCE.endhostent();
 
     }
 
-    public static void endmntent (Environment env) {
+    public static void endmntent(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -3564,46 +3565,46 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void endnetent (Environment env) {
+    public static void endnetent(Environment env) {
 
         CLibrary.INSTANCE.endnetent();
 
     }
 
-    public static void endnetgrent (Environment env) {
+    public static void endnetgrent(Environment env) {
 
         CLibrary.INSTANCE.endnetgrent();
 
     }
 
-    public static void endprotoent (Environment env) {
+    public static void endprotoent(Environment env) {
 
         CLibrary.INSTANCE.endprotoent();
 
     }
 
-    public static void endpwent (Environment env) {
+    public static void endpwent(Environment env) {
 
         CLibrary.INSTANCE.endpwent();
 
     }
 
-    public static void endservent (Environment env) {
+    public static void endservent(Environment env) {
 
         CLibrary.INSTANCE.endservent();
 
     }
 
-    public static void endutent (Environment env) {
+    public static void endutent(Environment env) {
 
         CLibrary.INSTANCE.endutent();
 
     }
 
-    public static void envz_add (Environment env) {
+    public static void envz_add(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String[] param0 ;
+        String[] param0;
 
         param0 = (String[]) env.memory.getArray(t0, -1);
 
@@ -3613,14 +3614,14 @@ public class APIStub {
         env.memory.setArray(t0, -1, param0);
     }
 
-    public static void envz_entry (Environment env) {
+    public static void envz_entry(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        int param1 ;
-        byte[] param2 ;
+        byte[] param0;
+        int param1;
+        byte[] param2;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -3634,14 +3635,14 @@ public class APIStub {
         env.memory.setByteArray(t2, param1, param2);
     }
 
-    public static void envz_get (Environment env) {
+    public static void envz_get(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        int param1 ;
-        byte[] param2 ;
+        byte[] param0;
+        int param1;
+        byte[] param2;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -3655,10 +3656,10 @@ public class APIStub {
         env.memory.setByteArray(t2, param1, param2);
     }
 
-    public static void envz_merge (Environment env) {
+    public static void envz_merge(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String[] param0 ;
+        String[] param0;
 
         param0 = (String[]) env.memory.getArray(t0, -1);
 
@@ -3706,10 +3707,10 @@ public class APIStub {
 //        env.memory.setIntArray(t1, param1, param1);
 //    }
 
-    public static void erand48 (Environment env) {
+    public static void erand48(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        short[] param0 ;
+        short[] param0;
 
         param0 = env.memory.getShortArray(t0, 3);
 
@@ -3719,10 +3720,10 @@ public class APIStub {
         env.memory.setShortArray(t0, 3, param0);
     }
 
-    public static void erand48_r (Environment env) {
+    public static void erand48_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int[] param0 ;
+        int[] param0;
 
         param0 = env.memory.getIntArray(t0, 3);
 
@@ -3732,10 +3733,10 @@ public class APIStub {
         env.memory.setIntArray(t0, 3, param0);
     }
 
-    public static void erf (Environment env) {
+    public static void erf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -3745,10 +3746,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void erfc (Environment env) {
+    public static void erfc(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -3758,10 +3759,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void erfcf (Environment env) {
+    public static void erfcf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -3771,10 +3772,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void erfcl (Environment env) {
+    public static void erfcl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -3784,10 +3785,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void erff (Environment env) {
+    public static void erff(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -3797,10 +3798,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void erfl (Environment env) {
+    public static void erfl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -3810,14 +3811,14 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void error_at_line (Environment env) {
+    public static void error_at_line(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        int param1 ;
-        String param2 ;
+        int param0;
+        int param1;
+        String param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -3830,10 +3831,10 @@ public class APIStub {
         env.memory.setTextReference(t2, param2);
     }
 
-    public static void execv (Environment env) {
+    public static void execv(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -3843,10 +3844,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void execve (Environment env) {
+    public static void execve(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -3856,10 +3857,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void execvp (Environment env) {
+    public static void execvp(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -3869,10 +3870,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void exit (Environment env) throws  Exception {
+    public static void exit(Environment env) throws Exception {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -3881,10 +3882,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void exp (Environment env) {
+    public static void exp(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -3894,10 +3895,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void exp10 (Environment env) {
+    public static void exp10(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -3907,10 +3908,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void exp10f (Environment env) {
+    public static void exp10f(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -3920,10 +3921,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void exp10l (Environment env) {
+    public static void exp10l(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -3933,10 +3934,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void exp2 (Environment env) {
+    public static void exp2(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -3946,10 +3947,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void exp2f (Environment env) {
+    public static void exp2f(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -3959,10 +3960,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void exp2l (Environment env) {
+    public static void exp2l(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -3972,10 +3973,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void expf (Environment env) {
+    public static void expf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -3985,10 +3986,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void expl (Environment env) {
+    public static void expl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -3998,12 +3999,12 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void explicit_bzero (Environment env) {
+    public static void explicit_bzero(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        int param1 ;
+        LongByReference param0;
+        int param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -4014,10 +4015,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void expm1 (Environment env) {
+    public static void expm1(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -4027,10 +4028,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void expm1f (Environment env) {
+    public static void expm1f(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -4040,10 +4041,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void expm1l (Environment env) {
+    public static void expm1l(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -4053,10 +4054,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void fabs (Environment env) {
+    public static void fabs(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -4066,10 +4067,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void fabsf (Environment env) {
+    public static void fabsf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -4079,10 +4080,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void fabsl (Environment env) {
+    public static void fabsl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -4092,10 +4093,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void fchdir (Environment env) {
+    public static void fchdir(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -4105,12 +4106,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void fchmod (Environment env) {
+    public static void fchmod(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -4122,14 +4123,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void fchown (Environment env) {
+    public static void fchown(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        int param1 ;
-        int param2 ;
+        int param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -4143,10 +4144,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void fclose (Environment env) {
+    public static void fclose(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4156,21 +4157,21 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void fcloseall (Environment env) {
+    public static void fcloseall(Environment env) {
 
         int ret = CLibrary.INSTANCE.fcloseall();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void fcntl (Environment env) {
+    public static void fcntl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        int param1 ;
-        IntByReference param2 ;
+        int param0;
+        int param1;
+        IntByReference param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -4184,16 +4185,16 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void fcvt (Environment env) {
+    public static void fcvt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        double param0 ;
-        int param1 ;
-        IntByReference param2 ;
-        IntByReference param3 ;
+        double param0;
+        int param1;
+        IntByReference param2;
+        IntByReference param3;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getInt(t1);
@@ -4209,14 +4210,14 @@ public class APIStub {
         env.memory.setIntReference(t3, param3.getValue());
     }
 
-    public static void fcvt_r (Environment env) {
+    public static void fcvt_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        double param0 ;
-        int param1 ;
-        IntByReference param2 ;
+        double param0;
+        int param1;
+        IntByReference param2;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getInt(t1);
@@ -4230,10 +4231,10 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void fdatasync (Environment env) {
+    public static void fdatasync(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -4243,12 +4244,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void fdim (Environment env) {
+    public static void fdim(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        double param1 ;
+        double param0;
+        double param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -4260,12 +4261,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void fdimf (Environment env) {
+    public static void fdimf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        float param1 ;
+        float param0;
+        float param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloat(t1);
@@ -4277,12 +4278,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void fdiml (Environment env) {
+    public static void fdiml(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -4294,12 +4295,12 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void fdopen (Environment env) {
+    public static void fdopen(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        String param1 ;
+        int param0;
+        String param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -4311,10 +4312,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void fdopendir (Environment env) {
+    public static void fdopendir(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -4324,12 +4325,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void FD_CLR (Environment env) {
+    public static void FD_CLR(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        IntByReference param1 ;
+        int param0;
+        IntByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -4340,12 +4341,12 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void FD_ISSET (Environment env) {
+    public static void FD_ISSET(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        IntByReference param1 ;
+        int param0;
+        IntByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -4357,12 +4358,12 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void FD_SET (Environment env) {
+    public static void FD_SET(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        IntByReference param1 ;
+        int param0;
+        IntByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -4373,10 +4374,10 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void FD_ZERO (Environment env) {
+    public static void FD_ZERO(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4385,10 +4386,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void feclearexcept (Environment env) {
+    public static void feclearexcept(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -4398,10 +4399,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void fedisableexcept (Environment env) {
+    public static void fedisableexcept(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -4411,10 +4412,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void feenableexcept (Environment env) {
+    public static void feenableexcept(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -4424,10 +4425,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void fegetenv (Environment env) {
+    public static void fegetenv(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLongByReference param0 ;
+        NativeLongByReference param0;
 
         param0 = env.memory.getNativeLongRef(t0);
 
@@ -4437,12 +4438,12 @@ public class APIStub {
         env.memory.setNativeLongReference(t0, param0.getValue());
     }
 
-    public static void fegetexceptflag (Environment env) {
+    public static void fegetexceptflag(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        ShortByReference param0 ;
-        int param1 ;
+        ShortByReference param0;
+        int param1;
 
         param0 = env.memory.getShortRef(t0);
         param1 = env.memory.getInt(t1);
@@ -4454,10 +4455,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void fegetmode (Environment env) {
+    public static void fegetmode(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLongByReference param0 ;
+        NativeLongByReference param0;
 
         param0 = env.memory.getNativeLongRef(t0);
 
@@ -4467,17 +4468,17 @@ public class APIStub {
         env.memory.setNativeLongReference(t0, param0.getValue());
     }
 
-    public static void fegetround (Environment env) {
+    public static void fegetround(Environment env) {
 
         int ret = CLibrary.INSTANCE.fegetround();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void feholdexcept (Environment env) {
+    public static void feholdexcept(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLongByReference param0 ;
+        NativeLongByReference param0;
 
         param0 = env.memory.getNativeLongRef(t0);
 
@@ -4487,10 +4488,10 @@ public class APIStub {
         env.memory.setNativeLongReference(t0, param0.getValue());
     }
 
-    public static void feof (Environment env) {
+    public static void feof(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4500,10 +4501,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void feof_unlocked (Environment env) {
+    public static void feof_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4513,10 +4514,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void feraiseexcept (Environment env) {
+    public static void feraiseexcept(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -4526,10 +4527,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ferror (Environment env) {
+    public static void ferror(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4539,10 +4540,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void ferror_unlocked (Environment env) {
+    public static void ferror_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4552,10 +4553,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void fesetenv (Environment env) {
+    public static void fesetenv(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLongByReference param0 ;
+        NativeLongByReference param0;
 
         param0 = env.memory.getNativeLongRef(t0);
 
@@ -4565,10 +4566,10 @@ public class APIStub {
         env.memory.setNativeLongReference(t0, param0.getValue());
     }
 
-    public static void fesetexcept (Environment env) {
+    public static void fesetexcept(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -4578,12 +4579,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void fesetexceptflag (Environment env) {
+    public static void fesetexceptflag(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        ShortByReference param0 ;
-        int param1 ;
+        ShortByReference param0;
+        int param1;
 
         param0 = env.memory.getShortRef(t0);
         param1 = env.memory.getInt(t1);
@@ -4595,10 +4596,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void fesetmode (Environment env) {
+    public static void fesetmode(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLongByReference param0 ;
+        NativeLongByReference param0;
 
         param0 = env.memory.getNativeLongRef(t0);
 
@@ -4608,10 +4609,10 @@ public class APIStub {
         env.memory.setNativeLongReference(t0, param0.getValue());
     }
 
-    public static void fesetround (Environment env) {
+    public static void fesetround(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -4621,10 +4622,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void fetestexcept (Environment env) {
+    public static void fetestexcept(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -4634,12 +4635,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void fetestexceptflag (Environment env) {
+    public static void fetestexceptflag(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        ShortByReference param0 ;
-        int param1 ;
+        ShortByReference param0;
+        int param1;
 
         param0 = env.memory.getShortRef(t0);
         param1 = env.memory.getInt(t1);
@@ -4651,10 +4652,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void feupdateenv (Environment env) {
+    public static void feupdateenv(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLongByReference param0 ;
+        NativeLongByReference param0;
 
         param0 = env.memory.getNativeLongRef(t0);
 
@@ -4664,10 +4665,10 @@ public class APIStub {
         env.memory.setNativeLongReference(t0, param0.getValue());
     }
 
-    public static void fexecve (Environment env) {
+    public static void fexecve(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -4677,10 +4678,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void fflush (Environment env) {
+    public static void fflush(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4690,10 +4691,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void fflush_unlocked (Environment env) {
+    public static void fflush_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4703,10 +4704,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void fgetc (Environment env) {
+    public static void fgetc(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4716,10 +4717,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void fgetc_unlocked (Environment env) {
+    public static void fgetc_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4729,10 +4730,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void fgetgrent (Environment env) {
+    public static void fgetgrent(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4742,12 +4743,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void fgetpos (Environment env) {
+    public static void fgetpos(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
-        IntByReference param1 ;
+        IntByReference param0;
+        IntByReference param1;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getIntRef(t1);
@@ -4759,10 +4760,10 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void fgetpwent (Environment env) {
+    public static void fgetpwent(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4772,10 +4773,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void fgetpwent_r (Environment env) {
+    public static void fgetpwent_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4785,14 +4786,14 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void fgets (Environment env) {
+    public static void fgets(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        int param1 ;
-        IntByReference param2 ;
+        String param0;
+        int param1;
+        IntByReference param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -4806,14 +4807,14 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void fgets_unlocked (Environment env) {
+    public static void fgets_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        int param1 ;
-        IntByReference param2 ;
+        String param0;
+        int param1;
+        IntByReference param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -4827,10 +4828,10 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void fgetwc_unlocked (Environment env) {
+    public static void fgetwc_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4840,14 +4841,14 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void fgetws (Environment env) {
+    public static void fgetws(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        int param1 ;
-        IntByReference param2 ;
+        String param0;
+        int param1;
+        IntByReference param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -4861,14 +4862,14 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void fgetws_unlocked (Environment env) {
+    public static void fgetws_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        int param1 ;
-        IntByReference param2 ;
+        String param0;
+        int param1;
+        IntByReference param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -4882,10 +4883,10 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void fileno (Environment env) {
+    public static void fileno(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4895,10 +4896,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void fileno_unlocked (Environment env) {
+    public static void fileno_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4908,10 +4909,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void finite (Environment env) {
+    public static void finite(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -4921,10 +4922,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void finitef (Environment env) {
+    public static void finitef(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -4934,10 +4935,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void finitel (Environment env) {
+    public static void finitel(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -4947,10 +4948,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void flockfile (Environment env) {
+    public static void flockfile(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -4959,10 +4960,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void floor (Environment env) {
+    public static void floor(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -4972,10 +4973,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void floorf (Environment env) {
+    public static void floorf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -4985,10 +4986,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void floorl (Environment env) {
+    public static void floorl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -4998,14 +4999,14 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void fma (Environment env) {
+    public static void fma(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        double param0 ;
-        double param1 ;
-        double param2 ;
+        double param0;
+        double param1;
+        double param2;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -5019,14 +5020,14 @@ public class APIStub {
         //env.memory.setDouble(t2, param2);
     }
 
-    public static void fmaf (Environment env) {
+    public static void fmaf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        float param0 ;
-        float param1 ;
-        float param2 ;
+        float param0;
+        float param1;
+        float param2;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloat(t1);
@@ -5040,14 +5041,14 @@ public class APIStub {
         env.memory.setFloat(t2, param2);
     }
 
-    public static void fmal (Environment env) {
+    public static void fmal(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
-        NativeLong param2 ;
+        NativeLong param0;
+        NativeLong param1;
+        NativeLong param2;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -5061,12 +5062,12 @@ public class APIStub {
         //env.memory.setNativeLongt2, param2);
     }
 
-    public static void fmax (Environment env) {
+    public static void fmax(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        double param1 ;
+        double param0;
+        double param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -5078,14 +5079,14 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void fmemopen (Environment env) {
+    public static void fmemopen(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        char[] param0 ;
-        int param1 ;
-        byte[] param2 ;
+        char[] param0;
+        int param1;
+        byte[] param2;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getBuffer(t0, param1);
@@ -5099,12 +5100,12 @@ public class APIStub {
         env.memory.setByteArray(t2, param1, param2);
     }
 
-    public static void fmin (Environment env) {
+    public static void fmin(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        double param1 ;
+        double param0;
+        double param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -5116,12 +5117,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void fminf (Environment env) {
+    public static void fminf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        float param1 ;
+        float param0;
+        float param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloat(t1);
@@ -5133,12 +5134,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void fminl (Environment env) {
+    public static void fminl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -5150,12 +5151,12 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void fmod (Environment env) {
+    public static void fmod(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        double param1 ;
+        double param0;
+        double param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -5167,12 +5168,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void fmodf (Environment env) {
+    public static void fmodf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        float param1 ;
+        float param0;
+        float param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloat(t1);
@@ -5184,12 +5185,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void fmodl (Environment env) {
+    public static void fmodl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -5201,14 +5202,14 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void fnmatch (Environment env) {
+    public static void fnmatch(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String param1 ;
-        int param2 ;
+        String param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -5222,12 +5223,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void fopen (Environment env) {
+    public static void fopen(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -5239,10 +5240,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void fopen64 (Environment env) {
+    public static void fopen64(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -5252,10 +5253,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void fopencookie (Environment env) {
+    public static void fopencookie(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        LongByReference param0 ;
+        LongByReference param0;
 
         param0 = env.memory.getPointer(t0);
 
@@ -5265,7 +5266,7 @@ public class APIStub {
         env.memory.setPointer(t0, param0.getValue());
     }
 
-    public static void fork (Environment env) {
+    public static void fork(Environment env) {
         //int ret = CLibrary.INSTANCE.fork();
         int ret = 0;
         env.register.set('1', new BitVec(ret));
@@ -5274,12 +5275,12 @@ public class APIStub {
         //env.register.set('0', new BitVec(SysUtils.addSymVar()));
     }
 
-    public static void forkpty (Environment env) {
+    public static void forkpty(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
-        String param1 ;
+        IntByReference param0;
+        String param1;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -5291,12 +5292,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void fputc_unlocked (Environment env) {
+    public static void fputc_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        IntByReference param1 ;
+        int param0;
+        IntByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -5308,12 +5309,12 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void fputs_unlocked (Environment env) {
+    public static void fputs_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        IntByReference param1 ;
+        String param0;
+        IntByReference param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getIntRef(t1);
@@ -5325,12 +5326,12 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void fputws (Environment env) {
+    public static void fputws(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        IntByReference param1 ;
+        String param0;
+        IntByReference param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getIntRef(t1);
@@ -5342,12 +5343,12 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void fputws_unlocked (Environment env) {
+    public static void fputws_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        IntByReference param1 ;
+        String param0;
+        IntByReference param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getIntRef(t1);
@@ -5359,16 +5360,16 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void fread (Environment env) {
+    public static void fread(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
-        int[] param3 ;
+        LongByReference param0;
+        int param1;
+        int param2;
+        int[] param3;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -5384,12 +5385,12 @@ public class APIStub {
         env.memory.setIntArray(t3, param1, param3);
     }
 
-    public static void fread_unlocked (Environment env) {
+    public static void fread_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        int param1 ;
+        LongByReference param0;
+        int param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -5401,10 +5402,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void free (Environment env) {
+    public static void free(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        LongByReference param0 ;
+        LongByReference param0;
 
         param0 = env.memory.getPointer(t0);
 
@@ -5413,14 +5414,14 @@ public class APIStub {
         env.memory.setPointer(t0, param0.getValue());
     }
 
-    public static void freopen (Environment env) {
+    public static void freopen(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String param1 ;
-        IntByReference param2 ;
+        String param0;
+        String param1;
+        IntByReference param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -5434,10 +5435,10 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void freopen64 (Environment env) {
+    public static void freopen64(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -5447,12 +5448,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void frexp (Environment env) {
+    public static void frexp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        IntByReference param1 ;
+        double param0;
+        IntByReference param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getIntRef(t1);
@@ -5464,12 +5465,12 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void frexpf (Environment env) {
+    public static void frexpf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        IntByReference param1 ;
+        float param0;
+        IntByReference param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getIntRef(t1);
@@ -5481,12 +5482,12 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void frexpl (Environment env) {
+    public static void frexpl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        IntByReference param1 ;
+        NativeLong param0;
+        IntByReference param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getIntRef(t1);
@@ -5498,14 +5499,14 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void fseek (Environment env) {
+    public static void fseek(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        IntByReference param0 ;
-        NativeLong param1 ;
-        int param2 ;
+        IntByReference param0;
+        NativeLong param1;
+        int param2;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -5519,14 +5520,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void fseeko (Environment env) {
+    public static void fseeko(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        IntByReference param0 ;
-        NativeLong param1 ;
-        int param2 ;
+        IntByReference param0;
+        NativeLong param1;
+        int param2;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -5540,12 +5541,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void fsetpos (Environment env) {
+    public static void fsetpos(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
-        IntByReference param1 ;
+        IntByReference param0;
+        IntByReference param1;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getIntRef(t1);
@@ -5600,11 +5601,11 @@ public class APIStub {
         env.memory.setIntReference(t1.add(52), param1.st_ctim.tv_sec);
     }
 */
-    public static void fstat64 (Environment env) {
+    public static void fstat64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         stat64 param1 = new stat64();
 
         param0 = env.memory.getInt(t0);
@@ -5615,10 +5616,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void fsync (Environment env) {
+    public static void fsync(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -5628,10 +5629,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ftell (Environment env) {
+    public static void ftell(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -5641,10 +5642,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void ftello (Environment env) {
+    public static void ftello(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -5654,10 +5655,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void ftello64 (Environment env) {
+    public static void ftello64(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -5667,12 +5668,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void ftruncate (Environment env) {
+    public static void ftruncate(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        NativeLong param1 ;
+        int param0;
+        NativeLong param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -5684,12 +5685,12 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void ftruncate64 (Environment env) {
+    public static void ftruncate64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        NativeLong param1 ;
+        int param0;
+        NativeLong param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -5701,10 +5702,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void ftrylockfile (Environment env) {
+    public static void ftrylockfile(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -5714,10 +5715,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void ftw (Environment env) {
+    public static void ftw(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        FTW param0 = new FTW() ;
+        FTW param0 = new FTW();
 
         param0.level = env.memory.getInt(t0);
         param0.base = env.memory.getInt(t0.add(4));
@@ -5728,12 +5729,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0.level);
     }
 
-    public static void ftw64 (Environment env) {
+    public static void ftw64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -5745,10 +5746,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void funlockfile (Environment env) {
+    public static void funlockfile(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -5757,12 +5758,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void futimes (Environment env) {
+    public static void futimes(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        timeval[] param1 ;
+        int param0;
+        timeval[] param1;
 
         param0 = env.memory.getInt(t0);
         param1 = (timeval[]) env.memory.getArray(t1, 2);
@@ -5774,12 +5775,12 @@ public class APIStub {
         env.memory.setArray(t1, 2, param1);
     }
 
-    public static void fwide (Environment env) {
+    public static void fwide(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
-        int param1 ;
+        IntByReference param0;
+        int param1;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getInt(t1);
@@ -5791,10 +5792,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void gamma (Environment env) {
+    public static void gamma(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -5804,10 +5805,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void gammaf (Environment env) {
+    public static void gammaf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -5817,10 +5818,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void gammal (Environment env) {
+    public static void gammal(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -5830,14 +5831,14 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void gcvt (Environment env) {
+    public static void gcvt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        double param0 ;
-        int param1 ;
-        String param2 ;
+        double param0;
+        int param1;
+        String param2;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getInt(t1);
@@ -5851,10 +5852,10 @@ public class APIStub {
         env.memory.setTextReference(t2, param2);
     }
 
-    public static void getauxval (Environment env) {
+    public static void getauxval(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -5865,24 +5866,20 @@ public class APIStub {
     }
 
 
-
-    public static void getchar (Environment env) {
-
+    public static void getchar(Environment env) {
         int ret = CLibrary.INSTANCE.getchar();
         env.register.set('0', new BitVec(ret));
-
     }
 
-    public static void getchar_unlocked (Environment env) {
+    public static void getchar_unlocked(Environment env) {
         int ret = CLibrary.INSTANCE.getchar_unlocked();
         env.register.set('0', new BitVec(ret));
-
     }
 
-    public static void getcontext (Environment env) {
+    public static void getcontext(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -5912,12 +5909,12 @@ public class APIStub {
 //        env.memory.setIntReference(t1, param1.getValue());
 //    }
 
-    public static void getcwd (Environment env) {
+    public static void getcwd(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -5929,10 +5926,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void getc_unlocked (Environment env) {
+    public static void getc_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -5942,10 +5939,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void getdate (Environment env) {
+    public static void getdate(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -5955,11 +5952,11 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void getdate_r (Environment env) {
+    public static void getdate_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
+        String param0;
         tm param1 = new tm();
 
         param0 = env.memory.getTextFromReference(t0);
@@ -6018,14 +6015,14 @@ public class APIStub {
 //        env.memory.setIntArray(t3, param1, param3);
 //    }
 
-    public static void getdents64 (Environment env) {
+    public static void getdents64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        char[] param1 ;
-        int param2 ;
+        int param0;
+        char[] param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param2 = env.memory.getInt(t2);
@@ -6039,19 +6036,19 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void getegid (Environment env) {
+    public static void getegid(Environment env) {
 
         int ret = CLibrary.INSTANCE.getegid();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getentropy (Environment env) {
+    public static void getentropy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        char[] param0 ;
-        int param1 ;
+        char[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getBuffer(t0, param1);
@@ -6063,10 +6060,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void getenv (Environment env) {
+    public static void getenv(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -6076,24 +6073,22 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void geteuid (Environment env) {
-
+    public static void geteuid(Environment env) {
         int ret = CLibrary.INSTANCE.geteuid();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getfsent (Environment env) {
-
+    public static void getfsent(Environment env) {
         fstab ret = CLibrary.INSTANCE.getfsent();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getfsfile (Environment env) {
+    public static void getfsfile(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -6103,10 +6098,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void getfsspec (Environment env) {
+    public static void getfsspec(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -6116,24 +6111,24 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void getgid (Environment env) {
+    public static void getgid(Environment env) {
 
         int ret = CLibrary.INSTANCE.getgid();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getgrent (Environment env) {
+    public static void getgrent(Environment env) {
 
         group ret = CLibrary.INSTANCE.getgrent();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getgrgid (Environment env) {
+    public static void getgrgid(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -6143,10 +6138,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void getgrnam (Environment env) {
+    public static void getgrnam(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -6156,10 +6151,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void getgroups (Environment env) {
+    public static void getgroups(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -6169,10 +6164,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void gethostbyname (Environment env) {
+    public static void gethostbyname(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -6182,12 +6177,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void gethostbyname2 (Environment env) {
+    public static void gethostbyname2(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -6199,26 +6194,26 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void gethostent (Environment env) {
+    public static void gethostent(Environment env) {
 
         hostent ret = CLibrary.INSTANCE.gethostent();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void gethostid (Environment env) {
+    public static void gethostid(Environment env) {
 
         NativeLong ret = CLibrary.INSTANCE.gethostid();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void gethostname (Environment env) {
+    public static void gethostname(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -6272,10 +6267,10 @@ public class APIStub {
 //        env.memory.setIntArray(t2, param1, param2);
 //    }
 
-    public static void getloadavg (Environment env) {
+    public static void getloadavg(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -6285,17 +6280,17 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void getlogin (Environment env) {
+    public static void getlogin(Environment env) {
 
         byte ret = CLibrary.INSTANCE.getlogin();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getmntent (Environment env) {
+    public static void getmntent(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -6305,10 +6300,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void getmntent_r (Environment env) {
+    public static void getmntent_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -6318,12 +6313,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void getnetbyaddr (Environment env) {
+    public static void getnetbyaddr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -6335,10 +6330,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void getnetbyname (Environment env) {
+    public static void getnetbyname(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -6348,21 +6343,21 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void getnetent (Environment env) {
+    public static void getnetent(Environment env) {
 
         netent ret = CLibrary.INSTANCE.getnetent();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getnetgrent (Environment env) {
+    public static void getnetgrent(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String[] param0 ;
-        String[] param1 ;
-        String[] param2 ;
+        String[] param0;
+        String[] param1;
+        String[] param2;
 
         param0 = (String[]) env.memory.getArray(t0, -1);
         param1 = (String[]) env.memory.getArray(t1, -1);
@@ -6376,12 +6371,12 @@ public class APIStub {
         env.memory.setArray(t2, -1, param2);
     }
 
-    public static void getopt_long (Environment env) {
+    public static void getopt_long(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        String param1 ;
+        int param0;
+        String param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -6393,12 +6388,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void getopt_long_only (Environment env) {
+    public static void getopt_long_only(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        String param1 ;
+        int param0;
+        String param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -6410,17 +6405,17 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void getpagesize (Environment env) {
+    public static void getpagesize(Environment env) {
 
         int ret = CLibrary.INSTANCE.getpagesize();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getpass (Environment env) {
+    public static void getpass(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -6430,14 +6425,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void getpeername (Environment env) {
+    public static void getpeername(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         sockaddr param1 = new sockaddr();
-        IntByReference param2 ;
+        IntByReference param2;
 
         param0 = env.memory.getInt(t0);
         param1.sa_ = env.memory.getIntFromReference(t1);
@@ -6453,10 +6448,10 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void getpgid (Environment env) {
+    public static void getpgid(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -6466,33 +6461,33 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void getpgrp (Environment env) {
+    public static void getpgrp(Environment env) {
 
         int ret = CLibrary.INSTANCE.getpgrp();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getpid (Environment env) {
+    public static void getpid(Environment env) {
 
         int ret = CLibrary.INSTANCE.getpid();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getppid (Environment env) {
+    public static void getppid(Environment env) {
 
         int ret = CLibrary.INSTANCE.getppid();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getpriority (Environment env) {
+    public static void getpriority(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -6504,10 +6499,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void getprotobyname (Environment env) {
+    public static void getprotobyname(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -6517,10 +6512,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void getprotobynumber (Environment env) {
+    public static void getprotobynumber(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -6530,28 +6525,28 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void getprotoent (Environment env) {
+    public static void getprotoent(Environment env) {
 
         protoent ret = CLibrary.INSTANCE.getprotoent();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getpt (Environment env) {
+    public static void getpt(Environment env) {
 
         int ret = CLibrary.INSTANCE.getpt();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getpwent (Environment env) {
+    public static void getpwent(Environment env) {
 
         passwd ret = CLibrary.INSTANCE.getpwent();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getpwent_r (Environment env) {
+    public static void getpwent_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
         passwd param0 = new passwd();
@@ -6576,10 +6571,10 @@ public class APIStub {
         env.memory.setPointer(t0.add(24), param0.pw_shell);
     }
 
-    public static void getpwnam (Environment env) {
+    public static void getpwnam(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -6589,10 +6584,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void getpwnam_r (Environment env) {
+    public static void getpwnam_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -6602,10 +6597,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void getpwuid (Environment env) {
+    public static void getpwuid(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -6615,10 +6610,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void getpwuid_r (Environment env) {
+    public static void getpwuid_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -6628,14 +6623,14 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void getrandom (Environment env) {
+    public static void getrandom(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        char[] param0 ;
-        int param1 ;
-        int param2 ;
+        char[] param0;
+        int param1;
+        int param2;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getBuffer(t0, param1);
@@ -6649,11 +6644,11 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void getrlimit (Environment env) {
+    public static void getrlimit(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         rlimit param1 = new rlimit();
 
         param0 = env.memory.getInt(t0);
@@ -6668,10 +6663,10 @@ public class APIStub {
         env.memory.setIntReference(t1.add(4), param1.rlim_max);
     }
 
-    public static void getrlimit64 (Environment env) {
+    public static void getrlimit64(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -6729,10 +6724,10 @@ public class APIStub {
 //        env.memory.setNativeLongReference(t1.add(60), param1.ru_nivcsw);
 //    }
 
-    public static void gets (Environment env) {
+    public static void gets(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -6742,12 +6737,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void getservbyname (Environment env) {
+    public static void getservbyname(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -6759,12 +6754,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void getservbyport (Environment env) {
+    public static void getservbyport(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        String param1 ;
+        int param0;
+        String param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -6776,17 +6771,17 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void getservent (Environment env) {
+    public static void getservent(Environment env) {
 
         servent ret = CLibrary.INSTANCE.getservent();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getsid (Environment env) {
+    public static void getsid(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -6796,14 +6791,14 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void getsockname (Environment env) {
+    public static void getsockname(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         sockaddr param1 = new sockaddr();
-        IntByReference param2 ;
+        IntByReference param2;
 
         param0 = env.memory.getInt(t0);
         param1.sa_ = env.memory.getIntFromReference(t1);
@@ -6819,14 +6814,14 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void getsockopt (Environment env) {
+    public static void getsockopt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        int param1 ;
-        int param2 ;
+        int param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -6837,14 +6832,14 @@ public class APIStub {
         env.register.set('0', new BitVec(ret));
     }
 
-    public static void getsubopt (Environment env) {
+    public static void getsubopt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String[] param0 ;
-        String param1 ;
-        String[] param2 ;
+        String[] param0;
+        String param1;
+        String[] param2;
 
         param0 = (String[]) env.memory.getArray(t0, -1);
         param1 = env.memory.getTextFromReference(t1);
@@ -6858,10 +6853,10 @@ public class APIStub {
         env.memory.setArray(t2, -1, param2);
     }
 
-    public static void gettext (Environment env) {
+    public static void gettext(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -6871,12 +6866,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void gettid (Environment env) {
+    public static void gettid(Environment env) {
         int ret = CLibrary.INSTANCE.gettid();
         env.register.set('0', new BitVec(ret));
     }
 
-    public static void gettimeofday (Environment env) {
+    public static void gettimeofday(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
@@ -6921,26 +6916,26 @@ public class APIStub {
 //        env.memory.setInt(t1.add(4), param1.tz_dsttime);
 //    }
 
-    public static void getuid (Environment env) {
+    public static void getuid(Environment env) {
         int ret = CLibrary.INSTANCE.getuid();
         env.register.set('0', new BitVec(ret));
     }
 
-    public static void getumask (Environment env) {
+    public static void getumask(Environment env) {
 
         int ret = CLibrary.INSTANCE.getumask();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getutent (Environment env) {
+    public static void getutent(Environment env) {
 
         utmp ret = CLibrary.INSTANCE.getutent();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getutid (Environment env) {
+    public static void getutid(Environment env) {
         BitVec t0 = env.register.get('0');
 
         utmp param0 = new utmp();
@@ -6950,7 +6945,7 @@ public class APIStub {
 
     }
 
-    public static void getutid_r (Environment env) {
+    public static void getutid_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
@@ -6962,7 +6957,7 @@ public class APIStub {
 
     }
 
-    public static void getutline (Environment env) {
+    public static void getutline(Environment env) {
         BitVec t0 = env.register.get('0');
 
         utmp param0 = new utmp();
@@ -6972,7 +6967,7 @@ public class APIStub {
 
     }
 
-    public static void getutline_r (Environment env) {
+    public static void getutline_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
         utmp param0 = new utmp();
@@ -6982,7 +6977,7 @@ public class APIStub {
 
     }
 
-    public static void getutmp (Environment env) {
+    public static void getutmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
@@ -6993,7 +6988,7 @@ public class APIStub {
 
     }
 
-    public static void getutmpx (Environment env) {
+    public static void getutmpx(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
@@ -7004,10 +6999,10 @@ public class APIStub {
 
     }
 
-    public static void getw (Environment env) {
+    public static void getw(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -7017,10 +7012,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void fgetwc (Environment env) {
+    public static void fgetwc(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -7030,24 +7025,24 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void getwchar (Environment env) {
+    public static void getwchar(Environment env) {
 
         int ret = CLibrary.INSTANCE.getwchar();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getwchar_unlocked (Environment env) {
+    public static void getwchar_unlocked(Environment env) {
 
         int ret = CLibrary.INSTANCE.getwchar_unlocked();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void getwc_unlocked (Environment env) {
+    public static void getwc_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -7057,10 +7052,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void getwd (Environment env) {
+    public static void getwd(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -7070,47 +7065,47 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void get_avphys_pages (Environment env) {
+    public static void get_avphys_pages(Environment env) {
 
         NativeLong ret = CLibrary.INSTANCE.get_avphys_pages();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void get_current_dir_name (Environment env) {
+    public static void get_current_dir_name(Environment env) {
 
         byte ret = CLibrary.INSTANCE.get_current_dir_name();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void get_nprocs (Environment env) {
+    public static void get_nprocs(Environment env) {
 
         int ret = CLibrary.INSTANCE.get_nprocs();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void get_nprocs_conf (Environment env) {
+    public static void get_nprocs_conf(Environment env) {
 
         int ret = CLibrary.INSTANCE.get_nprocs_conf();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void get_phys_pages (Environment env) {
+    public static void get_phys_pages(Environment env) {
 
         NativeLong ret = CLibrary.INSTANCE.get_phys_pages();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void glob64 (Environment env) {
+    public static void glob64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -7122,10 +7117,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void globfree (Environment env) {
+    public static void globfree(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -7134,10 +7129,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void globfree64 (Environment env) {
+    public static void globfree64(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -7146,10 +7141,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void gmtime (Environment env) {
+    public static void gmtime(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -7159,11 +7154,11 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void gmtime_r (Environment env) {
+    public static void gmtime_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
+        IntByReference param0;
         tm param1 = new tm();
 
         param0 = env.memory.getIntRef(t0);
@@ -7196,10 +7191,10 @@ public class APIStub {
         env.memory.setStringReference(t1.add(40), param1.__tm_zone);
     }
 
-    public static void grantpt (Environment env) {
+    public static void grantpt(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7209,10 +7204,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void gsignal (Environment env) {
+    public static void gsignal(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7238,12 +7233,12 @@ public class APIStub {
 //        //env.memory.setInt(t0, param0);
 //    }
 
-    public static void hasmntopt (Environment env) {
+    public static void hasmntopt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
         mntent param0 = new mntent();
-        String param1 ;
+        String param1;
 
         param0.mnt_fsname = env.memory.getStringFromReference(t0);
         param0.mnt_dir = env.memory.getStringFromReference(t0.add(4));
@@ -7265,10 +7260,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void hcreate (Environment env) {
+    public static void hcreate(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7294,7 +7289,7 @@ public class APIStub {
 //        //env.memory.setInt(t0, param0);
 //    }
 
-    public static void hdestroy (Environment env) {
+    public static void hdestroy(Environment env) {
 
         CLibrary.INSTANCE.hdestroy();
 
@@ -7311,12 +7306,12 @@ public class APIStub {
 //
 //    }
 
-    public static void hsearch (Environment env) {
+    public static void hsearch(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -7328,14 +7323,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void hsearch_r (Environment env) {
+    public static void hsearch_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        int param1 ;
-        IntByReference param2 ;
+        int param0;
+        int param1;
+        IntByReference param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -7349,10 +7344,10 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void htonl (Environment env) {
+    public static void htonl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7362,10 +7357,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void htons (Environment env) {
+    public static void htons(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7375,12 +7370,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void hypot (Environment env) {
+    public static void hypot(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        double param1 ;
+        double param0;
+        double param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -7392,12 +7387,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void hypotf (Environment env) {
+    public static void hypotf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        float param1 ;
+        float param0;
+        float param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloat(t1);
@@ -7409,12 +7404,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void hypotl (Environment env) {
+    public static void hypotl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -7426,10 +7421,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void iconv_close (Environment env) {
+    public static void iconv_close(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7439,12 +7434,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iconv_open (Environment env) {
+    public static void iconv_open(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -7467,12 +7462,12 @@ public class APIStub {
 //
 //    }
 
-    public static void if_indextoname (Environment env) {
+    public static void if_indextoname(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        String param1 ;
+        int param0;
+        String param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -7494,10 +7489,10 @@ public class APIStub {
 //
 //    }
 
-    public static void if_nametoindex (Environment env) {
+    public static void if_nametoindex(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -7507,10 +7502,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void ilogb (Environment env) {
+    public static void ilogb(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -7520,10 +7515,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void ilogbf (Environment env) {
+    public static void ilogbf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -7533,10 +7528,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void ilogbl (Environment env) {
+    public static void ilogbl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -7546,10 +7541,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void imaxabs (Environment env) {
+    public static void imaxabs(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7559,12 +7554,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void imaxdiv (Environment env) {
+    public static void imaxdiv(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -7572,16 +7567,14 @@ public class APIStub {
         int ret = CLibrary.INSTANCE.imaxdiv(param0, param1);
         env.register.set('0', new BitVec(ret));
 
-        //env.memory.setInt(t0, param0);
-        ////env.memory.setInt(t1, param1);
     }
 
-    public static void index (Environment env) {
+    public static void index(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -7593,10 +7586,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void inet_addr (Environment env) {
+    public static void inet_addr(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -7606,11 +7599,11 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void inet_aton (Environment env) {
+    public static void inet_aton(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
+        String param0;
         in_addr param1 = new in_addr();
 
         param0 = env.memory.getTextFromReference(t0);
@@ -7623,7 +7616,7 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.s_addr);
     }
 
-    public static void inet_lnaof (Environment env) {
+    public static void inet_lnaof(Environment env) {
         BitVec t0 = env.register.get('0');
 
         in_addr param0 = new in_addr();
@@ -7636,12 +7629,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0.s_addr);
     }
 
-    public static void inet_makeaddr (Environment env) {
+    public static void inet_makeaddr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -7653,10 +7646,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void inet_netof (Environment env) {
+    public static void inet_netof(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        in_addr param0 = new in_addr() ;
+        in_addr param0 = new in_addr();
 
         param0.s_addr = env.memory.getInt(t0);
 
@@ -7666,10 +7659,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0.s_addr);
     }
 
-    public static void inet_network (Environment env) {
+    public static void inet_network(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -7679,10 +7672,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void inet_ntoa (Environment env) {
+    public static void inet_ntoa(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        in_addr param0 = new in_addr() ;
+        in_addr param0 = new in_addr();
 
         param0.s_addr = env.memory.getInt(t0);
 
@@ -7692,12 +7685,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0.s_addr);
     }
 
-    public static void inet_ntop (Environment env) {
+    public static void inet_ntop(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        LongByReference param1 ;
+        int param0;
+        LongByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getPointer(t1);
@@ -7709,14 +7702,14 @@ public class APIStub {
         env.memory.setPointer(t1, param1.getValue());
     }
 
-    public static void inet_pton (Environment env) {
+    public static void inet_pton(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        String param1 ;
-        LongByReference param2 ;
+        int param0;
+        String param1;
+        LongByReference param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -7730,12 +7723,12 @@ public class APIStub {
         env.memory.setPointer(t2, param2.getValue());
     }
 
-    public static void initgroups (Environment env) {
+    public static void initgroups(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -7747,14 +7740,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void initstate (Environment env) {
+    public static void initstate(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        byte[] param1 ;
-        int param2 ;
+        int param0;
+        byte[] param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param2 = env.memory.getInt(t2);
@@ -7768,12 +7761,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void initstate_r (Environment env) {
+    public static void initstate_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        String param1 ;
+        int param0;
+        String param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -7785,10 +7778,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void isalnum (Environment env) {
+    public static void isalnum(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7798,10 +7791,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void isalpha (Environment env) {
+    public static void isalpha(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7811,10 +7804,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void isascii (Environment env) {
+    public static void isascii(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7824,10 +7817,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void isatty (Environment env) {
+    public static void isatty(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7837,10 +7830,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void isblank (Environment env) {
+    public static void isblank(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7850,10 +7843,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iscntrl (Environment env) {
+    public static void iscntrl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7863,10 +7856,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void isdigit (Environment env) {
+    public static void isdigit(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7876,10 +7869,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void isgraph (Environment env) {
+    public static void isgraph(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7889,10 +7882,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void isinff (Environment env) {
+    public static void isinff(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -7902,10 +7895,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void isinfl (Environment env) {
+    public static void isinfl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -7915,10 +7908,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void islower (Environment env) {
+    public static void islower(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7928,10 +7921,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void isnanf (Environment env) {
+    public static void isnanf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -7941,10 +7934,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void isnanl (Environment env) {
+    public static void isnanl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -7954,10 +7947,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void isprint (Environment env) {
+    public static void isprint(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7967,10 +7960,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ispunct (Environment env) {
+    public static void ispunct(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -7980,10 +7973,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void isspace (Environment env) {
+    public static void isspace(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getIntFromReference(t0);
 
@@ -7993,10 +7986,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void isupper (Environment env) {
+    public static void isupper(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8006,10 +7999,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iswalnum (Environment env) {
+    public static void iswalnum(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8019,10 +8012,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iswalpha (Environment env) {
+    public static void iswalpha(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8032,10 +8025,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iswblank (Environment env) {
+    public static void iswblank(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8045,10 +8038,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iswcntrl (Environment env) {
+    public static void iswcntrl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8058,12 +8051,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iswctype (Environment env) {
+    public static void iswctype(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        NativeLong param1 ;
+        int param0;
+        NativeLong param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -8075,10 +8068,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void iswdigit (Environment env) {
+    public static void iswdigit(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8088,10 +8081,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iswgraph (Environment env) {
+    public static void iswgraph(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8101,10 +8094,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iswlower (Environment env) {
+    public static void iswlower(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8114,10 +8107,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iswprint (Environment env) {
+    public static void iswprint(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8127,10 +8120,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iswpunct (Environment env) {
+    public static void iswpunct(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8140,10 +8133,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iswspace (Environment env) {
+    public static void iswspace(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8153,10 +8146,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iswupper (Environment env) {
+    public static void iswupper(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8166,10 +8159,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void iswxdigit (Environment env) {
+    public static void iswxdigit(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8179,10 +8172,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void isxdigit (Environment env) {
+    public static void isxdigit(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8192,10 +8185,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void j0 (Environment env) {
+    public static void j0(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -8205,10 +8198,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void j0f (Environment env) {
+    public static void j0f(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -8218,10 +8211,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void j0l (Environment env) {
+    public static void j0l(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -8231,10 +8224,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void j1 (Environment env) {
+    public static void j1(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -8244,10 +8237,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void j1f (Environment env) {
+    public static void j1f(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -8257,10 +8250,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void j1l (Environment env) {
+    public static void j1l(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -8270,12 +8263,12 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void jn (Environment env) {
+    public static void jn(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        double param1 ;
+        int param0;
+        double param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getDouble(t1);
@@ -8287,12 +8280,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void jnf (Environment env) {
+    public static void jnf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        float param1 ;
+        int param0;
+        float param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getFloat(t1);
@@ -8304,12 +8297,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void jnl (Environment env) {
+    public static void jnl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        NativeLong param1 ;
+        int param0;
+        NativeLong param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -8321,10 +8314,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void jrand48 (Environment env) {
+    public static void jrand48(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        short[] param0 ;
+        short[] param0;
 
         param0 = env.memory.getShortArray(t0, 3);
 
@@ -8334,10 +8327,10 @@ public class APIStub {
         env.memory.setShortArray(t0, 3, param0);
     }
 
-    public static void jrand48_r (Environment env) {
+    public static void jrand48_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int[] param0 ;
+        int[] param0;
 
         param0 = env.memory.getIntArray(t0, 3);
 
@@ -8347,12 +8340,12 @@ public class APIStub {
         env.memory.setIntArray(t0, 3, param0);
     }
 
-    public static void kill (Environment env) {
+    public static void kill(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -8364,12 +8357,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void killpg (Environment env) {
+    public static void killpg(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -8381,10 +8374,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void l64a (Environment env) {
+    public static void l64a(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -8394,10 +8387,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void labs (Environment env) {
+    public static void labs(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8407,10 +8400,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void lcong48 (Environment env) {
+    public static void lcong48(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        short[] param0 ;
+        short[] param0;
 
         param0 = env.memory.getShortArray(t0, 7);
 
@@ -8419,10 +8412,10 @@ public class APIStub {
         env.memory.setShortArray(t0, 7, param0);
     }
 
-    public static void lcong48_r (Environment env) {
+    public static void lcong48_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int[] param0 ;
+        int[] param0;
 
         param0 = env.memory.getIntArray(t0, 7);
 
@@ -8432,12 +8425,12 @@ public class APIStub {
         env.memory.setIntArray(t0, 7, param0);
     }
 
-    public static void ldexp (Environment env) {
+    public static void ldexp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        int param1 ;
+        double param0;
+        int param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getInt(t1);
@@ -8449,12 +8442,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void ldexpf (Environment env) {
+    public static void ldexpf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        int param1 ;
+        float param0;
+        int param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getInt(t1);
@@ -8466,12 +8459,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void ldexpl (Environment env) {
+    public static void ldexpl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        int param1 ;
+        NativeLong param0;
+        int param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getInt(t1);
@@ -8483,12 +8476,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void ldiv (Environment env) {
+    public static void ldiv(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -8500,10 +8493,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void lgamma (Environment env) {
+    public static void lgamma(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -8513,10 +8506,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void lgammaf (Environment env) {
+    public static void lgammaf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -8526,12 +8519,12 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void lgammaf_r (Environment env) {
+    public static void lgammaf_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        IntByReference param1 ;
+        float param0;
+        IntByReference param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getIntRef(t1);
@@ -8543,10 +8536,10 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void lgammal (Environment env) {
+    public static void lgammal(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -8556,12 +8549,12 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void lgammal_r (Environment env) {
+    public static void lgammal_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        IntByReference param1 ;
+        NativeLong param0;
+        IntByReference param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getIntRef(t1);
@@ -8573,12 +8566,12 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void lgamma_r (Environment env) {
+    public static void lgamma_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        IntByReference param1 ;
+        double param0;
+        IntByReference param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getIntRef(t1);
@@ -8590,10 +8583,10 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void link (Environment env) {
+    public static void link(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8603,14 +8596,14 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void linkat (Environment env) {
+    public static void linkat(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        String param1 ;
-        int param2 ;
+        int param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -8624,10 +8617,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void lio_listio (Environment env) {
+    public static void lio_listio(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8637,10 +8630,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void lio_listio64 (Environment env) {
+    public static void lio_listio64(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8650,12 +8643,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void listen (Environment env) {
+    public static void listen(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -8667,10 +8660,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void llabs (Environment env) {
+    public static void llabs(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -8680,12 +8673,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void lldiv (Environment env) {
+    public static void lldiv(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -8697,10 +8690,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void llrint (Environment env) {
+    public static void llrint(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -8710,10 +8703,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void llrintf (Environment env) {
+    public static void llrintf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -8723,10 +8716,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void llrintl (Environment env) {
+    public static void llrintl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -8736,10 +8729,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void llround (Environment env) {
+    public static void llround(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -8749,10 +8742,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void llroundf (Environment env) {
+    public static void llroundf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -8762,10 +8755,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void llroundl (Environment env) {
+    public static void llroundl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -8775,17 +8768,15 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void localeconv (Environment env) {
-
-       lconv ret = CLibrary.INSTANCE.localeconv();
+    public static void localeconv(Environment env) {
+        lconv ret = CLibrary.INSTANCE.localeconv();
         env.register.set('0', new BitVec(ret));
-
     }
 
-    public static void localtime (Environment env) {
+    public static void localtime(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -8795,11 +8786,11 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void localtime_r (Environment env) {
+    public static void localtime_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
+        IntByReference param0;
         tm param1 = new tm();
 
         param0 = env.memory.getIntRef(t0);
@@ -8832,10 +8823,10 @@ public class APIStub {
         env.memory.setStringReference(t1.add(40), param1.__tm_zone);
     }
 
-    public static void log (Environment env) {
+    public static void log(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -8845,10 +8836,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void log10 (Environment env) {
+    public static void log10(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -8858,10 +8849,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void log10f (Environment env) {
+    public static void log10f(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -8871,10 +8862,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void log10l (Environment env) {
+    public static void log10l(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -8884,10 +8875,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void log1p (Environment env) {
+    public static void log1p(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -8897,10 +8888,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void log1pf (Environment env) {
+    public static void log1pf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -8910,10 +8901,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void log1pl (Environment env) {
+    public static void log1pl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -8923,10 +8914,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void log2 (Environment env) {
+    public static void log2(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -8936,10 +8927,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void log2f (Environment env) {
+    public static void log2f(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -8949,10 +8940,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void log2l (Environment env) {
+    public static void log2l(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -8962,10 +8953,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void logb (Environment env) {
+    public static void logb(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -8975,10 +8966,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void logbf (Environment env) {
+    public static void logbf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -8988,10 +8979,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void logbl (Environment env) {
+    public static void logbl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -9001,10 +8992,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void logf (Environment env) {
+    public static void logf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -9014,7 +9005,7 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void login (Environment env) {
+    public static void login(Environment env) {
         BitVec t0 = env.register.get('0');
 
         utmp param0 = new utmp();
@@ -9023,10 +9014,10 @@ public class APIStub {
 
     }
 
-    public static void login_tty (Environment env) {
+    public static void login_tty(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -9036,23 +9027,23 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void logl (Environment env) {
+    public static void logl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
         double ret = CLibrary.INSTANCE.logl(param0);
         env.register.set('0', new BitVec(ret));
 
-        //env.memory.setNativeLongt0, param0);
+        //env.memory.setNativeLong(t0, param0);
     }
 
-    public static void logout (Environment env) {
+    public static void logout(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -9062,14 +9053,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void logwtmp (Environment env) {
+    public static void logwtmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String param1 ;
-        String param2 ;
+        String param0;
+        String param1;
+        String param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -9082,12 +9073,12 @@ public class APIStub {
         env.memory.setTextReference(t2, param2);
     }
 
-    public static void longjmp (Environment env) {
+    public static void longjmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -9098,11 +9089,9 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void lrand48 (Environment env) {
-
+    public static void lrand48(Environment env) {
         NativeLong ret = CLibrary.INSTANCE.lrand48();
         env.register.set('0', new BitVec(ret));
-
     }
 
 //    public static void lrand48_r (Environment env) {
@@ -9122,7 +9111,6 @@ public class APIStub {
 //        int ret = CLibrary.INSTANCE.lrand48_r(param0, param1);
 //        env.register.set('0', new BitVec(ret));
 //
-//
 //        env.memory.setIntReference(t0, param0.__x);
 //        env.memory.setIntReference(t0.add(4), param0.__old_x);
 //        env.memory.setShortReference(t0.add(8), param0.__c);
@@ -9131,10 +9119,10 @@ public class APIStub {
 //        env.memory.setIntReference(t1, param1.getValue());
 //    }
 
-    public static void lrint (Environment env) {
+    public static void lrint(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -9144,10 +9132,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void lrintf (Environment env) {
+    public static void lrintf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -9157,10 +9145,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void lrintl (Environment env) {
+    public static void lrintl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -9170,10 +9158,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void lround (Environment env) {
+    public static void lround(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -9183,10 +9171,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void lroundf (Environment env) {
+    public static void lroundf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -9196,10 +9184,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void lroundl (Environment env) {
+    public static void lroundl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -9209,14 +9197,14 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void lseek (Environment env) {
+    public static void lseek(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        NativeLong param1 ;
-        int param2 ;
+        int param0;
+        NativeLong param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -9230,14 +9218,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void lseek64 (Environment env) {
+    public static void lseek64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        NativeLong param1 ;
-        int param2 ;
+        int param0;
+        NativeLong param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -9295,10 +9283,10 @@ public class APIStub {
 //        env.memory.setIntReference(t1.add(52), param1.st_ctim.tv_sec);
 //    }
 
-    public static void lstat64 (Environment env) {
+    public static void lstat64(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -9308,12 +9296,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void lutimes (Environment env) {
+    public static void lutimes(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        timeval[] param1 ;
+        String param0;
+        timeval[] param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = (timeval[]) env.memory.getArray(t1, 2);
@@ -9325,14 +9313,14 @@ public class APIStub {
         env.memory.setArray(t1, 2, param1);
     }
 
-    public static void madvise (Environment env) {
+    public static void madvise(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -9346,7 +9334,7 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void main (Environment env) {
+    public static void main(Environment env) {
 
         int ret = CLibrary.INSTANCE.main();
         env.register.set('0', new BitVec(ret));
@@ -9370,14 +9358,14 @@ public class APIStub {
 //        env.memory.setVoid(t1, param1);
 //    }
 
-    public static void mallinfo (Environment env) {
+    public static void mallinfo(Environment env) {
         CLibrary.INSTANCE.mallinfo();
     }
 
-    public static void malloc (Environment env) {
+    public static void malloc(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -9386,12 +9374,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void mallopt (Environment env) {
+    public static void mallopt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -9403,12 +9391,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void mblen (Environment env) {
+    public static void mblen(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -9420,14 +9408,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void mbrlen (Environment env) {
+    public static void mbrlen(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        int param1 ;
-        int[] param2 ;
+        byte[] param0;
+        int param1;
+        int[] param2;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -9441,16 +9429,16 @@ public class APIStub {
         env.memory.setIntArray(t2, param1, param2);
     }
 
-    public static void mbrtowc (Environment env) {
+    public static void mbrtowc(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
-        int[] param3 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
+        int[] param3;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -9466,10 +9454,10 @@ public class APIStub {
         env.memory.setIntArray(t3, param2, param3);
     }
 
-    public static void mbsinit (Environment env) {
+    public static void mbsinit(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -9479,10 +9467,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void mbsnrtowcs (Environment env) {
+    public static void mbsnrtowcs(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -9492,10 +9480,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void mbsrtowcs (Environment env) {
+    public static void mbsrtowcs(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -9505,14 +9493,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void mbstowcs (Environment env) {
+    public static void mbstowcs(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -9526,14 +9514,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void mbtowc (Environment env) {
+    public static void mbtowc(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -9561,16 +9549,16 @@ public class APIStub {
 //        env.memory.setVoid(t0, param0);
 //    }
 
-    public static void memccpy (Environment env) {
+    public static void memccpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        LongByReference param0 ;
-        LongByReference param1 ;
-        int param2 ;
-        int param3 ;
+        LongByReference param0;
+        LongByReference param1;
+        int param2;
+        int param3;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getPointer(t1);
@@ -9585,14 +9573,14 @@ public class APIStub {
         //env.memory.setInt(t3, param3);
     }
 
-    public static void memchr (Environment env) {
+    public static void memchr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -9605,14 +9593,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void memcmp (Environment env) {
+    public static void memcmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        LongByReference param1 ;
-        int param2 ;
+        LongByReference param0;
+        LongByReference param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getPointer(t1);
@@ -9626,14 +9614,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void memcpy (Environment env) {
+    public static void memcpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        LongByReference param1 ;
-        int param2 ;
+        LongByReference param0;
+        LongByReference param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getPointer(t1);
@@ -9646,12 +9634,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void memfd_create (Environment env) {
+    public static void memfd_create(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -9663,12 +9651,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void memfrob (Environment env) {
+    public static void memfrob(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        int param1 ;
+        LongByReference param0;
+        int param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -9679,12 +9667,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void memmem (Environment env) {
+    public static void memmem(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        int param1 ;
+        LongByReference param0;
+        int param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -9695,14 +9683,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void memmove (Environment env) {
+    public static void memmove(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        LongByReference param1 ;
-        int param2 ;
+        LongByReference param0;
+        LongByReference param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getPointer(t1);
@@ -9715,14 +9703,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void mempcpy (Environment env) {
+    public static void mempcpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        LongByReference param1 ;
-        int param2 ;
+        LongByReference param0;
+        LongByReference param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getPointer(t1);
@@ -9735,14 +9723,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void memrchr (Environment env) {
+    public static void memrchr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -9756,14 +9744,14 @@ public class APIStub {
     }
 
     /* Manually implemented */
-    public static void memset (Environment env) {
+    public static void memset(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
         BitVec param0;
-        int param1 ;
-        int param2 ;
+        int param1;
+        int param2;
 
         param0 = env.memory.getWordMemoryValue(t0);
         param1 = env.memory.getInt(t1);
@@ -9771,9 +9759,9 @@ public class APIStub {
 
         BitVec ptr = t0;
 
-        for (int i = 0; i < param2; i+=4) {
+        for (int i = 0; i < param2; i += 4) {
             // For 'param2' number of bytes
-            env.memory.set(ptr, new BitVec(param1));
+            Memory.set(ptr, new BitVec(param1));
             ptr = ptr.add(4);
         }
         //CLibrary.INSTANCE.memset(param0, param1, param2);
@@ -9782,12 +9770,12 @@ public class APIStub {
 
     }
 
-    public static void mkdir (Environment env) {
+    public static void mkdir(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -9799,10 +9787,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void mkdtemp (Environment env) {
+    public static void mkdtemp(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -9812,12 +9800,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void mkfifo (Environment env) {
+    public static void mkfifo(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -9829,14 +9817,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void mknod (Environment env) {
+    public static void mknod(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        int param1 ;
-        int param2 ;
+        String param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -9850,10 +9838,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void mkstemp (Environment env) {
+    public static void mkstemp(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -9863,10 +9851,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void mktemp (Environment env) {
+    public static void mktemp(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -9876,7 +9864,7 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void mktime (Environment env) {
+    public static void mktime(Environment env) {
         BitVec t0 = env.register.get('0');
 
         tm param0 = new tm();
@@ -9909,12 +9897,12 @@ public class APIStub {
         env.memory.setStringReference(t0.add(40), param0.__tm_zone);
     }
 
-    public static void mlock (Environment env) {
+    public static void mlock(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        int param1 ;
+        LongByReference param0;
+        int param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -9926,14 +9914,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void mlock2 (Environment env) {
+    public static void mlock2(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -9947,10 +9935,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void mlockall (Environment env) {
+    public static void mlockall(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -9960,14 +9948,14 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void mmap (Environment env) {
+    public static void mmap(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -9980,14 +9968,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void mmap64 (Environment env) {
+    public static void mmap64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -10000,12 +9988,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void modf (Environment env) {
+    public static void modf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        DoubleByReference param1 ;
+        double param0;
+        DoubleByReference param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDoubleRef(t1);
@@ -10017,12 +10005,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1.getValue());
     }
 
-    public static void modff (Environment env) {
+    public static void modff(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        FloatByReference param1 ;
+        float param0;
+        FloatByReference param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloatRef(t1);
@@ -10034,12 +10022,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1.getValue());
     }
 
-    public static void modfl (Environment env) {
+    public static void modfl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLongByReference param1 ;
+        NativeLong param0;
+        NativeLongByReference param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLongRef(t1);
@@ -10051,12 +10039,12 @@ public class APIStub {
         env.memory.setNativeLongReference(t1, param1.getValue());
     }
 
-    public static void mount (Environment env) {
+    public static void mount(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -10082,14 +10070,14 @@ public class APIStub {
 //        env.memory.setPointer(t0, param0.getValue());
 //    }
 
-    public static void mprotect (Environment env) {
+    public static void mprotect(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -10103,19 +10091,19 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void mrand48 (Environment env) {
+    public static void mrand48(Environment env) {
 
         NativeLong ret = CLibrary.INSTANCE.mrand48();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void mrand48_r (Environment env) {
+    public static void mrand48_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
         drand48_data param0 = new drand48_data();
-        IntByReference param1 ;
+        IntByReference param1;
 
         param0.__x = env.memory.getShortRef(t0);
         param0.__old_x = env.memory.getShortRef(t0.add(4));
@@ -10135,14 +10123,14 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void mremap (Environment env) {
+    public static void mremap(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -10155,14 +10143,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void msync (Environment env) {
+    public static void msync(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -10176,18 +10164,18 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void mtrace (Environment env) {
+    public static void mtrace(Environment env) {
 
         CLibrary.INSTANCE.mtrace();
 
     }
 
-    public static void munlock (Environment env) {
+    public static void munlock(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        int param1 ;
+        LongByReference param0;
+        int param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -10199,19 +10187,19 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void munlockall (Environment env) {
+    public static void munlockall(Environment env) {
 
         int ret = CLibrary.INSTANCE.munlockall();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void munmap (Environment env) {
+    public static void munmap(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        int param1 ;
+        LongByReference param0;
+        int param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -10223,16 +10211,16 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void muntrace (Environment env) {
+    public static void muntrace(Environment env) {
 
         CLibrary.INSTANCE.muntrace();
 
     }
 
-    public static void nanf (Environment env) {
+    public static void nanf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -10242,10 +10230,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void nanl (Environment env) {
+    public static void nanl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -10255,7 +10243,7 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void nanosleep (Environment env) {
+    public static void nanosleep(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
@@ -10276,10 +10264,10 @@ public class APIStub {
         env.memory.setNativeLongReference(t1.add(4), param1.tv_nsec);
     }
 
-    public static void nearbyint (Environment env) {
+    public static void nearbyint(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -10289,10 +10277,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void nearbyintf (Environment env) {
+    public static void nearbyintf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -10302,10 +10290,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void nearbyintl (Environment env) {
+    public static void nearbyintl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -10315,12 +10303,12 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void nextafter (Environment env) {
+    public static void nextafter(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        double param1 ;
+        double param0;
+        double param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -10332,12 +10320,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void nextafterf (Environment env) {
+    public static void nextafterf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        float param1 ;
+        float param0;
+        float param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloat(t1);
@@ -10349,12 +10337,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void nextafterl (Environment env) {
+    public static void nextafterl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -10366,10 +10354,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void nextdown (Environment env) {
+    public static void nextdown(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -10379,10 +10367,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void nextdownf (Environment env) {
+    public static void nextdownf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -10392,10 +10380,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void nextdownl (Environment env) {
+    public static void nextdownl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -10405,12 +10393,12 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void nexttoward (Environment env) {
+    public static void nexttoward(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        NativeLong param1 ;
+        double param0;
+        NativeLong param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -10422,12 +10410,12 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void nexttowardf (Environment env) {
+    public static void nexttowardf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        NativeLong param1 ;
+        float param0;
+        NativeLong param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -10439,12 +10427,12 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void nexttowardl (Environment env) {
+    public static void nexttowardl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -10456,10 +10444,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void nextup (Environment env) {
+    public static void nextup(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -10469,10 +10457,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void nextupf (Environment env) {
+    public static void nextupf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -10482,10 +10470,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void nextupl (Environment env) {
+    public static void nextupl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -10495,14 +10483,14 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void nftw (Environment env) {
+    public static void nftw(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        int param1 ;
-        int param2 ;
+        String param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -10516,12 +10504,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void nftw64 (Environment env) {
+    public static void nftw64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -10533,12 +10521,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void ngettext (Environment env) {
+    public static void ngettext(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -10550,10 +10538,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void nice (Environment env) {
+    public static void nice(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -10563,10 +10551,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void nl_langinfo (Environment env) {
+    public static void nl_langinfo(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -10576,10 +10564,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void notfound (Environment env) {
+    public static void notfound(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -10589,10 +10577,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void nrand48 (Environment env) {
+    public static void nrand48(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        short[] param0 ;
+        short[] param0;
 
         param0 = env.memory.getShortArray(t0, 3);
 
@@ -10602,10 +10590,10 @@ public class APIStub {
         env.memory.setShortArray(t0, 3, param0);
     }
 
-    public static void nrand48_r (Environment env) {
+    public static void nrand48_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int[] param0 ;
+        int[] param0;
 
         param0 = env.memory.getIntArray(t0, 3);
 
@@ -10615,10 +10603,10 @@ public class APIStub {
         env.memory.setIntArray(t0, 3, param0);
     }
 
-    public static void ntohl (Environment env) {
+    public static void ntohl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -10628,10 +10616,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ntohs (Environment env) {
+    public static void ntohs(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -10641,7 +10629,7 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ntp_adjtime (Environment env) {
+    public static void ntp_adjtime(Environment env) {
         BitVec t0 = env.register.get('0');
 
         timex param0 = new timex();
@@ -10692,7 +10680,7 @@ public class APIStub {
         env.memory.setIntReference(t0.add(76), param0.tai);
     }
 
-    public static void ntp_gettime (Environment env) {
+    public static void ntp_gettime(Environment env) {
         BitVec t0 = env.register.get('0');
 
         ntptimeval param0 = new ntptimeval();
@@ -10749,12 +10737,12 @@ public class APIStub {
 //        env.memory.setVoid(t0, param0);
 //    }
 
-    public static void open (Environment env) {
+    public static void open(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -10766,10 +10754,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void opendir (Environment env) {
+    public static void opendir(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -10779,14 +10767,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void openlog (Environment env) {
+    public static void openlog(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        int param1 ;
-        int param2 ;
+        String param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -10799,14 +10787,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void openpty (Environment env) {
+    public static void openpty(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        IntByReference param0 ;
-        IntByReference param1 ;
-        String param2 ;
+        IntByReference param0;
+        IntByReference param1;
+        String param2;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getIntRef(t1);
@@ -10838,12 +10826,12 @@ public class APIStub {
 //        env.memory.setIntArray(t1, param1, param1);
 //    }
 
-    public static void parse_printf_format (Environment env) {
+    public static void parse_printf_format(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -10855,12 +10843,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void fpathconf (Environment env) {
+    public static void fpathconf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -10872,17 +10860,17 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void pause (Environment env) {
+    public static void pause(Environment env) {
 
         int ret = CLibrary.INSTANCE.pause();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void pclose (Environment env) {
+    public static void pclose(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -10892,10 +10880,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void perror (Environment env) {
+    public static void perror(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -10904,10 +10892,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void pipe (Environment env) {
+    public static void pipe(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int[] param0 ;
+        int[] param0;
 
         param0 = env.memory.getIntArray(t0, 2);
 
@@ -10917,12 +10905,12 @@ public class APIStub {
         env.memory.setIntArray(t0, 2, param0);
     }
 
-    public static void pkey_alloc (Environment env) {
+    public static void pkey_alloc(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -10934,10 +10922,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void pkey_free (Environment env) {
+    public static void pkey_free(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -10947,10 +10935,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void pkey_get (Environment env) {
+    public static void pkey_get(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -10960,16 +10948,16 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void pkey_mprotect (Environment env) {
+    public static void pkey_mprotect(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
-        int param3 ;
+        LongByReference param0;
+        int param1;
+        int param2;
+        int param3;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -10985,12 +10973,12 @@ public class APIStub {
         //env.memory.setInt(t3, param3);
     }
 
-    public static void pkey_set (Environment env) {
+    public static void pkey_set(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -11002,12 +10990,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void popen (Environment env) {
+    public static void popen(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -11019,14 +11007,14 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void posix_fallocate (Environment env) {
+    public static void posix_fallocate(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        NativeLong param1 ;
-        NativeLong param2 ;
+        int param0;
+        NativeLong param1;
+        NativeLong param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -11040,14 +11028,14 @@ public class APIStub {
         //env.memory.setNativeLongt2, param2);
     }
 
-    public static void posix_memalign (Environment env) {
+    public static void posix_memalign(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -11061,12 +11049,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void pow (Environment env) {
+    public static void pow(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        double param1 ;
+        double param0;
+        double param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -11078,12 +11066,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void powf (Environment env) {
+    public static void powf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        float param1 ;
+        float param0;
+        float param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloat(t1);
@@ -11095,12 +11083,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void powl (Environment env) {
+    public static void powl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -11112,16 +11100,16 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void pread (Environment env) {
+    public static void pread(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        int param0 ;
-        char[] param1 ;
-        int param2 ;
-        NativeLong param3 ;
+        int param0;
+        char[] param1;
+        int param2;
+        NativeLong param3;
 
         param0 = env.memory.getInt(t0);
         param2 = env.memory.getInt(t2);
@@ -11137,14 +11125,14 @@ public class APIStub {
         //env.memory.setNativeLongt3, param3);
     }
 
-    public static void pread64 (Environment env) {
+    public static void pread64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        char[] param1 ;
-        int param2 ;
+        int param0;
+        char[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getInt(t0);
@@ -11158,17 +11146,17 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void preadv (Environment env) {
+    public static void preadv(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         iovec param1 = new iovec();
-        int param2 ;
+        int param2;
 
         param0 = env.memory.getInt(t0);
-        param1.iov_base = (PointerType) env.memory.getPointer(t1);
+        param1.iov_base = env.memory.getPointer(t1);
         param1.iov_len = env.memory.getIntFromReference(t1.add(4));
         param2 = env.memory.getInt(t2);
 
@@ -11181,14 +11169,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void preadv2 (Environment env) {
+    public static void preadv2(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         iovec param1 = new iovec();
-        int param2 ;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1.iov_base = env.memory.getPointer(t1);
@@ -11204,14 +11192,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void preadv64 (Environment env) {
+    public static void preadv64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         iovec param1 = new iovec();
-        int param2 ;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1.iov_base = env.memory.getPointer(t1);
@@ -11227,11 +11215,11 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void preadv64v2 (Environment env) {
+    public static void preadv64v2(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         iovec param1 = new iovec();
 
         param0 = env.memory.getInt(t0);
@@ -11246,10 +11234,10 @@ public class APIStub {
         env.memory.setIntReference(t1.add(4), param1.iov_len);
     }
 
-    public static void printf_size (Environment env) {
+    public static void printf_size(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -11259,7 +11247,7 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void printf_size_info (Environment env) {
+    public static void printf_size_info(Environment env) {
         BitVec t0 = env.register.get('0');
 
         printf_info param0 = new printf_info();
@@ -11269,12 +11257,12 @@ public class APIStub {
 
     }
 
-    public static void psignal (Environment env) {
+    public static void psignal(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        String param1 ;
+        int param0;
+        String param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -11285,10 +11273,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void pthread_cond_clockwait (Environment env) {
+    public static void pthread_cond_clockwait(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -11298,10 +11286,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void pthread_getattr_default_np (Environment env) {
+    public static void pthread_getattr_default_np(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -11311,10 +11299,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void pthread_key_create (Environment env) {
+    public static void pthread_key_create(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -11324,10 +11312,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void pthread_key_delete (Environment env) {
+    public static void pthread_key_delete(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -11337,10 +11325,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void pthread_rwlock_clockrdlock (Environment env) {
+    public static void pthread_rwlock_clockrdlock(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -11350,10 +11338,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void pthread_rwlock_clockwrlock (Environment env) {
+    public static void pthread_rwlock_clockwrlock(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -11363,10 +11351,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void pthread_setattr_default_np (Environment env) {
+    public static void pthread_setattr_default_np(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -11376,12 +11364,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void pthread_setspecific (Environment env) {
+    public static void pthread_setspecific(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        LongByReference param1 ;
+        int param0;
+        LongByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getPointer(t1);
@@ -11393,12 +11381,12 @@ public class APIStub {
         env.memory.setPointer(t1, param1.getValue());
     }
 
-    public static void pthread_tryjoin_np (Environment env) {
+    public static void pthread_tryjoin_np(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        LongByReference param1 ;
+        NativeLong param0;
+        LongByReference param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getPointer(t1);
@@ -11410,10 +11398,10 @@ public class APIStub {
         env.memory.setPointer(t1, param1.getValue());
     }
 
-    public static void ptsname (Environment env) {
+    public static void ptsname(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -11423,14 +11411,14 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ptsname_r (Environment env) {
+    public static void ptsname_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        byte[] param1 ;
-        int param2 ;
+        int param0;
+        byte[] param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param2 = env.memory.getInt(t2);
@@ -11444,12 +11432,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void fputc (Environment env) {
+    public static void fputc(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        IntByReference param1 ;
+        int param0;
+        IntByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -11461,10 +11449,10 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void putchar (Environment env) {
+    public static void putchar(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -11474,10 +11462,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void putchar_unlocked (Environment env) {
+    public static void putchar_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -11487,12 +11475,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void putc_unlocked (Environment env) {
+    public static void putc_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        IntByReference param1 ;
+        int param0;
+        IntByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -11504,10 +11492,10 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void putenv (Environment env) {
+    public static void putenv(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -11517,12 +11505,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void putpwent (Environment env) {
+    public static void putpwent(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
         passwd param0 = new passwd();
-        IntByReference param1 ;
+        IntByReference param1;
 
         param0.pw_name = env.memory.getPointer(t0);
         param0.pw_passwd = env.memory.getPointer(t0.add(4));
@@ -11546,7 +11534,7 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void puts (Environment env) {
+    public static void puts(Environment env) {
         BitVec t0 = env.register.get('0');
 
         // Set parameters
@@ -11557,12 +11545,12 @@ public class APIStub {
         // Update memory and r0 register
     }
 
-    public static void fputs (Environment env) {
+    public static void fputs(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        IntByReference param1 ;
+        String param0;
+        IntByReference param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getIntRef(t1);
@@ -11574,7 +11562,7 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void pututline (Environment env) {
+    public static void pututline(Environment env) {
         BitVec t0 = env.register.get('0');
 
         utmp param0 = new utmp();
@@ -11584,12 +11572,12 @@ public class APIStub {
 
     }
 
-    public static void putw (Environment env) {
+    public static void putw(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        IntByReference param1 ;
+        int param0;
+        IntByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -11601,12 +11589,12 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void fputwc (Environment env) {
+    public static void fputwc(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte param0 ;
-        IntByReference param1 ;
+        byte param0;
+        IntByReference param1;
 
         param0 = env.memory.getByte(t0);
         param1 = env.memory.getIntRef(t1);
@@ -11618,10 +11606,10 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void putwchar (Environment env) {
+    public static void putwchar(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        byte param0 ;
+        byte param0;
 
         param0 = env.memory.getByte(t0);
 
@@ -11631,10 +11619,10 @@ public class APIStub {
         env.memory.setByte(t0, param0);
     }
 
-    public static void putwchar_unlocked (Environment env) {
+    public static void putwchar_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        byte param0 ;
+        byte param0;
 
         param0 = env.memory.getByte(t0);
 
@@ -11644,12 +11632,12 @@ public class APIStub {
         env.memory.setByte(t0, param0);
     }
 
-    public static void fputwc_unlocked (Environment env) {
+    public static void fputwc_unlocked(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte param0 ;
-        IntByReference param1 ;
+        byte param0;
+        IntByReference param1;
 
         param0 = env.memory.getByte(t0);
         param1 = env.memory.getIntRef(t1);
@@ -11661,16 +11649,16 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void pwrite (Environment env) {
+    public static void pwrite(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        int param0 ;
-        char[] param1 ;
-        int param2 ;
-        NativeLong param3 ;
+        int param0;
+        char[] param1;
+        int param2;
+        NativeLong param3;
 
         param0 = env.memory.getInt(t0);
         param2 = env.memory.getInt(t2);
@@ -11686,14 +11674,14 @@ public class APIStub {
         //env.memory.setNativeLongt3, param3);
     }
 
-    public static void pwrite64 (Environment env) {
+    public static void pwrite64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        char[] param1 ;
-        int param2 ;
+        int param0;
+        char[] param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param2 = env.memory.getInt(t2);
@@ -11707,14 +11695,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void pwritev (Environment env) {
+    public static void pwritev(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         iovec param1 = new iovec();
-        int param2 ;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1.iov_base = env.memory.getPointer(t1);
@@ -11730,14 +11718,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void pwritev2 (Environment env) {
+    public static void pwritev2(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         iovec param1 = new iovec();
-        int param2 ;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1.iov_base = env.memory.getPointer(t1);
@@ -11753,14 +11741,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void pwritev64 (Environment env) {
+    public static void pwritev64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         iovec param1 = new iovec();
-        int param2 ;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1.iov_base = env.memory.getPointer(t1);
@@ -11776,11 +11764,11 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void pwritev64v2 (Environment env) {
+    public static void pwritev64v2(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         iovec param1 = new iovec();
 
         param0 = env.memory.getInt(t0);
@@ -11795,16 +11783,16 @@ public class APIStub {
         env.memory.setIntReference(t1.add(4), param1.iov_len);
     }
 
-    public static void qecvt (Environment env) {
+    public static void qecvt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        NativeLong param0 ;
-        int param1 ;
-        IntByReference param2 ;
-        IntByReference param3 ;
+        NativeLong param0;
+        int param1;
+        IntByReference param2;
+        IntByReference param3;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getInt(t1);
@@ -11820,12 +11808,12 @@ public class APIStub {
         env.memory.setIntReference(t3, param3.getValue());
     }
 
-    public static void qecvt_r (Environment env) {
+    public static void qecvt_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        int param1 ;
+        NativeLong param0;
+        int param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getInt(t1);
@@ -11837,16 +11825,16 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void qfcvt (Environment env) {
+    public static void qfcvt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        NativeLong param0 ;
-        int param1 ;
-        IntByReference param2 ;
-        IntByReference param3 ;
+        NativeLong param0;
+        int param1;
+        IntByReference param2;
+        IntByReference param3;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getInt(t1);
@@ -11862,12 +11850,12 @@ public class APIStub {
         env.memory.setIntReference(t3, param3.getValue());
     }
 
-    public static void qfcvt_r (Environment env) {
+    public static void qfcvt_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        int param1 ;
+        NativeLong param0;
+        int param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getInt(t1);
@@ -11879,14 +11867,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void qgcvt (Environment env) {
+    public static void qgcvt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        NativeLong param0 ;
-        int param1 ;
-        String param2 ;
+        NativeLong param0;
+        int param1;
+        String param2;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getInt(t1);
@@ -11900,14 +11888,14 @@ public class APIStub {
         env.memory.setTextReference(t2, param2);
     }
 
-    public static void qsort (Environment env) {
+    public static void qsort(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -11920,10 +11908,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void raise (Environment env) throws Exception {
+    public static void raise(Environment env) throws Exception {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -11934,26 +11922,22 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void rand (Environment env) {
-
+    public static void rand(Environment env) {
         int ret = CLibrary.INSTANCE.rand();
         env.register.set('0', new BitVec(ret));
-
     }
 
-    public static void random (Environment env) {
-
+    public static void random(Environment env) {
         NativeLong ret = CLibrary.INSTANCE.random();
         env.register.set('0', new BitVec(ret));
-
     }
 
-    public static void random_r (Environment env) {
+    public static void random_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
         random_data param0 = new random_data();
-        IntByReference param1 ;
+        IntByReference param1;
 
         param0.fptr = env.memory.getPointer(t0);
         param0.rptr = env.memory.getPointer(t0.add(4));
@@ -11977,10 +11961,10 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void rand_r (Environment env) {
+    public static void rand_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -11990,12 +11974,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void rawmemchr (Environment env) {
+    public static void rawmemchr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        int param1 ;
+        LongByReference param0;
+        int param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -12006,14 +11990,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void read (Environment env) {
+    public static void read(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        char[] param1 ;
-        int param2 ;
+        int param0;
+        char[] param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param2 = env.memory.getInt(t2);
@@ -12055,10 +12039,10 @@ public class APIStub {
 //        env.memory.setIntReference(t0, param0.getValue());
 //    }
 
-    public static void readdir64_r (Environment env) {
+    public static void readdir64_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -12068,10 +12052,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void readlink (Environment env) {
+    public static void readlink(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -12081,14 +12065,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void readv (Environment env) {
+    public static void readv(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         iovec param1 = new iovec();
-        int param2 ;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1.iov_base = env.memory.getPointer(t1);
@@ -12104,12 +12088,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void realloc (Environment env) {
+    public static void realloc(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        LongByReference param0 ;
-        int param1 ;
+        LongByReference param0;
+        int param1;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -12120,14 +12104,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void reallocarray (Environment env) {
+    public static void reallocarray(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        LongByReference param0 ;
-        int param1 ;
-        int param2 ;
+        LongByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getPointer(t0);
         param1 = env.memory.getInt(t1);
@@ -12140,10 +12124,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void realpath (Environment env) {
+    public static void realpath(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -12153,16 +12137,16 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void recv (Environment env) {
+    public static void recv(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        int param0 ;
-        char[] param1 ;
-        int param2 ;
-        int param3 ;
+        int param0;
+        char[] param1;
+        int param2;
+        int param3;
 
         param0 = env.memory.getInt(t0);
         param2 = env.memory.getInt(t2);
@@ -12178,14 +12162,14 @@ public class APIStub {
         //env.memory.setInt(t3, param3);
     }
 
-    public static void regcomp (Environment env) {
+    public static void regcomp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        IntByReference param0 ;
-        String param1 ;
-        int param2 ;
+        IntByReference param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -12199,10 +12183,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void regfree (Environment env) {
+    public static void regfree(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -12211,29 +12195,28 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void register_printf_function (Environment env) {
+    public static void register_printf_function(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
 
         int ret = CLibrary.INSTANCE.register_printf_function(param0, param1);
         env.register.set('0', new BitVec(ret));
-
         //env.memory.setInt(t0, param0);
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void remainder (Environment env) {
+    public static void remainder(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        double param1 ;
+        double param0;
+        double param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -12245,12 +12228,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void remainderf (Environment env) {
+    public static void remainderf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        float param1 ;
+        float param0;
+        float param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloat(t1);
@@ -12262,12 +12245,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void remainderl (Environment env) {
+    public static void remainderl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -12279,10 +12262,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void remove (Environment env) {
+    public static void remove(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -12292,12 +12275,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void rename (Environment env) {
+    public static void rename(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -12309,10 +12292,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void rewind (Environment env) {
+    public static void rewind(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -12321,10 +12304,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void rewinddir (Environment env) {
+    public static void rewinddir(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -12333,12 +12316,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void rindex (Environment env) {
+    public static void rindex(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -12350,10 +12333,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void rint (Environment env) {
+    public static void rint(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -12363,10 +12346,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void rintf (Environment env) {
+    public static void rintf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -12376,10 +12359,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void rintl (Environment env) {
+    public static void rintl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -12389,10 +12372,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void rmdir (Environment env) {
+    public static void rmdir(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -12402,10 +12385,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void round (Environment env) {
+    public static void round(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -12415,10 +12398,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void roundf (Environment env) {
+    public static void roundf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -12428,10 +12411,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void roundl (Environment env) {
+    public static void roundl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -12441,10 +12424,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void rpmatch (Environment env) {
+    public static void rpmatch(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -12454,12 +12437,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void scalb (Environment env) {
+    public static void scalb(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        double param1 ;
+        double param0;
+        double param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDouble(t1);
@@ -12471,12 +12454,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void scalbf (Environment env) {
+    public static void scalbf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        float param1 ;
+        float param0;
+        float param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloat(t1);
@@ -12488,12 +12471,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void scalbl (Environment env) {
+    public static void scalbl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        NativeLong param1 ;
+        NativeLong param0;
+        NativeLong param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -12505,12 +12488,12 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void scalbln (Environment env) {
+    public static void scalbln(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        int param1 ;
+        double param0;
+        int param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getInt(t1);
@@ -12522,12 +12505,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void scalblnf (Environment env) {
+    public static void scalblnf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        int param1 ;
+        float param0;
+        int param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getInt(t1);
@@ -12539,12 +12522,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void scalblnl (Environment env) {
+    public static void scalblnl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        int param1 ;
+        NativeLong param0;
+        int param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getInt(t1);
@@ -12556,12 +12539,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void scalbn (Environment env) {
+    public static void scalbn(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        double param0 ;
-        int param1 ;
+        double param0;
+        int param1;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getInt(t1);
@@ -12573,12 +12556,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void scalbnf (Environment env) {
+    public static void scalbnf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        float param0 ;
-        int param1 ;
+        float param0;
+        int param1;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getInt(t1);
@@ -12590,12 +12573,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void scalbnl (Environment env) {
+    public static void scalbnl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLong param0 ;
-        int param1 ;
+        NativeLong param0;
+        int param1;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getInt(t1);
@@ -12607,10 +12590,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void scandir (Environment env) {
+    public static void scandir(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -12620,10 +12603,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void scandir64 (Environment env) {
+    public static void scandir64(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -12633,12 +12616,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void sched_getaffinity (Environment env) {
+    public static void sched_getaffinity(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -12650,11 +12633,11 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void sched_getparam (Environment env) {
+    public static void sched_getparam(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         sched_param param1 = new sched_param();
 
         param0 = env.memory.getInt(t0);
@@ -12668,10 +12651,10 @@ public class APIStub {
 
     }
 
-    public static void sched_getscheduler (Environment env) {
+    public static void sched_getscheduler(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -12681,10 +12664,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void sched_get_priority_max (Environment env) {
+    public static void sched_get_priority_max(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -12694,10 +12677,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void sched_get_priority_min (Environment env) {
+    public static void sched_get_priority_min(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -12707,11 +12690,11 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void sched_rr_get_interval (Environment env) {
+    public static void sched_rr_get_interval(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         timespec param1 = new timespec();
 
         param0 = env.memory.getInt(t0);
@@ -12726,12 +12709,12 @@ public class APIStub {
         env.memory.setNativeLongReference(t1.add(4), param1.tv_nsec);
     }
 
-    public static void sched_setaffinity (Environment env) {
+    public static void sched_setaffinity(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -12743,11 +12726,11 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void sched_setparam (Environment env) {
+    public static void sched_setparam(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         sched_param param1 = new sched_param();
 
         param0 = env.memory.getInt(t0);
@@ -12761,12 +12744,12 @@ public class APIStub {
 
     }
 
-    public static void sched_setscheduler (Environment env) {
+    public static void sched_setscheduler(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -12778,17 +12761,17 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void sched_yield (Environment env) {
+    public static void sched_yield(Environment env) {
 
         int ret = CLibrary.INSTANCE.sched_yield();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void secure_getenv (Environment env) {
+    public static void secure_getenv(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -12798,10 +12781,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void seed48 (Environment env) {
+    public static void seed48(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        short[] param0 ;
+        short[] param0;
 
         param0 = env.memory.getShortArray(t0, 3);
 
@@ -12811,10 +12794,10 @@ public class APIStub {
         env.memory.setShortArray(t0, 3, param0);
     }
 
-    public static void seed48_r (Environment env) {
+    public static void seed48_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int[] param0 ;
+        int[] param0;
 
         param0 = env.memory.getIntArray(t0, 3);
 
@@ -12824,12 +12807,12 @@ public class APIStub {
         env.memory.setIntArray(t0, 3, param0);
     }
 
-    public static void seekdir (Environment env) {
+    public static void seekdir(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
-        NativeLong param1 ;
+        IntByReference param0;
+        NativeLong param1;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -12840,14 +12823,14 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void semget (Environment env) {
+    public static void semget(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        int param1 ;
-        int param2 ;
+        int param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -12861,14 +12844,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void semop (Environment env) {
+    public static void semop(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         sembuf param1 = new sembuf();
-        int param2 ;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1.sem_num = env.memory.getShort(t1);
@@ -12886,14 +12869,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void semtimedop (Environment env) {
+    public static void semtimedop(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         sembuf param1 = new sembuf();
-        int param2 ;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1.sem_num = env.memory.getShortFromReference(t1);
@@ -12911,10 +12894,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void sem_clockwait (Environment env) {
+    public static void sem_clockwait(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -12924,10 +12907,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void sem_close (Environment env) {
+    public static void sem_close(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -12937,10 +12920,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void sem_destroy (Environment env) {
+    public static void sem_destroy(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -12950,12 +12933,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void sem_getvalue (Environment env) {
+    public static void sem_getvalue(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
-        IntByReference param1 ;
+        IntByReference param0;
+        IntByReference param1;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getIntRef(t1);
@@ -12967,14 +12950,14 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void sem_init (Environment env) {
+    public static void sem_init(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        IntByReference param0 ;
-        int param1 ;
-        int param2 ;
+        IntByReference param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getInt(t1);
@@ -12988,10 +12971,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void sem_post (Environment env) {
+    public static void sem_post(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -13001,11 +12984,11 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void sem_timedwait (Environment env) {
+    public static void sem_timedwait(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
+        IntByReference param0;
         timespec param1 = new timespec();
 
         param0 = env.memory.getIntRef(t0);
@@ -13020,10 +13003,10 @@ public class APIStub {
         env.memory.setNativeLongReference(t1.add(4), param1.tv_nsec);
     }
 
-    public static void sem_trywait (Environment env) {
+    public static void sem_trywait(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -13033,10 +13016,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void sem_unlink (Environment env) {
+    public static void sem_unlink(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -13046,10 +13029,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void sem_wait (Environment env) {
+    public static void sem_wait(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -13059,16 +13042,16 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void send (Environment env) {
+    public static void send(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        int param0 ;
-        char[] param1 ;
-        int param2 ;
-        int param3 ;
+        int param0;
+        char[] param1;
+        int param2;
+        int param3;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getInt(t0);
@@ -13084,12 +13067,12 @@ public class APIStub {
         //env.memory.setInt(t3, param3);
     }
 
-    public static void setbuf (Environment env) {
+    public static void setbuf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
-        String param1 ;
+        IntByReference param0;
+        String param1;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -13100,14 +13083,14 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void setbuffer (Environment env) {
+    public static void setbuffer(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        int[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getIntArray(t0, param2);
@@ -13120,10 +13103,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void setcontext (Environment env) {
+    public static void setcontext(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -13133,12 +13116,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void setdomainname (Environment env) {
+    public static void setdomainname(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -13150,10 +13133,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void setegid (Environment env) {
+    public static void setegid(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13163,14 +13146,14 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void setenv (Environment env) {
+    public static void setenv(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String param1 ;
-        int param2 ;
+        String param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -13184,10 +13167,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void seteuid (Environment env) {
+    public static void seteuid(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13197,17 +13180,17 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void setfsent (Environment env) {
+    public static void setfsent(Environment env) {
 
         int ret = CLibrary.INSTANCE.setfsent();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void setgid (Environment env) {
+    public static void setgid(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13217,18 +13200,18 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void setgrent (Environment env) {
+    public static void setgrent(Environment env) {
 
         CLibrary.INSTANCE.setgrent();
 
     }
 
-    public static void setgroups (Environment env) {
+    public static void setgroups(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int[] param1 ;
+        int param0;
+        int[] param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntArray(t1, param0);
@@ -13240,10 +13223,10 @@ public class APIStub {
         env.memory.setIntArray(t1, param0, param1);
     }
 
-    public static void sethostent (Environment env) {
+    public static void sethostent(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13252,10 +13235,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void sethostid (Environment env) {
+    public static void sethostid(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -13265,12 +13248,12 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void sethostname (Environment env) {
+    public static void sethostname(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -13282,10 +13265,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void setitimer (Environment env) {
+    public static void setitimer(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13295,10 +13278,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void setjmp (Environment env) {
+    public static void setjmp(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13308,10 +13291,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void setlinebuf (Environment env) {
+    public static void setlinebuf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -13320,12 +13303,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void setlocale (Environment env) {
+    public static void setlocale(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        String param1 ;
+        int param0;
+        String param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -13337,10 +13320,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void setlogmask (Environment env) {
+    public static void setlogmask(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13350,12 +13333,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void setmntent (Environment env) {
+    public static void setmntent(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -13367,10 +13350,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void setnetent (Environment env) {
+    public static void setnetent(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13379,10 +13362,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void setnetgrent (Environment env) {
+    public static void setnetgrent(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -13392,12 +13375,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void setpgid (Environment env) {
+    public static void setpgid(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -13409,21 +13392,21 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void setpgrp (Environment env) {
+    public static void setpgrp(Environment env) {
 
         int ret = CLibrary.INSTANCE.setpgrp();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void setpriority (Environment env) {
+    public static void setpriority(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        int param1 ;
-        int param2 ;
+        int param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -13437,10 +13420,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void setprotoent (Environment env) {
+    public static void setprotoent(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13449,18 +13432,18 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void setpwent (Environment env) {
+    public static void setpwent(Environment env) {
 
         CLibrary.INSTANCE.setpwent();
 
     }
 
-    public static void setregid (Environment env) {
+    public static void setregid(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -13472,12 +13455,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void setreuid (Environment env) {
+    public static void setreuid(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -13489,11 +13472,11 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void setrlimit (Environment env) {
+    public static void setrlimit(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         rlimit param1 = new rlimit();
 
         param0 = env.memory.getInt(t0);
@@ -13508,10 +13491,10 @@ public class APIStub {
         env.memory.setIntReference(t1.add(4), param1.rlim_max);
     }
 
-    public static void setrlimit64 (Environment env) {
+    public static void setrlimit64(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13521,10 +13504,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void setservent (Environment env) {
+    public static void setservent(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13533,21 +13516,21 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void setsid (Environment env) {
+    public static void setsid(Environment env) {
 
         int ret = CLibrary.INSTANCE.setsid();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void setsockopt (Environment env) {
+    public static void setsockopt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        int param1 ;
-        int param2 ;
+        int param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -13561,10 +13544,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void setstate (Environment env) {
+    public static void setstate(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -13574,11 +13557,11 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void setstate_r (Environment env) {
+    public static void setstate_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
+        String param0;
         random_data param1 = new random_data();
 
         param0 = env.memory.getTextFromReference(t0);
@@ -13603,7 +13586,7 @@ public class APIStub {
         env.memory.setPointer(t1.add(24), param1.end_ptr);
     }
 
-    public static void settimeofday (Environment env) {
+    public static void settimeofday(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
@@ -13624,10 +13607,10 @@ public class APIStub {
         env.memory.setIntReference(t1.add(4), param1.tz_dsttime);
     }
 
-    public static void setuid (Environment env) {
+    public static void setuid(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13637,22 +13620,22 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void setutent (Environment env) {
+    public static void setutent(Environment env) {
 
         CLibrary.INSTANCE.setutent();
 
     }
 
-    public static void setvbuf (Environment env) {
+    public static void setvbuf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        int[] param0 ;
-        byte[] param1 ;
-        int param2 ;
-        int param3 ;
+        int[] param0;
+        byte[] param1;
+        int param2;
+        int param3;
 
         param3 = env.memory.getInt(t3);
         param0 = env.memory.getIntArray(t0, param3);
@@ -13668,14 +13651,14 @@ public class APIStub {
         //env.memory.setInt(t3, param3);
     }
 
-    public static void shm_open (Environment env) {
+    public static void shm_open(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        int param1 ;
-        int param2 ;
+        String param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -13689,10 +13672,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void shm_unlink (Environment env) {
+    public static void shm_unlink(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -13702,12 +13685,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void shutdown (Environment env) {
+    public static void shutdown(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -13719,10 +13702,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void sigabbrev_np (Environment env) {
+    public static void sigabbrev_np(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13732,12 +13715,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void sigaddset (Environment env) {
+    public static void sigaddset(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLongByReference param0 ;
-        int param1 ;
+        NativeLongByReference param0;
+        int param1;
 
         param0 = env.memory.getNativeLongRef(t0);
         param1 = env.memory.getInt(t1);
@@ -13749,12 +13732,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void sigaltstack (Environment env) {
+    public static void sigaltstack(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
-        IntByReference param1 ;
+        IntByReference param0;
+        IntByReference param1;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getIntRef(t1);
@@ -13766,10 +13749,10 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void sigblock (Environment env) {
+    public static void sigblock(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13779,12 +13762,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void sigdelset (Environment env) {
+    public static void sigdelset(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLongByReference param0 ;
-        int param1 ;
+        NativeLongByReference param0;
+        int param1;
 
         param0 = env.memory.getNativeLongRef(t0);
         param1 = env.memory.getInt(t1);
@@ -13796,10 +13779,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void sigdescr_np (Environment env) {
+    public static void sigdescr_np(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13809,10 +13792,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void sigemptyset (Environment env) {
+    public static void sigemptyset(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLongByReference param0 ;
+        NativeLongByReference param0;
 
         param0 = env.memory.getNativeLongRef(t0);
 
@@ -13822,10 +13805,10 @@ public class APIStub {
         env.memory.setNativeLongReference(t0, param0.getValue());
     }
 
-    public static void sigfillset (Environment env) {
+    public static void sigfillset(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLongByReference param0 ;
+        NativeLongByReference param0;
 
         param0 = env.memory.getNativeLongRef(t0);
 
@@ -13835,12 +13818,12 @@ public class APIStub {
         env.memory.setNativeLongReference(t0, param0.getValue());
     }
 
-    public static void siginterrupt (Environment env) {
+    public static void siginterrupt(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -13852,12 +13835,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void sigismember (Environment env) {
+    public static void sigismember(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        NativeLongByReference param0 ;
-        int param1 ;
+        NativeLongByReference param0;
+        int param1;
 
         param0 = env.memory.getNativeLongRef(t0);
         param1 = env.memory.getInt(t1);
@@ -13869,12 +13852,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void siglongjmp (Environment env) {
+    public static void siglongjmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -13885,10 +13868,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void sigmask (Environment env) {
+    public static void sigmask(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13898,12 +13881,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void signal (Environment env) {
+    public static void signal(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -13915,10 +13898,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void significand (Environment env) {
+    public static void significand(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -13928,10 +13911,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void significandf (Environment env) {
+    public static void significandf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -13941,10 +13924,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void significandl (Environment env) {
+    public static void significandl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -13954,10 +13937,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void sigpause (Environment env) {
+    public static void sigpause(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -13967,10 +13950,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void sigpending (Environment env) {
+    public static void sigpending(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLongByReference param0 ;
+        NativeLongByReference param0;
 
         param0 = env.memory.getNativeLongRef(t0);
 
@@ -13980,14 +13963,14 @@ public class APIStub {
         env.memory.setNativeLongReference(t0, param0.getValue());
     }
 
-    public static void sigprocmask (Environment env) {
+    public static void sigprocmask(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        NativeLongByReference param1 ;
-        NativeLongByReference param2 ;
+        int param0;
+        NativeLongByReference param1;
+        NativeLongByReference param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getNativeLongRef(t1);
@@ -14001,12 +13984,12 @@ public class APIStub {
         env.memory.setNativeLongReference(t2, param2.getValue());
     }
 
-    public static void sigsetjmp (Environment env) {
+    public static void sigsetjmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -14018,10 +14001,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void sigsetmask (Environment env) {
+    public static void sigsetmask(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -14031,10 +14014,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void sigsuspend (Environment env) {
+    public static void sigsuspend(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLongByReference param0 ;
+        NativeLongByReference param0;
 
         param0 = env.memory.getNativeLongRef(t0);
 
@@ -14044,10 +14027,10 @@ public class APIStub {
         env.memory.setNativeLongReference(t0, param0.getValue());
     }
 
-    public static void sin (Environment env) {
+    public static void sin(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -14057,14 +14040,14 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void sincos (Environment env) {
+    public static void sincos(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        double param0 ;
-        DoubleByReference param1 ;
-        DoubleByReference param2 ;
+        double param0;
+        DoubleByReference param1;
+        DoubleByReference param2;
 
         param0 = env.memory.getDouble(t0);
         param1 = env.memory.getDoubleRef(t1);
@@ -14077,14 +14060,14 @@ public class APIStub {
         //env.memory.setDouble(t2, param2.getValue());
     }
 
-    public static void sincosf (Environment env) {
+    public static void sincosf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        float param0 ;
-        FloatByReference param1 ;
-        FloatByReference param2 ;
+        float param0;
+        FloatByReference param1;
+        FloatByReference param2;
 
         param0 = env.memory.getFloat(t0);
         param1 = env.memory.getFloatRef(t1);
@@ -14097,14 +14080,14 @@ public class APIStub {
         env.memory.setFloat(t2, param2.getValue());
     }
 
-    public static void sincosl (Environment env) {
+    public static void sincosl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        NativeLong param0 ;
-        NativeLongByReference param1 ;
-        NativeLongByReference param2 ;
+        NativeLong param0;
+        NativeLongByReference param1;
+        NativeLongByReference param2;
 
         param0 = env.memory.getNativeLong(t0);
         param1 = env.memory.getNativeLongRef(t1);
@@ -14117,10 +14100,10 @@ public class APIStub {
         env.memory.setNativeLongReference(t2, param2.getValue());
     }
 
-    public static void sinf (Environment env) {
+    public static void sinf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -14130,10 +14113,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void sinh (Environment env) {
+    public static void sinh(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -14143,10 +14126,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void sinhf (Environment env) {
+    public static void sinhf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -14156,10 +14139,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void sinhl (Environment env) {
+    public static void sinhl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -14168,10 +14151,10 @@ public class APIStub {
 
     }
 
-    public static void sinl (Environment env) {
+    public static void sinl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -14180,14 +14163,14 @@ public class APIStub {
 
     }
 
-    public static void socket (Environment env) {
+    public static void socket(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        int param1 ;
-        int param2 ;
+        int param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -14198,16 +14181,16 @@ public class APIStub {
 
     }
 
-    public static void socketpair (Environment env) {
+    public static void socketpair(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        int param0 ;
-        int param1 ;
-        int param2 ;
-        int[] param3 ;
+        int param0;
+        int param1;
+        int param2;
+        int[] param3;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -14220,10 +14203,10 @@ public class APIStub {
         env.memory.setIntArray(t3, 2, param3);
     }
 
-    public static void sqrt (Environment env) {
+    public static void sqrt(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -14231,10 +14214,10 @@ public class APIStub {
         env.register.set('0', new BitVec(ret));
     }
 
-    public static void sqrtf (Environment env) {
+    public static void sqrtf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -14243,10 +14226,10 @@ public class APIStub {
 
     }
 
-    public static void sqrtl (Environment env) {
+    public static void sqrtl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -14255,10 +14238,10 @@ public class APIStub {
 
     }
 
-    public static void srand (Environment env) {
+    public static void srand(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -14266,10 +14249,10 @@ public class APIStub {
 
     }
 
-    public static void srand48 (Environment env) {
+    public static void srand48(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -14277,11 +14260,11 @@ public class APIStub {
 
     }
 
-    public static void srand48_r (Environment env) {
+    public static void srand48_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         drand48_data param1 = new drand48_data();
 
         param0 = env.memory.getInt(t0);
@@ -14302,10 +14285,10 @@ public class APIStub {
         env.memory.setLongReference(t1.add(12), param1.__a);
     }
 
-    public static void srandom (Environment env) {
+    public static void srandom(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -14313,11 +14296,11 @@ public class APIStub {
 
     }
 
-    public static void srandom_r (Environment env) {
+    public static void srandom_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         random_data param1 = new random_data();
 
         param0 = env.memory.getInt(t0);
@@ -14341,12 +14324,12 @@ public class APIStub {
         env.memory.setPointer(t1.add(24), param1.end_ptr);
     }
 
-    public static void ssignal (Environment env) {
+    public static void ssignal(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -14355,10 +14338,10 @@ public class APIStub {
         env.register.set('0', new BitVec(ret));
     }
 
-    public static void stime (Environment env) {
+    public static void stime(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -14368,12 +14351,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void stpcpy (Environment env) {
+    public static void stpcpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -14385,14 +14368,14 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void stpncpy (Environment env) {
+    public static void stpncpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -14405,12 +14388,12 @@ public class APIStub {
         env.memory.setByteArray(t1, param2, param1);
     }
 
-    public static void strcasecmp (Environment env) {
+    public static void strcasecmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -14422,12 +14405,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strcasestr (Environment env) {
+    public static void strcasestr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -14439,12 +14422,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strcat (Environment env) {
+    public static void strcat(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -14456,12 +14439,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strchr (Environment env) {
+    public static void strchr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -14472,12 +14455,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void strchrnul (Environment env) {
+    public static void strchrnul(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -14488,12 +14471,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void strcmp (Environment env) {
+    public static void strcmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -14505,12 +14488,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strcoll (Environment env) {
+    public static void strcoll(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -14522,12 +14505,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strcpy (Environment env) {
+    public static void strcpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -14539,12 +14522,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strcspn (Environment env) {
+    public static void strcspn(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -14556,10 +14539,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strdup (Environment env) {
+    public static void strdup(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -14569,10 +14552,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void strdupa (Environment env) {
+    public static void strdupa(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -14582,10 +14565,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void strerror (Environment env) {
+    public static void strerror(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -14593,10 +14576,10 @@ public class APIStub {
         env.register.set('0', new BitVec(ret));
     }
 
-    public static void strerrordesc_np (Environment env) {
+    public static void strerrordesc_np(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -14604,10 +14587,10 @@ public class APIStub {
         env.register.set('0', new BitVec(ret));
     }
 
-    public static void strerrorname_np (Environment env) {
+    public static void strerrorname_np(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -14616,14 +14599,14 @@ public class APIStub {
 
     }
 
-    public static void strerror_r (Environment env) {
+    public static void strerror_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        byte[] param1 ;
-        int param2 ;
+        int param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getInt(t0);
@@ -14635,14 +14618,14 @@ public class APIStub {
         env.memory.setByteArray(t1, param2, param1);
     }
 
-    public static void strfromd (Environment env) {
+    public static void strfromd(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        int param1 ;
-        byte[] param2 ;
+        byte[] param0;
+        int param1;
+        byte[] param2;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -14655,14 +14638,14 @@ public class APIStub {
         env.memory.setByteArray(t2, param1, param2);
     }
 
-    public static void strfromf (Environment env) {
+    public static void strfromf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        int param1 ;
-        byte[] param2 ;
+        byte[] param0;
+        int param1;
+        byte[] param2;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -14675,14 +14658,14 @@ public class APIStub {
         env.memory.setByteArray(t2, param1, param2);
     }
 
-    public static void strfroml (Environment env) {
+    public static void strfroml(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        int param1 ;
-        byte[] param2 ;
+        byte[] param0;
+        int param1;
+        byte[] param2;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -14696,10 +14679,10 @@ public class APIStub {
         env.memory.setByteArray(t2, param1, param2);
     }
 
-    public static void strfry (Environment env) {
+    public static void strfry(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -14709,12 +14692,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void strftime (Environment env) {
+    public static void strftime(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -14726,10 +14709,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void strlen (Environment env) {
+    public static void strlen(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -14739,14 +14722,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void strncasecmp (Environment env) {
+    public static void strncasecmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -14760,14 +14743,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void strncat (Environment env) {
+    public static void strncat(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -14781,14 +14764,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void strncmp (Environment env) {
+    public static void strncmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -14802,14 +14785,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void strncpy (Environment env) {
+    public static void strncpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -14823,12 +14806,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void strndup (Environment env) {
+    public static void strndup(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -14840,12 +14823,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void strndupa (Environment env) {
+    public static void strndupa(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -14857,12 +14840,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void strnlen (Environment env) {
+    public static void strnlen(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -14874,12 +14857,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void strpbrk (Environment env) {
+    public static void strpbrk(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -14891,13 +14874,13 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strptime (Environment env) {
+    public static void strptime(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
         tm param2 = new tm();
 
         param0 = env.memory.getTextFromReference(t0);
@@ -14932,12 +14915,12 @@ public class APIStub {
         env.memory.setStringReference(t2.add(40), param2.__tm_zone);
     }
 
-    public static void strrchr (Environment env) {
+    public static void strrchr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -14949,12 +14932,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void strsep (Environment env) {
+    public static void strsep(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String[] param0 ;
-        String param1 ;
+        String[] param0;
+        String param1;
 
         param0 = (String[]) env.memory.getArray(t0, -1);
         param1 = env.memory.getTextFromReference(t1);
@@ -14966,10 +14949,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strsignal (Environment env) {
+    public static void strsignal(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -14979,12 +14962,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void strspn (Environment env) {
+    public static void strspn(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -14996,12 +14979,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strstr (Environment env) {
+    public static void strstr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -15013,12 +14996,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strtod (Environment env) {
+    public static void strtod(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String[] param1 ;
+        String param0;
+        String[] param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = (String[]) env.memory.getArray(t1, -1);
@@ -15030,12 +15013,12 @@ public class APIStub {
         env.memory.setArray(t1, -1, param1);
     }
 
-    public static void strtof (Environment env) {
+    public static void strtof(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String[] param1 ;
+        String param0;
+        String[] param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = (String[]) env.memory.getArray(t1, -1);
@@ -15047,14 +15030,14 @@ public class APIStub {
         env.memory.setArray(t1, -1, param1);
     }
 
-    public static void strtoimax (Environment env) {
+    public static void strtoimax(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String[] param1 ;
-        int param2 ;
+        String param0;
+        String[] param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = (String[]) env.memory.getArray(t1, -1);
@@ -15068,12 +15051,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void strtok (Environment env) {
+    public static void strtok(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -15085,14 +15068,14 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strtok_r (Environment env) {
+    public static void strtok_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String param1 ;
-        String[] param2 ;
+        String param0;
+        String param1;
+        String[] param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -15106,14 +15089,14 @@ public class APIStub {
         env.memory.setArray(t2, -1, param2);
     }
 
-    public static void strtol (Environment env) {
+    public static void strtol(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String[] param1 ;
-        int param2 ;
+        String param0;
+        String[] param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = (String[]) env.memory.getArray(t1, -1);
@@ -15127,12 +15110,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void strtold (Environment env) {
+    public static void strtold(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String[] param1 ;
+        String param0;
+        String[] param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = (String[]) env.memory.getArray(t1, -1);
@@ -15144,14 +15127,14 @@ public class APIStub {
         env.memory.setArray(t1, -1, param1);
     }
 
-    public static void strtoll (Environment env) {
+    public static void strtoll(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String[] param1 ;
-        int param2 ;
+        String param0;
+        String[] param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = (String[]) env.memory.getArray(t1, -1);
@@ -15165,10 +15148,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void strtoq (Environment env) {
+    public static void strtoq(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -15178,14 +15161,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void strtoul (Environment env) {
+    public static void strtoul(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String[] param1 ;
-        int param2 ;
+        String param0;
+        String[] param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = (String[]) env.memory.getArray(t1, -1);
@@ -15199,10 +15182,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void strtoull (Environment env) {
+    public static void strtoull(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -15212,14 +15195,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void strtoumax (Environment env) {
+    public static void strtoumax(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String[] param1 ;
-        int param2 ;
+        String param0;
+        String[] param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = (String[]) env.memory.getArray(t1, -1);
@@ -15233,10 +15216,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void strtouq (Environment env) {
+    public static void strtouq(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -15246,12 +15229,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void strverscmp (Environment env) {
+    public static void strverscmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -15263,14 +15246,14 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void strxfrm (Environment env) {
+    public static void strxfrm(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -15300,10 +15283,10 @@ public class APIStub {
 //        //env.memory.setInt(t0, param0);
 //    }
 
-    public static void success (Environment env) {
+    public static void success(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -15313,12 +15296,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void swapcontext (Environment env) {
+    public static void swapcontext(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
-        IntByReference param1 ;
+        IntByReference param0;
+        IntByReference param1;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getIntRef(t1);
@@ -15330,18 +15313,18 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void sprintf (Environment env) {
+    public static void sprintf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        char[] param0 ;
-        String param1 ;
-        int param2 ;
+        char[] param0;
+        String param1;
+        String param2;
 
         param0 = env.memory.getBuffer(t0, 100);
         param1 = env.memory.getTextFromReference(t1);
-        param2 = env.memory.getInt(t2);
+        param2 = Integer.toString(env.memory.getInt(t2));
 
         int ret = CLibrary.INSTANCE.sprintf(param0, param1, param2);
         env.register.set('0', new BitVec(ret));
@@ -15349,12 +15332,12 @@ public class APIStub {
         env.memory.setBuffer(t0, param1.length(), param0);
     }
 
-    public static void swprintf (Environment env) {
+    public static void swprintf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -15366,10 +15349,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void swscanf (Environment env) {
+    public static void swscanf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -15379,12 +15362,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void symlink (Environment env) {
+    public static void symlink(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -15396,10 +15379,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void sync (Environment env) {
+    public static void sync(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -15409,10 +15392,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void sysconf (Environment env) {
+    public static void sysconf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -15422,10 +15405,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void system (Environment env) {
+    public static void system(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -15435,12 +15418,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void sysv_signal (Environment env) {
+    public static void sysv_signal(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -15452,10 +15435,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void tan (Environment env) {
+    public static void tan(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -15465,10 +15448,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void tanf (Environment env) {
+    public static void tanf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -15478,10 +15461,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void tanh (Environment env) {
+    public static void tanh(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -15491,10 +15474,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void tanhf (Environment env) {
+    public static void tanhf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -15504,10 +15487,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void tanhl (Environment env) {
+    public static void tanhl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -15517,10 +15500,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void tanl (Environment env) {
+    public static void tanl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -15530,10 +15513,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void tcdrain (Environment env) {
+    public static void tcdrain(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -15543,12 +15526,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void tcflow (Environment env) {
+    public static void tcflow(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -15560,12 +15543,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void tcflush (Environment env) {
+    public static void tcflush(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -15577,11 +15560,11 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void tcgetattr (Environment env) {
+    public static void tcgetattr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
+        int param0;
         termios param1 = new termios();
 
         param0 = env.memory.getInt(t0);
@@ -15592,10 +15575,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void tcgetpgrp (Environment env) {
+    public static void tcgetpgrp(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -15605,10 +15588,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void tcgetsid (Environment env) {
+    public static void tcgetsid(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -15618,12 +15601,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void tcsendbreak (Environment env) {
+    public static void tcsendbreak(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -15635,12 +15618,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void tcsetattr (Environment env) {
+    public static void tcsetattr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -15652,12 +15635,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void tcsetpgrp (Environment env) {
+    public static void tcsetpgrp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -15686,10 +15669,10 @@ public class APIStub {
 //        env.memory.setVoid(t1, param1);
 //    }
 
-    public static void telldir (Environment env) {
+    public static void telldir(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -15699,12 +15682,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void tempnam (Environment env) {
+    public static void tempnam(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -15716,10 +15699,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void textdomain (Environment env) {
+    public static void textdomain(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -15729,10 +15712,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void tgamma (Environment env) {
+    public static void tgamma(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -15742,10 +15725,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void tgammaf (Environment env) {
+    public static void tgammaf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -15755,10 +15738,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void tgammal (Environment env) {
+    public static void tgammal(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -15768,14 +15751,14 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void tgkill (Environment env) {
+    public static void tgkill(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        int param1 ;
-        int param2 ;
+        int param0;
+        int param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -15789,10 +15772,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void thrd_exit (Environment env) {
+    public static void thrd_exit(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -15801,7 +15784,7 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void time (Environment env) {
+    public static void time(Environment env) {
         BitVec t0 = env.register.get('0');
 
         lc_time_data param0 = new lc_time_data();
@@ -15810,7 +15793,7 @@ public class APIStub {
 
     }
 
-    public static void timegm (Environment env) {
+    public static void timegm(Environment env) {
         BitVec t0 = env.register.get('0');
 
         tm param0 = new tm();
@@ -15843,7 +15826,7 @@ public class APIStub {
         env.memory.setStringReference(t0.add(40), param0.__tm_zone);
     }
 
-    public static void timelocal (Environment env) {
+    public static void timelocal(Environment env) {
         BitVec t0 = env.register.get('0');
 
         tm param0 = new tm();
@@ -15876,7 +15859,7 @@ public class APIStub {
         env.memory.setStringReference(t0.add(40), param0.__tm_zone);
     }
 
-    public static void times (Environment env) {
+    public static void times(Environment env) {
         BitVec t0 = env.register.get('0');
 
         tms param0 = new tms();
@@ -15895,24 +15878,24 @@ public class APIStub {
         env.memory.setNativeLongReference(t0.add(12), param0.tms_cstime);
     }
 
-    public static void tmpfile (Environment env) {
+    public static void tmpfile(Environment env) {
 
         int ret = CLibrary.INSTANCE.tmpfile();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void tmpfile64 (Environment env) {
+    public static void tmpfile64(Environment env) {
 
         int ret = CLibrary.INSTANCE.tmpfile64();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void tmpnam (Environment env) {
+    public static void tmpnam(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -15922,10 +15905,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void tmpnam_r (Environment env) {
+    public static void tmpnam_r(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -15935,10 +15918,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void toascii (Environment env) {
+    public static void toascii(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -15948,10 +15931,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void tolower (Environment env) {
+    public static void tolower(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -15961,10 +15944,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void toupper (Environment env) {
+    public static void toupper(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -15974,12 +15957,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void towctrans (Environment env) {
+    public static void towctrans(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -15991,10 +15974,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void towlower (Environment env) {
+    public static void towlower(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -16004,10 +15987,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void towupper (Environment env) {
+    public static void towupper(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -16017,10 +16000,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void trunc (Environment env) {
+    public static void trunc(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -16030,12 +16013,12 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void truncate (Environment env) {
+    public static void truncate(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -16047,12 +16030,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void truncate64 (Environment env) {
+    public static void truncate64(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        NativeLong param1 ;
+        String param0;
+        NativeLong param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -16064,10 +16047,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void truncf (Environment env) {
+    public static void truncf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -16077,10 +16060,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void truncl (Environment env) {
+    public static void truncl(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -16090,10 +16073,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void tryagain (Environment env) {
+    public static void tryagain(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -16103,10 +16086,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ttyname (Environment env) {
+    public static void ttyname(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -16116,14 +16099,14 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void ttyname_r (Environment env) {
+    public static void ttyname_r(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        byte[] param1 ;
-        int param2 ;
+        int param0;
+        byte[] param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param2 = env.memory.getInt(t2);
@@ -16137,18 +16120,18 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void tzset (Environment env) {
+    public static void tzset(Environment env) {
 
         CLibrary.INSTANCE.tzset();
 
     }
 
-    public static void ulimit (Environment env) {
+    public static void ulimit(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        NativeLong param1 ;
+        int param0;
+        NativeLong param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getNativeLong(t1);
@@ -16160,10 +16143,10 @@ public class APIStub {
         //env.memory.setNativeLongt1, param1);
     }
 
-    public static void umask (Environment env) {
+    public static void umask(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -16173,10 +16156,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void umount (Environment env) {
+    public static void umount(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -16186,12 +16169,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void umount2 (Environment env) {
+    public static void umount2(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -16203,12 +16186,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void uname (Environment env) {
+    public static void uname(Environment env) {
         BitVec t0 = env.register.get('0');
 
         utsname param0 = new utsname();
 
-        param0.sysname = env.memory.getByteArray(t0,-1);
+        param0.sysname = env.memory.getByteArray(t0, -1);
         param0.nodename = env.memory.getByteArray(t0.add(4), -1);
         param0.release = env.memory.getByteArray(t0.add(8), -1);
         param0.version = env.memory.getByteArray(t0.add(12), -1);
@@ -16224,12 +16207,12 @@ public class APIStub {
         env.memory.setByteArray(t0.add(20), 4, param0.domainname);
     }
 
-    public static void ungetc (Environment env) {
+    public static void ungetc(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        IntByReference param1 ;
+        int param0;
+        IntByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -16241,12 +16224,12 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void ungetwc (Environment env) {
+    public static void ungetwc(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        IntByReference param1 ;
+        int param0;
+        IntByReference param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -16258,10 +16241,10 @@ public class APIStub {
         env.memory.setIntReference(t1, param1.getValue());
     }
 
-    public static void unlink (Environment env) {
+    public static void unlink(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -16271,10 +16254,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void unlockpt (Environment env) {
+    public static void unlockpt(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -16284,10 +16267,10 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void unsetenv (Environment env) {
+    public static void unsetenv(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -16297,11 +16280,11 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void updwtmp (Environment env) {
+    public static void updwtmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
+        String param0;
         utmp param1 = new utmp();
 
         param0 = env.memory.getTextFromReference(t0);
@@ -16311,11 +16294,11 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void utime (Environment env) {
+    public static void utime(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
+        String param0;
         utimbuf param1 = new utimbuf();
 
         param0 = env.memory.getTextFromReference(t0);
@@ -16330,12 +16313,12 @@ public class APIStub {
         env.memory.setIntReference(t1.add(4), param1.modtime);
     }
 
-    public static void utimes (Environment env) {
+    public static void utimes(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        timeval[] param1 ;
+        String param0;
+        timeval[] param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = (timeval[]) env.memory.getArray(t1, 2);
@@ -16347,10 +16330,10 @@ public class APIStub {
         env.memory.setArray(t1, 2, param1);
     }
 
-    public static void utmpname (Environment env) {
+    public static void utmpname(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -16360,10 +16343,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void valloc (Environment env) {
+    public static void valloc(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -16372,16 +16355,16 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void vasprintf (Environment env) {
+    public static void vasprintf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String[] param0 ;
-        String param1 ;
-        int param2 ;
+        String[] param0;
+        String param1;
+        int param2;
 
-        param0 = (String[]) env.memory.getArray(t0, -1);
+        param0 = (String[]) env.memory.getArray(t0, 100);
         param1 = env.memory.getTextFromReference(t1);
         param2 = env.memory.getInt(t2);
 
@@ -16393,12 +16376,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void va_copy (Environment env) {
+    public static void va_copy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
@@ -16409,10 +16392,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void va_end (Environment env) {
+    public static void va_end(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -16421,14 +16404,14 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void verr (Environment env) {
+    public static void verr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        String param1 ;
-        int param2 ;
+        int param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16441,14 +16424,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void verrx (Environment env) {
+    public static void verrx(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        String param1 ;
-        int param2 ;
+        int param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16458,24 +16441,23 @@ public class APIStub {
 
         //env.memory.setInt(t0, param0);
         env.memory.setTextReference(t1, param1);
-        //env.memory.setInt(t2, param2);
     }
 
-    public static void vfork (Environment env) {
+    public static void vfork(Environment env) {
 
         int ret = CLibrary.INSTANCE.vfork();
         env.register.set('0', new BitVec(ret));
 
     }
 
-    public static void vfprintf (Environment env) {
+    public static void vfprintf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        IntByReference param0 ;
-        String param1 ;
-        int param2 ;
+        IntByReference param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16489,14 +16471,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void vfscanf (Environment env) {
+    public static void vfscanf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        IntByReference param0 ;
-        String param1 ;
-        int param2 ;
+        IntByReference param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16510,14 +16492,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void vfwprintf (Environment env) {
+    public static void vfwprintf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        IntByReference param0 ;
-        String param1 ;
-        int param2 ;
+        IntByReference param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16531,29 +16513,26 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void vlimit (Environment env) {
+    public static void vlimit(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        int param1 ;
+        int param0;
+        int param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getInt(t1);
 
         int ret = CLibrary.INSTANCE.vlimit(param0, param1);
         env.register.set('0', new BitVec(ret));
-
-        //env.memory.setInt(t0, param0);
-        ////env.memory.setInt(t1, param1);
     }
 
-    public static void vprintf (Environment env) {
+    public static void vprintf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -16565,12 +16544,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void vscanf (Environment env) {
+    public static void vscanf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -16582,17 +16561,16 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void vsnprintf (Environment env) {
-        // fixed manually
+    public static void vsnprintf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
         BitVec t3 = env.register.get('3');
 
-        char[] param0 ;
-        int param1 ;
-        String param2 ;
-        int param3 ;
+        char[] param0;
+        int param1;
+        String param2;
+        int param3;
 
         param1 = env.memory.getIntFromReference(t1);
         param0 = env.memory.getBuffer(t0, param1);
@@ -16604,39 +16582,35 @@ public class APIStub {
         env.register.set('0', new BitVec(ret));
 
         env.memory.setBuffer(t0, param1, param0);
-        ////env.memory.setInt(t1, param1);
-        //env.memory.setInt(t3, param3);
     }
 
-    public static void vsprintf (Environment env) {
+    public static void vsprintf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String param1 ;
-        int param2 ;
+        char[] param0;
+        String param1;
+        Object[] param2;
 
-        param0 = env.memory.getTextFromReference(t0);
+        param0 = env.memory.getBuffer(t0, 100);
         param1 = env.memory.getTextFromReference(t1);
-        param2 = env.memory.getInt(t2);
+        param2 = env.memory.getArray(t2,1);
 
         int ret = CLibrary.INSTANCE.vsprintf(param0, param1, param2);
         env.register.set('0', new BitVec(ret));
 
-        env.memory.setTextReference(t0, param0);
-        env.memory.setTextReference(t1, param1);
-        //env.memory.setInt(t2, param2);
+        env.memory.setBuffer(t0, 1, param0);
     }
 
-    public static void vsscanf (Environment env) {
+    public static void vsscanf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String param1 ;
-        int param2 ;
+        String param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16650,12 +16624,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void vswprintf (Environment env) {
+    public static void vswprintf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -16667,10 +16641,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void vswscanf (Environment env) {
+    public static void vswscanf(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -16680,14 +16654,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void vsyslog (Environment env) {
+    public static void vsyslog(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        String param1 ;
-        int param2 ;
+        int param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16700,12 +16674,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void vwarn (Environment env) {
+    public static void vwarn(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -16716,12 +16690,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void vwarnx (Environment env) {
+    public static void vwarnx(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -16732,12 +16706,12 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void vwprintf (Environment env) {
+    public static void vwprintf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        int param1 ;
+        String param0;
+        int param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getInt(t1);
@@ -16749,10 +16723,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void wait (Environment env) {
+    public static void wait(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -16762,12 +16736,12 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void wait3 (Environment env) {
+    public static void wait3(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        IntByReference param0 ;
-        int param1 ;
+        IntByReference param0;
+        int param1;
 
         param0 = env.memory.getIntRef(t0);
         param1 = env.memory.getInt(t1);
@@ -16779,14 +16753,14 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void wait4 (Environment env) {
+    public static void wait4(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        IntByReference param1 ;
-        int param2 ;
+        int param0;
+        IntByReference param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -16800,14 +16774,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void waitpid (Environment env) {
+    public static void waitpid(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
-        IntByReference param1 ;
-        int param2 ;
+        int param0;
+        IntByReference param1;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getIntRef(t1);
@@ -16821,12 +16795,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wcpcpy (Environment env) {
+    public static void wcpcpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16838,14 +16812,14 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void wcpncpy (Environment env) {
+    public static void wcpncpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -16859,14 +16833,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wcrtomb (Environment env) {
+    public static void wcrtomb(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        byte param1 ;
-        IntByReference param2 ;
+        String param0;
+        byte param1;
+        IntByReference param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getByte(t1);
@@ -16880,12 +16854,12 @@ public class APIStub {
         env.memory.setIntReference(t2, param2.getValue());
     }
 
-    public static void wcscasecmp (Environment env) {
+    public static void wcscasecmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16897,12 +16871,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void wcscat (Environment env) {
+    public static void wcscat(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16914,12 +16888,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void wcschr (Environment env) {
+    public static void wcschr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        byte param1 ;
+        String param0;
+        byte param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getByte(t1);
@@ -16931,12 +16905,12 @@ public class APIStub {
         env.memory.setByte(t1, param1);
     }
 
-    public static void wcschrnul (Environment env) {
+    public static void wcschrnul(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        byte param1 ;
+        String param0;
+        byte param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getByte(t1);
@@ -16948,12 +16922,12 @@ public class APIStub {
         env.memory.setByte(t1, param1);
     }
 
-    public static void wcscmp (Environment env) {
+    public static void wcscmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16965,12 +16939,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void wcscoll (Environment env) {
+    public static void wcscoll(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16982,12 +16956,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void wcscpy (Environment env) {
+    public static void wcscpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -16999,12 +16973,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void wcscspn (Environment env) {
+    public static void wcscspn(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -17016,10 +16990,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void wcsdup (Environment env) {
+    public static void wcsdup(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17029,12 +17003,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcsftime (Environment env) {
+    public static void wcsftime(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -17046,10 +17020,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void wcslen (Environment env) {
+    public static void wcslen(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17059,14 +17033,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcsncasecmp (Environment env) {
+    public static void wcsncasecmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -17080,14 +17054,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wcsncat (Environment env) {
+    public static void wcsncat(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -17101,14 +17075,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wcsncmp (Environment env) {
+    public static void wcsncmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -17122,14 +17096,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wcsncpy (Environment env) {
+    public static void wcsncpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -17143,12 +17117,12 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wcsnlen (Environment env) {
+    public static void wcsnlen(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        byte[] param0 ;
-        int param1 ;
+        byte[] param0;
+        int param1;
 
         param1 = env.memory.getInt(t1);
         param0 = env.memory.getByteArray(t0, param1);
@@ -17160,10 +17134,10 @@ public class APIStub {
         ////env.memory.setInt(t1, param1);
     }
 
-    public static void wcsnrtombs (Environment env) {
+    public static void wcsnrtombs(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17173,12 +17147,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcspbrk (Environment env) {
+    public static void wcspbrk(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -17190,12 +17164,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void wcsrchr (Environment env) {
+    public static void wcsrchr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        byte param1 ;
+        String param0;
+        byte param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getByte(t1);
@@ -17207,10 +17181,10 @@ public class APIStub {
         env.memory.setByte(t1, param1);
     }
 
-    public static void wcsrtombs (Environment env) {
+    public static void wcsrtombs(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17220,12 +17194,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcsspn (Environment env) {
+    public static void wcsspn(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -17237,12 +17211,12 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void wcsstr (Environment env) {
+    public static void wcsstr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -17254,10 +17228,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void wcstod (Environment env) {
+    public static void wcstod(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17267,10 +17241,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcstof (Environment env) {
+    public static void wcstof(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17280,14 +17254,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcstoimax (Environment env) {
+    public static void wcstoimax(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String param1 ;
-        int param2 ;
+        String param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -17301,14 +17275,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wcstok (Environment env) {
+    public static void wcstok(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String param1 ;
-        String param2 ;
+        String param0;
+        String param1;
+        String param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -17322,10 +17296,10 @@ public class APIStub {
         env.memory.setTextReference(t2, param2);
     }
 
-    public static void wcstol (Environment env) {
+    public static void wcstol(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17335,10 +17309,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcstold (Environment env) {
+    public static void wcstold(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17348,10 +17322,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcstoll (Environment env) {
+    public static void wcstoll(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17361,14 +17335,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcstombs (Environment env) {
+    public static void wcstombs(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -17382,10 +17356,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wcstoq (Environment env) {
+    public static void wcstoq(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17395,10 +17369,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcstoul (Environment env) {
+    public static void wcstoul(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17408,10 +17382,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcstoull (Environment env) {
+    public static void wcstoull(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17421,14 +17395,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcstoumax (Environment env) {
+    public static void wcstoumax(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        String param1 ;
-        int param2 ;
+        String param0;
+        String param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -17442,10 +17416,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wcstouq (Environment env) {
+    public static void wcstouq(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17455,12 +17429,12 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wcswcs (Environment env) {
+    public static void wcswcs(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        String param1 ;
+        String param0;
+        String param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getTextFromReference(t1);
@@ -17472,10 +17446,10 @@ public class APIStub {
         env.memory.setTextReference(t1, param1);
     }
 
-    public static void wcsxfrm (Environment env) {
+    public static void wcsxfrm(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17485,10 +17459,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wctob (Environment env) {
+    public static void wctob(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        int param0 ;
+        int param0;
 
         param0 = env.memory.getInt(t0);
 
@@ -17498,12 +17472,12 @@ public class APIStub {
         //env.memory.setInt(t0, param0);
     }
 
-    public static void wctomb (Environment env) {
+    public static void wctomb(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        String param0 ;
-        byte param1 ;
+        String param0;
+        byte param1;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getByte(t1);
@@ -17515,10 +17489,10 @@ public class APIStub {
         env.memory.setByte(t1, param1);
     }
 
-    public static void wctrans (Environment env) {
+    public static void wctrans(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17528,10 +17502,10 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wctype (Environment env) {
+    public static void wctype(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        String param0 ;
+        String param0;
 
         param0 = env.memory.getTextFromReference(t0);
 
@@ -17541,14 +17515,14 @@ public class APIStub {
         env.memory.setTextReference(t0, param0);
     }
 
-    public static void wmemchr (Environment env) {
+    public static void wmemchr(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte param1 ;
-        int param2 ;
+        byte[] param0;
+        byte param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -17562,14 +17536,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wmemcmp (Environment env) {
+    public static void wmemcmp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -17583,14 +17557,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wmemcpy (Environment env) {
+    public static void wmemcpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -17604,14 +17578,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wmemmove (Environment env) {
+    public static void wmemmove(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -17625,14 +17599,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wmempcpy (Environment env) {
+    public static void wmempcpy(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte[] param1 ;
-        int param2 ;
+        byte[] param0;
+        byte[] param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -17646,14 +17620,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wmemset (Environment env) {
+    public static void wmemset(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        byte[] param0 ;
-        byte param1 ;
-        int param2 ;
+        byte[] param0;
+        byte param1;
+        int param2;
 
         param2 = env.memory.getInt(t2);
         param0 = env.memory.getByteArray(t0, param2);
@@ -17667,14 +17641,14 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wordexp (Environment env) {
+    public static void wordexp(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        String param0 ;
-        IntByReference param1 ;
-        int param2 ;
+        String param0;
+        IntByReference param1;
+        int param2;
 
         param0 = env.memory.getTextFromReference(t0);
         param1 = env.memory.getIntRef(t1);
@@ -17688,10 +17662,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void wordfree (Environment env) {
+    public static void wordfree(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -17700,10 +17674,10 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void write (Environment env) {
+    public static void write(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        IntByReference param0 ;
+        IntByReference param0;
 
         param0 = env.memory.getIntRef(t0);
 
@@ -17713,14 +17687,14 @@ public class APIStub {
         env.memory.setIntReference(t0, param0.getValue());
     }
 
-    public static void writev (Environment env) {
+    public static void writev(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
         BitVec t2 = env.register.get('2');
 
-        int param0 ;
+        int param0;
         iovec param1 = new iovec();
-        int param2 ;
+        int param2;
 
         param0 = env.memory.getInt(t0);
         param1.iov_base = env.memory.getPointer(t1);
@@ -17736,10 +17710,10 @@ public class APIStub {
         //env.memory.setInt(t2, param2);
     }
 
-    public static void y0 (Environment env) {
+    public static void y0(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -17749,10 +17723,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void y0f (Environment env) {
+    public static void y0f(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -17762,10 +17736,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void y0l (Environment env) {
+    public static void y0l(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -17775,10 +17749,10 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void y1 (Environment env) {
+    public static void y1(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        double param0 ;
+        double param0;
 
         param0 = env.memory.getDouble(t0);
 
@@ -17788,10 +17762,10 @@ public class APIStub {
         //env.memory.setDouble(t0, param0);
     }
 
-    public static void y1f (Environment env) {
+    public static void y1f(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        float param0 ;
+        float param0;
 
         param0 = env.memory.getFloat(t0);
 
@@ -17801,10 +17775,10 @@ public class APIStub {
         env.memory.setFloat(t0, param0);
     }
 
-    public static void y1l (Environment env) {
+    public static void y1l(Environment env) {
         BitVec t0 = env.register.get('0');
 
-        NativeLong param0 ;
+        NativeLong param0;
 
         param0 = env.memory.getNativeLong(t0);
 
@@ -17814,12 +17788,12 @@ public class APIStub {
         //env.memory.setNativeLongt0, param0);
     }
 
-    public static void yn (Environment env) {
+    public static void yn(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        double param1 ;
+        int param0;
+        double param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getDouble(t1);
@@ -17831,12 +17805,12 @@ public class APIStub {
         //env.memory.setDouble(t1, param1);
     }
 
-    public static void ynf (Environment env) {
+    public static void ynf(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        float param1 ;
+        int param0;
+        float param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getFloat(t1);
@@ -17848,12 +17822,12 @@ public class APIStub {
         env.memory.setFloat(t1, param1);
     }
 
-    public static void ynl (Environment env) {
+    public static void ynl(Environment env) {
         BitVec t0 = env.register.get('0');
         BitVec t1 = env.register.get('1');
 
-        int param0 ;
-        NativeLong param1 ;
+        int param0;
+        NativeLong param1;
 
         param0 = env.memory.getInt(t0);
         param1 = env.memory.getNativeLong(t1);

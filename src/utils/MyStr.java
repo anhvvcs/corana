@@ -1,7 +1,7 @@
 package utils;
 
 public class MyStr {
-    private StringBuilder sb;
+    private final StringBuilder sb;
 
     public MyStr(Object... obj) {
         sb = new StringBuilder();

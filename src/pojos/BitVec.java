@@ -22,7 +22,7 @@ public class BitVec {
     }
 
     public BitVec(String sym, BitSet val) {
-        String result = (sym.matches("[01][01]+") || sym.matches("^(0x|0X|#x)?[a-fA-F0-9]+$")) ? sym: Z3Solver.solveBitVecArithmetic(sym);
+        String result = (sym.matches("[01][01]+") || sym.matches("^(0x|0X|#x)?[a-fA-F0-9]+$")) ? sym : Z3Solver.solveBitVecArithmetic(sym);
         this.sym = (!result.equals("ERROR")) ? SysUtils.normalizeNumInHex(result) : sym;
         this.val = val;
     }
@@ -85,7 +85,7 @@ public class BitVec {
 
     public void calculate() {
         String result = (getSym().matches("[01][01]+") || getSym().matches("^(0x|0X|#x)?[a-fA-F0-9]+$")) ? getSym() : Z3Solver.solveBitVecArithmetic(getSym());
-        if (!result.equals("ERROR"))  {
+        if (!result.equals("ERROR")) {
             this.setSym(result);
             this.setVal(Arithmetic.intToBitSet((int) Arithmetic.hexToInt(result)));
         }

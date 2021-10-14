@@ -5,7 +5,7 @@ public enum RoundType {
     TOWARDS_PLUS_INF("tpi"), NEAREST_EVEN("ne"),
     NEAREST_TIE("nt"), NORMAL("n");
 
-    private String s;
+    private final String s;
 
     RoundType(String s) {
         this.s = s;

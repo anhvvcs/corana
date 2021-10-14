@@ -8,7 +8,7 @@ import java.io.PrintStream;
 public class Logs {
     private static String output = "./output.out";
     private static FileWriter fileWriter;
-    private static int processNo = 0;
+    private static final int processNo = 0;
 
     public static void logFile(String name) {
         output = name;
@@ -73,6 +73,6 @@ public class Logs {
     }
 
     public static String shorten(String s) {
-        return s.length() > 100 ? s.substring(s.length()-80, s.length()) : s;
+        return s.length() > 100 ? s.substring(s.length() - 80) : s;
     }
 }

@@ -3,6 +3,7 @@ package external.handler;
 import emulator.base.Emulator;
 import executor.BinParser;
 import pojos.BitVec;
+import utils.Arithmetic;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,25 +22,30 @@ public class ExternalCall {
         // add all function interfaces to the database
         // query function name
         List<String> list = Arrays.stream(APIStub.class.getMethods()).map(s -> s.getName()).collect(Collectors.toList());
-            if (list.contains(findFunctionName(functionSym))) {
-                return true;
-            }
-        return false;
+        return list.contains(findFunctionName(functionSym));
     }
 
-    public static String findFunctionName(String jmpAddress){
-    // find Function name from jmpAddress
+    public static String findFunctionName(String jmpAddress) {
+        // find Function name from jmpAddress
+        jmpAddress = jmpAddress.contains("-") ? jmpAddress.substring(0,jmpAddress.indexOf("-")) : jmpAddress;
         List<String> prefixes = Arrays.asList("__libc");
-        String fullSym = jmpAddress.replace("#0x","");
+        String fullSym = jmpAddress.replace("#0x", "");
+        String aboveSym = Arithmetic.intToHex(Arithmetic.hexToInt(fullSym) - 1);
+        String belowSym = Arithmetic.intToHex(Arithmetic.hexToInt(fullSym) + 1);
 
         while (fullSym.length() < 8) {
             fullSym = "0" + fullSym;
         }
 
-        HashMap <String, String> tbl = BinParser.getSymbolTable();
+        HashMap<String, String> tbl = BinParser.getSymbolTable();
         String res = "";
+
         if (tbl.containsKey(fullSym)) {
             res = tbl.get(fullSym);
+        } else if (tbl.containsKey(belowSym)) {
+            res = tbl.get(belowSym);
+        } else if (tbl.containsKey(aboveSym)) {
+            res = tbl.get(aboveSym);
         }
         return res;
     }

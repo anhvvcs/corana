@@ -4,6 +4,7 @@ import com.mongodb.*;
 
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
+
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
 
@@ -12,6 +13,7 @@ import com.mongodb.client.result.UpdateResult;
 import com.mongodb.operation.UpdateOperation;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+import pojos.BitVec;
 import utils.Arithmetic;
 import utils.SysUtils;
 
@@ -22,7 +24,7 @@ public class DBDriver {
     private static MongoCollection<Document> collection;
 
     public static boolean startConnection(String collectionName) {
-        MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
         boolean load = false;
         DBDriver.database = mongoClient.getDatabase("CORANA");
         boolean collectionExists = database.listCollectionNames()
@@ -43,7 +45,10 @@ public class DBDriver {
         if (address.charAt(0) == '#') {
             hexStr = Arithmetic.intToHex(Arithmetic.hexToInt(address));
         }
-        Document result = DBDriver.collection.find(eq("address",hexStr)).limit(1).first();
+        Document result = DBDriver.collection.find(eq("address", hexStr)).limit(1).first();
+//        if (result == null) {
+//            System.out.println("");
+//        } 109c0
         return (result == null) ? "#x00000000" /* SysUtils.addSymVar()*/ : result.getString("value");
     }
 
@@ -52,12 +57,12 @@ public class DBDriver {
         if (address.charAt(0) == '#') {
             hexStr = Arithmetic.intToHex(Arithmetic.hexToInt(address));
         }
-        Document result = DBDriver.collection.find(eq("address",hexStr)).limit(1).first();
+        Document result = DBDriver.collection.find(eq("address", hexStr)).limit(1).first();
         return (result == null) ? null : result.getString("value");
     }
 
     public static String getFunctionLabel(String address) {
-        Document result =  DBDriver.collection.find(eq("address",address)).limit(1).first();
+        Document result = DBDriver.collection.find(eq("address", address)).limit(1).first();
         return (result == null) ? null : result.getString("label");
     }
 
@@ -83,7 +88,7 @@ public class DBDriver {
         //addDocument("0x01", "0xff");
         String result = "x000008e";
 
-        MongoClient mongoClient = new MongoClient( "localhost" , 27017 );
+        MongoClient mongoClient = new MongoClient("localhost", 27017);
         DBDriver.database = mongoClient.getDatabase("CORANA");
         String collectionName = "Test";
         boolean collectionExists = database.listCollectionNames()

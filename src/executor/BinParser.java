@@ -3,6 +3,7 @@ package executor;
 import capstone.Capstone;
 import elfutils.Elf;
 import elfutils.SectionHeader;
+import external.handler.APIStub;
 import pojos.AsmNode;
 import utils.Arithmetic;
 import utils.Logs;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BinParser {
     private static HashMap<String, String> symbolTable; // <hex address, symbol name>
@@ -68,11 +70,11 @@ public class BinParser {
         HashMap<String, String> symTable = new HashMap<>();
         for (String line : resultLines) {
             String[] contents = line.split("\\s+");
-            if (contents.length == 6) {
+            if (contents.length >= 6) {
                 if (!symTable.containsKey(contents[0])) {
-                    symTable.put(contents[0], contents[5].trim()); // e.g. 00014fa0 printf
+                    symTable.put(contents[0], contents[contents.length-1].trim()); // e.g. 00014fa0 printf
                 } else {
-                    if (!contents[5].contains("_")) {
+                    if (!contents[5].contains("_") && !contents[5].equals(".hidden")) {
                         symTable.put(contents[0], contents[5].trim());
                     }
                 }
@@ -209,6 +211,28 @@ public class BinParser {
         _start = Arithmetic.hexToInt(hexstart);
     }
 
+    public static List<String> getExternalFunctions(String binpath) {
+        String objCmd = "nm -g -C " + binpath;
+        String exRes = SysUtils.execCmd(objCmd);
+        List<String> externalFuncs = new ArrayList<>();
+        String[] resultLines = exRes.split("\n");
+
+        for (String line : resultLines) {
+            String[] ls = line.split(" ");
+            if (ls.length > 2) {
+                externalFuncs.add(ls[2]);
+            }
+        }
+        List<String> alllist = Arrays.stream(APIStub.class.getMethods()).map(s -> s.getName()).collect(Collectors.toList());
+        List<String> res = new ArrayList<>();
+        for (String func : externalFuncs) {
+            if (alllist.contains(func)) {
+                res.add(func);
+            }
+        }
+        return res;
+    }
+
     public static List<String> getInternalSymbols(String binpath) {
         String objCmd = "nm -g -C " + binpath;
         String exRes = SysUtils.execCmd(objCmd);
@@ -236,7 +260,6 @@ public class BinParser {
         }
         return inFuncs;
     }
-
 
 
     public static ArrayList<AsmNode> parseObjDump(String inp) {

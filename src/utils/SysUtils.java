@@ -69,17 +69,18 @@ public class SysUtils {
     }
 
     public static String getAddressValue(String hexStr) {
-        return hexStr.replace("x", "")
-                .replace("#", "")
+        if (hexStr.charAt(0) == 'x') hexStr = hexStr.substring(1, hexStr.length());
+        return hexStr.replace("#", "")
                 .replaceFirst("^0+(?!$)", "");
     }
 
     public static String addSymVar() {
-        String var = "sym" + String.valueOf(count);
+        String var = "sym" + count;
         Mapping.intToSymVariable.put(count, var);
         count = count + 1;
         return var;
     }
+
     public static int getCountSyms() {
         return count;
     }

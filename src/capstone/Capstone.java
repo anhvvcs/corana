@@ -92,10 +92,10 @@ public class Capstone {
     }
 
     public static class CsInsn {
-        private NativeLong csh;
-        private CS cs;
-        private _cs_insn raw;
-        private int arch;
+        private final NativeLong csh;
+        private final CS cs;
+        private final _cs_insn raw;
+        private final int arch;
 
         // instruction ID.
         public int id;
@@ -158,42 +158,42 @@ public class Capstone {
                 case CS_ARCH_ARM:
                     detail.arch.setType(Arm.UnionOpInfo.class);
                     detail.arch.read();
-                    op_info = new Arm.OpInfo((Arm.UnionOpInfo) detail.arch.arm);
+                    op_info = new Arm.OpInfo(detail.arch.arm);
                     break;
                 case CS_ARCH_ARM64:
                     detail.arch.setType(Arm64.UnionOpInfo.class);
                     detail.arch.read();
-                    op_info = new Arm64.OpInfo((Arm64.UnionOpInfo) detail.arch.arm64);
+                    op_info = new Arm64.OpInfo(detail.arch.arm64);
                     break;
                 case CS_ARCH_MIPS:
                     detail.arch.setType(Mips.UnionOpInfo.class);
                     detail.arch.read();
-                    op_info = new Mips.OpInfo((Mips.UnionOpInfo) detail.arch.mips);
+                    op_info = new Mips.OpInfo(detail.arch.mips);
                     break;
                 case CS_ARCH_X86:
                     detail.arch.setType(X86.UnionOpInfo.class);
                     detail.arch.read();
-                    op_info = new X86.OpInfo((X86.UnionOpInfo) detail.arch.x86);
+                    op_info = new X86.OpInfo(detail.arch.x86);
                     break;
                 case CS_ARCH_SPARC:
                     detail.arch.setType(Sparc.UnionOpInfo.class);
                     detail.arch.read();
-                    op_info = new Sparc.OpInfo((Sparc.UnionOpInfo) detail.arch.sparc);
+                    op_info = new Sparc.OpInfo(detail.arch.sparc);
                     break;
                 case CS_ARCH_SYSZ:
                     detail.arch.setType(Systemz.UnionOpInfo.class);
                     detail.arch.read();
-                    op_info = new Systemz.OpInfo((Systemz.UnionOpInfo) detail.arch.sysz);
+                    op_info = new Systemz.OpInfo(detail.arch.sysz);
                     break;
                 case CS_ARCH_PPC:
                     detail.arch.setType(Ppc.UnionOpInfo.class);
                     detail.arch.read();
-                    op_info = new Ppc.OpInfo((Ppc.UnionOpInfo) detail.arch.ppc);
+                    op_info = new Ppc.OpInfo(detail.arch.ppc);
                     break;
                 case CS_ARCH_XCORE:
                     detail.arch.setType(Xcore.UnionOpInfo.class);
                     detail.arch.read();
-                    op_info = new Xcore.OpInfo((Xcore.UnionOpInfo) detail.arch.xcore);
+                    op_info = new Xcore.OpInfo(detail.arch.xcore);
                     break;
                 default:
             }
@@ -371,15 +371,15 @@ public class Capstone {
     private static final CsInsn[] EMPTY_INSN = new CsInsn[0];
 
     protected NativeStruct ns; // for memory retention
-    private CS cs;
+    private final CS cs;
     public int arch;
     public int mode;
     private int syntax;
     private int detail;
-    private boolean diet;
+    private final boolean diet;
 
     public Capstone(int arch, int mode) {
-        cs = (CS) Native.loadLibrary("capstone", CS.class);
+        cs = Native.loadLibrary("capstone", CS.class);
         int version = cs.cs_version(null, null);
         if (version != (CS_API_MAJOR << 8) + CS_API_MINOR) {
             throw new RuntimeException("Different API version between core & binding (CS_ERR_VERSION)");

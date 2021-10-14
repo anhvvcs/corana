@@ -35,13 +35,11 @@ public class Z3Solver {
             if (result != null) {
                 if (result.contains("ERR0R") || result.contains("error")) {
                     return artm;
-                }
-                else {
+                } else {
                     return result.split("\n")[0];
                 }
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
 //            System.err.println("Command length: "+ Configs.tempZ3Script.length());
         }
         return "ERROR";
@@ -79,7 +77,7 @@ public class Z3Solver {
      */
     public static String checkSAT(String pathConstrain, String eval) {
         try {
-            Logs.info("\t-> Checking path constrains by Z3",  "... ", Logs.shorten(pathConstrain));
+            Logs.info("\t-> Checking path constrains by Z3", "... ", Logs.shorten(pathConstrain));
 
             ArrayList<String> bvVars = new ArrayList<>(Mapping.regStrToChar.keySet());
             bvVars.addAll(new ArrayList<>(Mapping.intToSymVariable.values()));

@@ -9,6 +9,7 @@ public class Typedef {
             super(32);
         }
     }
+
     public class clockid_t extends IntegerType {
         public clockid_t() {
             super(32);

@@ -6,7 +6,6 @@ import emulator.semantics.Memory;
 import executor.Configs;
 import executor.DBDriver;
 import external.handler.APIStub;
-import org.junit.Test;
 import pojos.BitVec;
 import utils.Arithmetic;
 
@@ -95,20 +94,21 @@ public class StubTest {
 //            break;
 //        }
         try {
-                Method stubMethod = APIStub.class.getMethod(function, Environment.class);
-                stubMethod.setAccessible(true);
-                Environment tc = testcase;
-                //System.out.println(tc);
-                stubMethod.invoke(null, tc);
-                System.out.println(tc.register.get('0'));
+            Method stubMethod = APIStub.class.getMethod(function, Environment.class);
+            stubMethod.setAccessible(true);
+            Environment tcEnv = testcase;
+            //System.out.println(tc);
+            stubMethod.invoke(null, tcEnv);
+            System.out.println(tcEnv.register.get('0'));
 
-            } catch (Exception e) {
-                System.out.println(e);
-            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
+
     public static void main(String[] args) {
         List<Environment> envs = StubTest.readJson("./resources/connect_test.json");
-        for (Environment testcase: envs) {
+        for (Environment testcase : envs) {
             StubTest.run("connect", testcase);
             break;
         }

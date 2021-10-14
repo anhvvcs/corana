@@ -26,34 +26,30 @@ public class Process {
     }
 
     public void run() {
-        //Instantiating the File class
         //File file = new File("./stream_"+Corana.inpFile+"_"+Arithmetic.intToHex(Integer.valueOf(startAddress))+".txt");
         //Instantiating the PrintStream class
         try {
-
-            //while (!Thread.currentThread().isInterrupted()) {
-                //Thread.sleep(10);
 //                PrintStream stream = new PrintStream(file);
 //                System.setOut(stream);
-                // TODO: Start from asmNodes.get(_start), not the first node
-                if (variation == Variation.M0) {
-                    Executor.execFrom(new M0(env), genesis, startAddress);
-                    //execFrom(new M0(env), genesis.label, String.valueOf(Arithmetic.hexToInt("0000e854")));
-                } else if (variation == Variation.M0_PLUS) {
-                    Executor.execFrom(new M0_Plus(env), genesis, startAddress);
-                } else if (variation == Variation.M3) {
-                    Executor.execFrom(new M3(env), genesis, startAddress);
-                } else if (variation == Variation.M4) {
-                    Executor.execFrom(new M4(env), genesis, startAddress);
-                } else if (variation == Variation.M7) {
-                    Executor.execFrom(new M7(env), genesis, startAddress);
-                } else if (variation == Variation.M33) {
-                    Executor.execFrom(new M33(env), genesis, startAddress);
-                } else {
-                    Logs.infoLn("-> Unsupported ARM Variation.");
-                    return;
-                }
-                Executor.gg();
+            // TODO: Start from asmNodes.get(_start), not the first node
+            if (variation == Variation.M0) {
+                Executor.execFrom(new M0(env), genesis, startAddress);
+                //execFrom(new M0(env), genesis.label, String.valueOf(Arithmetic.hexToInt("0000e854")));
+            } else if (variation == Variation.M0_PLUS) {
+                Executor.execFrom(new M0_Plus(env), genesis, startAddress);
+            } else if (variation == Variation.M3) {
+                Executor.execFrom(new M3(env), genesis, startAddress);
+            } else if (variation == Variation.M4) {
+                Executor.execFrom(new M4(env), genesis, startAddress);
+            } else if (variation == Variation.M7) {
+                Executor.execFrom(new M7(env), genesis, startAddress);
+            } else if (variation == Variation.M33) {
+                Executor.execFrom(new M33(env), genesis, startAddress);
+            } else {
+                Logs.infoLn("-> Unsupported ARM Variation.");
+                return;
+            }
+            Executor.gg();
             //}
         } catch (Exception e) {
             //Thread.currentThread().interrupt();
