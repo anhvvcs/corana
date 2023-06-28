@@ -1,5 +1,6 @@
 package pojos;
 
+import com.sun.jna.NativeLong;
 import utils.Arithmetic;
 
 import java.util.BitSet;
@@ -27,7 +28,14 @@ public class BitVec {
         this.sym = Arithmetic.intToHexSmt(n);
         this.val = Arithmetic.intToBitSet(n);
     }
-
+    public BitVec(NativeLong n) {
+        this.sym = Arithmetic.intToHexSmt(n.longValue());
+        this.val = Arithmetic.longToBitSet(n.longValue());
+    }
+    public BitVec(Long n) {
+        this.sym = Arithmetic.intToHexSmt(n);
+        this.val = Arithmetic.longToBitSet(n);
+    }
     public String getSym() {
         return sym;
     }

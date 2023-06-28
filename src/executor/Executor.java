@@ -7,16 +7,13 @@ import emulator.cortex.*;
 import emulator.semantics.EnvModel;
 import emulator.semantics.Environment;
 import enums.Variation;
-import javafx.util.Pair;
+
 import pojos.AsmNode;
 import pojos.BitVec;
 import utils.*;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Stack;
+import java.util.*;
 
 public class Executor {
 
@@ -27,8 +24,8 @@ public class Executor {
     private static int loopLimitation = 5;
     private static HashMap<String, Integer> countJumpedPair = new HashMap<>();
     private static HashMap<String, EnvModel> labelToEnvModel = new HashMap<>();
-    private static Stack<Pair<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
-    private static Pair<EnvModel, HashMap<String, EnvModel>> recentPop = null;
+    protected static Stack<Map.Entry<EnvModel, HashMap<String, EnvModel>>> envStack = new Stack<>();
+    protected static Map.Entry<EnvModel, HashMap<String, EnvModel>> recentPop = null;
     private static String triggerPrevLabelTwoUnsat = null;
 
     private static long startTime;
@@ -168,7 +165,7 @@ public class Executor {
                 } else { 
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
-                Pair<EnvModel, EnvModel> envPair;
+                Map.Entry<EnvModel, EnvModel> envPair;
                 switch (opcode) {
                     case "b":
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
@@ -1120,7 +1117,7 @@ public class Executor {
                 } else { 
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
-                Pair<EnvModel, EnvModel> envPair;
+                Map.Entry<EnvModel, EnvModel> envPair;
                 switch (opcode) {
                     case "b":
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
@@ -2072,7 +2069,7 @@ public class Executor {
                 } else {
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
-                Pair<EnvModel, EnvModel> envPair;
+                Map.Entry<EnvModel, EnvModel> envPair;
                 switch (opcode) {
                     case "b":
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
@@ -3052,7 +3049,7 @@ public class Executor {
                 } else { 
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
-                Pair<EnvModel, EnvModel> envPair;
+                Map.Entry<EnvModel, EnvModel> envPair;
                 switch (opcode) {
                     case "b":
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
@@ -4030,7 +4027,7 @@ public class Executor {
                 } else { 
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
-                Pair<EnvModel, EnvModel> envPair;
+                Map.Entry<EnvModel, EnvModel> envPair;
                 switch (opcode) {
                     case "b":
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
@@ -5008,7 +5005,7 @@ public class Executor {
                 } else { 
                     charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
                 }
-                Pair<EnvModel, EnvModel> envPair;
+                Map.Entry<EnvModel, EnvModel> envPair;
                 switch (opcode) {
                     case "b":
                         envPair = emulator.b(preCond, condSuffix, strLabel == null ? charLabel : strLabel);
@@ -5958,7 +5955,8 @@ public class Executor {
         }
     }
 
-    private static void decideToJump(EnvModel modelTrue, EnvModel modelFalse) {
+    //labelToEnvModel: EnvModel is never changed???
+    protected static void decideToJump(EnvModel modelTrue, EnvModel modelFalse) {
         Gson gson = new Gson();
         String jsonString = gson.toJson(labelToEnvModel);
         Type type = new TypeToken<HashMap<String, EnvModel>>() {
@@ -5966,19 +5964,19 @@ public class Executor {
         HashMap<String, EnvModel> clonedMap = gson.fromJson(jsonString, type);
         if (modelFalse != null && labelToEnvModel.containsKey(modelFalse.label)) {
             if (modelFalse.label != null) {
-                envStack.push(new Pair<>(new EnvModel(modelFalse), clonedMap));
+                envStack.push(Pair.of(new EnvModel(modelFalse), clonedMap));
             }
         }
         if (modelTrue != null && labelToEnvModel.containsKey(modelTrue.label)) {
             if (modelTrue.label != null) {
-                envStack.push(new Pair<>(new EnvModel(modelTrue), clonedMap));
+                envStack.push(Pair.of(new EnvModel(modelTrue), clonedMap));
             }
         }
         if (envStack.empty()) gg();
-        Pair<EnvModel, HashMap<String, EnvModel>> model = envStack.pop();
+        Map.Entry<EnvModel, HashMap<String, EnvModel>> model = envStack.pop();
         recentPop = model;
-        jumpTo = model.getKey().label; 
-        labelToEnvModel = model.getValue(); 
+        jumpTo = model.getKey().label;
+        labelToEnvModel = model.getValue();
         if ((modelTrue == null || modelTrue.label == null || !jumpTo.equals(modelTrue.label))
                 && (modelFalse == null || modelFalse.label == null || !jumpTo.equals(modelFalse.label))) {
             String triggerPrevLabelTwoUnsat = prevInst(jumpTo);

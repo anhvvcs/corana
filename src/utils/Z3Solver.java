@@ -1,15 +1,22 @@
 package utils;
 
+import emulator.semantics.Environment;
 import emulator.semantics.Flags;
+import emulator.semantics.Register;
 import executor.Configs;
+import pojos.BitVec;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Z3Solver {
-
+    private static String predefinedFuncs;
+    public static void init() {
+        predefinedFuncs = getPredefinedFunctions();
+    }
     private static String getPredefinedFunctions() {
         MyStr smtDeclarations = new MyStr();
         try {
@@ -25,6 +32,86 @@ public class Z3Solver {
         return smtDeclarations.value();
     }
 
+    /**
+     * Get SMT formula for each instruction for semantic checking
+     * @param pathConstrain
+     * @param env
+     * @return
+     */
+    public static String getSMTFormula(String pathConstrain, Environment env) {
+        String fileSuffix = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        Logs.info("\t-> Checking path constrains by Z3", "... ", Logs.shorten(pathConstrain), " ");
+        //ArrayList<String> bvVars = new ArrayList<>();
+        ArrayList<String> bvVars = new ArrayList<>(Mapping.regStrToChar.keySet());
+
+        ArrayList<String> boolVars = new ArrayList<>();
+        Field[] fields = Flags.class.getFields();
+        for (Field f : fields) {
+            boolVars.add(f.getName().toLowerCase() + "_SYM");
+        }
+
+        String declaration = declareRegister(env, pathConstrain);
+        String finalConstraint = pathConstrain.equals("") ? "" : "(assert " + pathConstrain + ")";
+        String z3Clause = predefinedFuncs + declaration.replace("$mainAssert", finalConstraint);
+        return z3Clause;
+    }
+    private static List<String> getAllSymVars(Register registers) {
+        List<String> result = new ArrayList<>();
+        for (Character key : registers.regs.keySet()){
+            String slot = registers.regs.get(key).toString();
+            result.addAll(Arrays.asList(slot.split(" ")).stream().filter(word -> word.contains("SYM"))
+                    .collect(Collectors.toList()));
+        }
+        List<String> resultWithoutDuplicates = new ArrayList<>(new HashSet<>(result));
+        return resultWithoutDuplicates;
+    }
+    private static List<String> getAllMemVars(String pathConstraints) {
+        List<String> result = new ArrayList<>();
+
+        result.addAll(Arrays.asList(pathConstraints.split("\\s+|\\(|\\)|not")).stream().filter(word -> word.contains("MEM"))
+                .collect(Collectors.toList()));
+
+        List<String> resultWithoutDuplicates = new ArrayList<>(new HashSet<>(result));
+        return resultWithoutDuplicates;
+    }
+    private static List<String> getAllSymVars(String pathConstraints) {
+        List<String> result = new ArrayList<>();
+
+        result.addAll(Arrays.asList(pathConstraints.split("\\s+|\\(|\\)|not")).stream().filter(word -> word.contains("SYM"))
+                .collect(Collectors.toList()));
+
+        List<String> resultWithoutDuplicates = new ArrayList<>(new HashSet<>(result));
+        return resultWithoutDuplicates;
+    }
+    private static String declareRegister(Environment env, String pc) {
+        MyStr str = new MyStr();
+//        for (String v : Mapping.regStrToChar.keySet()) {
+//            str.append("(declare-const " + v + " (_ BitVec 32))\n");
+//        }
+        ArrayList<String> boolVars = new ArrayList<>();
+        Field[] fields = Flags.class.getFields();
+        for (Field f : fields) {
+            boolVars.add(f.getName().toLowerCase() + "_SYM");
+        }
+        for (String v : boolVars) {
+            str.append("(declare-const " + v + " Bool)\n");
+        }
+        ArrayList<String> allSym = new ArrayList<>(getAllMemVars(str.value()));
+        for (String v : allSym) {
+            str.append("(declare-const " + v + " Bool)\n");
+        }
+        for (Character v: env.register.regs.keySet()) {
+            if (((BitVec) env.register.regs.get(v)).getSym().equals(Mapping.regCharToStr.get(v) + "_SYM")) {
+                str.append("(declare-const " + Mapping.regCharToStr.get(v) + "_SYM " + " (_ BitVec 32))\n");
+            } else {
+                str.append("(declare-fun " + Mapping.regCharToStr.get(v) + "_SYM (_ BitVec 32) " + ((BitVec) env.register.regs.get(v)).getSym() + ")\n");
+            }
+        }
+
+        str.append("$mainAssert\n", "(check-sat)\n");
+        str.append("(get-model)\n");
+        return str.value();
+    }
     /**
      * Declare needed variables and which value we need to obtain if SAT
      *

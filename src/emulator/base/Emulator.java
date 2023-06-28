@@ -5,15 +5,11 @@ import emulator.semantics.EnvData;
 import emulator.semantics.EnvModel;
 import emulator.semantics.Environment;
 import enums.*;
-import javafx.util.Pair;
 import pojos.BitBool;
 import pojos.BitVec;
-import utils.Arithmetic;
-import utils.Logs;
-import utils.Mapping;
-import utils.Z3Solver;
-
+import utils.*;
 import java.util.BitSet;
+import java.util.Map;
 import java.util.Objects;
 
 public class Emulator {
@@ -116,30 +112,32 @@ public class Emulator {
      * @param label: target
      * @return true branch and false branch, each is represented by a graph node
      */
-    public Pair<EnvModel, EnvModel> b(String preCond, Character cond, Object label) {
+    public Map.Entry<EnvModel, EnvModel> b(String preCond, Character cond, Object label) {
         if (label instanceof String) {
             String finalLabel = (String) label;
-            Logs.info("\t-> Direct Jump to", finalLabel, "if", Mapping.condCharToStr.get(cond), "\n");
+            if (cond != null) Logs.info("\t-> Direct Jump to", finalLabel, "if", Mapping.condCharToStr.get(cond), "\n");
+            else Logs.info("\t-> Direct Jump to", finalLabel, "\n");
             EnvModel modelTrue = checkPosCond(preCond, cond);
             EnvModel modelFalse = checkNegCond(preCond, cond);
-            return new Pair<>(modelTrue, modelFalse);
+            return Pair.of(modelTrue, modelFalse);
         } else if (label instanceof Character) {
             Character finalLabel = (Character) label;
-            Logs.info("\t-> Indirect Jump to", Mapping.regCharToStr.get(finalLabel), "if", Mapping.condCharToStr.get(cond), "\n");
+            if (cond != null)  Logs.info("\t-> Indirect Jump to", Mapping.regCharToStr.get(finalLabel), "if", Mapping.condCharToStr.get(cond), "\n");
+            else Logs.info("\t-> Indirect Jump to", Mapping.regCharToStr.get(finalLabel), "\n");
             EnvModel modelTrue = checkPosCond(preCond, cond, val(finalLabel).getSym());
             EnvModel modelFalse = checkNegCond(preCond, cond, val(finalLabel).getSym());
-            return new Pair<>(modelTrue, modelFalse);
+            return Pair.of(modelTrue, modelFalse);
         }
         Logs.infoLn("+ Wrong type of label!");
         return null;
     }
 
-    public Pair<EnvModel, EnvModel> bl(int nextLabel, String preCond, Character cond, Object label) {
+    public Map.Entry<EnvModel, EnvModel> bl(int nextLabel, String preCond, Character cond, Object label) {
         write('l', new BitVec(nextLabel));
         return b(preCond, cond, label);
     }
 
-    public Pair<EnvModel, EnvModel> bx(String preCond, Character cond, Object label) {
+    public Map.Entry<EnvModel, EnvModel> bx(String preCond, Character cond, Object label) {
         return b(preCond, cond, label);
     }
 
