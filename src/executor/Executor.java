@@ -371,47 +371,67 @@ public class Executor {
                     }
                     emulator.eor(p0, p1, p2, im, extType, extraChar, extraNum, suffix);
                 }
-            } else if ("add".equals(opcode)) {
-                Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
-                Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
-                Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
-                Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
-                if (arrParams.length == 3) {
-                    emulator.add(p0, p1, p2, im, suffix);
+            } else if ("add".equals(opcode)) { //FIX:2022/08/22
+                Character p0;
+                Character p1 ;
+                Integer im ;
+                Character p2;
+                if (arrParams.length < 3) {
+                    p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
+                    im = arrParams[1].contains("#") ? SysUtils.normalizeNumInParam(arrParams[1].trim()) : null;
+                    emulator.add(p0, p0, null, im, suffix);
                 } else {
-                    String[] extArr = arrParams[3].split("\\s+");
-                    String extType = extArr[0];
-                    Integer extraNum = null;
-                    Character extraChar = null;
-                    if (extArr.length > 1) {
-                        if (extArr[1].contains("#")) {
-                            extraNum = Integer.parseInt(extArr[1].replace("#", ""));
-                        } else {
-                            extraChar = Mapping.regStrToChar.get(SysUtils.normalizeRegName(extArr[1]));
+                    p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
+                    p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
+                    im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
+                    p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
+                    if (arrParams.length == 3) {
+                        emulator.add(p0, p1, p2, im, suffix);
+                    } else {
+                        String[] extArr = arrParams[3].split("\\s+");
+                        String extType = extArr[0];
+                        Integer extraNum = null;
+                        Character extraChar = null;
+                        if (extArr.length > 1) {
+                            if (extArr[1].contains("#")) {
+                                extraNum = Integer.parseInt(extArr[1].replace("#", ""));
+                            } else {
+                                extraChar = Mapping.regStrToChar.get(SysUtils.normalizeRegName(extArr[1]));
+                            }
                         }
+                        emulator.add(p0, p1, p2, im, extType, extraChar, extraNum, suffix);
                     }
-                    emulator.add(p0, p1, p2, im, extType, extraChar, extraNum, suffix);
                 }
-            } else if ("sub".equals(opcode)) {
-                Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
-                Character p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
-                Integer im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
-                Character p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
-                if (arrParams.length == 3) {
-                    emulator.sub(p0, p1, p2, im, suffix);
+            } else if ("sub".equals(opcode)) { //FIX:2022/08/22
+                Character p0;
+                Character p1 ;
+                Integer im ;
+                Character p2;
+                if (arrParams.length < 3) {
+                    p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
+                    im = arrParams[1].contains("#") ? SysUtils.normalizeNumInParam(arrParams[1].trim()) : null;
+                    emulator.sub(p0, p0, null, im, suffix);
                 } else {
-                    String[] extArr = arrParams[3].split("\\s+");
-                    String extType = extArr[0];
-                    Integer extraNum = null;
-                    Character extraChar = null;
-                    if (extArr.length > 1) {
-                        if (extArr[1].contains("#")) {
-                            extraNum = Integer.parseInt(extArr[1].replace("#", ""));
-                        } else {
-                            extraChar = Mapping.regStrToChar.get(SysUtils.normalizeRegName(extArr[1]));
+                    p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
+                    p1 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[1].trim()));
+                    im = arrParams[2].contains("#") ? SysUtils.normalizeNumInParam(arrParams[2].trim()) : null;
+                    p2 = arrParams[2].contains("#") ? null : Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[2].trim()));
+                    if (arrParams.length == 3) {
+                        emulator.sub(p0, p1, p2, im, suffix);
+                    } else {
+                        String[] extArr = arrParams[3].split("\\s+");
+                        String extType = extArr[0];
+                        Integer extraNum = null;
+                        Character extraChar = null;
+                        if (extArr.length > 1) {
+                            if (extArr[1].contains("#")) {
+                                extraNum = Integer.parseInt(extArr[1].replace("#", ""));
+                            } else {
+                                extraChar = Mapping.regStrToChar.get(SysUtils.normalizeRegName(extArr[1]));
+                            }
                         }
+                        emulator.sub(p0, p1, p2, im, extType, extraChar, extraNum, suffix);
                     }
-                    emulator.sub(p0, p1, p2, im, extType, extraChar, extraNum, suffix);
                 }
             } else if ("cmp".equals(opcode)) {
                 Character p0 = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
@@ -465,9 +485,43 @@ public class Executor {
                     p = p.replace("{", "").replace("}", "");
                     Character c = Mapping.regStrToChar.get(SysUtils.normalizeRegName(p));
                     emulator.pop(c);
+                    //TODO: fix PC jump
+                    if (c.equals('p')) {
+                        String preCond = recentPop == null ? "" : recentPop.getKey().pathCondition;
+                        if (preCond.length() > 5000) preCond = "";
+
+                        BitVec pcValue = emulator.getEnv().register.get('p');
+                        if (Arithmetic.hexToInt(pcValue.getSym()) > 1000) {
+                            jumpFrom = nLabel;
+
+                            EnvModel thisEnvModel = new EnvModel(jumpFrom, preCond);
+                            labelToEnvModel.put(thisEnvModel.label, thisEnvModel);
+
+                            String strLabel = null;
+                            Character charLabel = null;
+
+                            strLabel = String.valueOf(Arithmetic.hexToInt(pcValue.getSym().replace("#0x", "").replace("0x", "")));
+                            charLabel = Mapping.regStrToChar.get(SysUtils.normalizeRegName(arrParams[0].trim()));
+
+                            Map.Entry<EnvModel, EnvModel> envPair;
+                            envPair = emulator.b(preCond, null, strLabel == null ? charLabel : strLabel);
+                            EnvModel modelTrue = envPair.getKey();
+                            EnvModel modelFalse = envPair.getValue();
+                            // If it is a direct jump
+                            if (modelTrue != null && modelTrue.envData != null) {
+                                Logs.infoLn("\t ==+ PC jump to: " + pcValue.getSym());
+                                modelTrue.label = strLabel;
+                                modelTrue.prevLabel = prevLabel;
+                                labelToEnvModel.put(modelTrue.label, modelTrue);
+                            }
+                            pcJump(modelTrue, modelFalse);
+                        }
+
+                    }
                 }
             } else if ("push".equals(opcode)) {
-                for (String p : arrParams) {
+                for (int i = arrParams.length - 1; i >= 0; i--) {
+                    String p = arrParams[i];
                     p = p.replace("{", "").replace("}", "");
                     Character c = Mapping.regStrToChar.get(SysUtils.normalizeRegName(p));
                     emulator.push(c);
@@ -5989,7 +6043,29 @@ public class Executor {
     private static boolean isARM(String inpFile) {
         return Objects.requireNonNull(SysUtils.execCmd("file " + inpFile)).contains("ARM");
     }
-    
+    protected static void pcJump(EnvModel modelTrue, EnvModel modelFalse) {
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(labelToEnvModel);
+        Type type = new TypeToken<HashMap<String, EnvModel>>() {
+        }.getType();
+        HashMap<String, EnvModel> clonedMap = gson.fromJson(jsonString, type);
+        if (modelTrue != null && labelToEnvModel.containsKey(modelTrue.label)) {
+            if (modelTrue.label != null) {
+                envStack.push(Pair.of(new EnvModel(modelTrue), clonedMap));
+            }
+        }
+        if (envStack.empty()) gg();
+        Map.Entry<EnvModel, HashMap<String, EnvModel>> model = envStack.pop();
+        recentPop = model;
+        jumpTo = model.getKey().label;
+        labelToEnvModel = model.getValue();
+        if ((modelTrue == null || modelTrue.label == null || !jumpTo.equals(modelTrue.label))
+                && (modelFalse == null || modelFalse.label == null || !jumpTo.equals(modelFalse.label))) {
+            String triggerPrevLabelTwoUnsat = prevInst(jumpTo);
+            if (Integer.parseInt(triggerPrevLabelTwoUnsat) < 0) gg();
+            Logs.infoLn("-----> Recursively roll back to the parent branch: " + jumpTo);
+        }
+    }
     private static String nextInst(String label) {
         return label.contains("-") ? label.replace("-", "+") : String.valueOf(Integer.parseInt(label) + 4);
     }
