@@ -15,6 +15,12 @@ public class Environment {
     public Stacks stacks;
     public Random generator;
 
+    public Environment(Environment env) {
+        this.flags = env.flags;
+        this.register = env.register;
+        this.memory = env.memory;
+        this.stacks = env.stacks;
+    }
     public Environment(boolean n, boolean z, boolean c, boolean v, boolean q, boolean ge, BitSet r0, BitSet r1, BitSet r2, BitSet r3, BitSet r4, BitSet r5, BitSet r6,
                        BitSet r7, BitSet r8, BitSet r9, BitSet r10, BitSet r11, BitSet r12, BitSet sp, BitSet lr, BitSet pc) {
         flags = new Flags(n, z, c, v, q, ge);

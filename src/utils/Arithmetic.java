@@ -8,9 +8,11 @@ import java.util.BitSet;
 public class Arithmetic {
 
     public static long hexToInt(String hex) {
+        if (hex.contains("SYM")) return -1;
         if (hex.contains("-0x")) return -Long.parseLong(hex.substring(3), 16);
-        return Long.parseLong(hex.contains("0x") ? hex.substring(2) : hex, 16);
+        return Long.parseLong(hex.contains("0x") || hex.contains("#x") ? hex.substring(2) : hex, 16);
     }
+
 
     public static String floatToHexSmt(float l) {
         StringBuilder hex = new StringBuilder(Arithmetic.intToHex((int) l));

@@ -6,6 +6,7 @@ import emulator.semantics.Register;
 import executor.Configs;
 import pojos.BitVec;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -33,6 +34,36 @@ public class Z3Solver {
     }
 
     /**
+     *
+     * @Va
+     */
+    public static String solveBitVecArithmetic(String artm) {
+        String z3Clause = "(simplify " + artm + ")";
+        String fileSuffix = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+        if (artm.length() > 100) return "ERROR";
+        try {
+            File tempScript = File.createTempFile("z3_script_"+fileSuffix, ".smt");
+            String tempZ3Script = tempScript.getAbsolutePath();
+            FileUtils.write(tempZ3Script, z3Clause);
+
+            String result = SysUtils.execCmd("z3 -smt2 " + tempZ3Script);
+
+            FileUtils.delete(tempZ3Script);
+            if (result != null) {
+                if (result.contains("ERR0R") || result.contains("error")) {
+                    return artm;
+                } else {
+                    return result.split("\n")[0];
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "ERROR";
+            //System.err.println("Command length: "+ tempZ3Script.length());
+        }
+        return "ERROR";
+    }
+    /**
      * Get SMT formula for each instruction for semantic checking
      * @param pathConstrain
      * @param env
@@ -40,7 +71,6 @@ public class Z3Solver {
      */
     public static String getSMTFormula(String pathConstrain, Environment env) {
         String fileSuffix = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        Logs.info("\t-> Checking path constrains by Z3", "... ", Logs.shorten(pathConstrain), " ");
         //ArrayList<String> bvVars = new ArrayList<>();
         ArrayList<String> bvVars = new ArrayList<>(Mapping.regStrToChar.keySet());
 
@@ -143,28 +173,36 @@ public class Z3Solver {
      * @return raw result returned by Z3 if SAT, null if UNSAT
      */
     public static String checkSAT(String pathConstrain, String eval) {
-        Logs.info("\t-> Checking path constrains by Z3", Logs.shorten(pathConstrain), "... ");
-
-        ArrayList<String> bvVars = new ArrayList<>(Mapping.regStrToChar.keySet());
-        ArrayList<String> boolVars = new ArrayList<>();
-        Field[] fields = Flags.class.getFields();
-        for (Field f : fields) {
-            boolVars.add(f.getName().toLowerCase());
-        }
-
-        String declaration = declareEvalAndVars(eval, bvVars, boolVars);
-        String finalConstraint = pathConstrain.equals("") ? "" : "(assert " + pathConstrain + ")";
-        String z3Clause = getPredefinedFunctions() + declaration.replace("$mainAssert", finalConstraint);
-        FileUtils.write(Configs.tempZ3Script, z3Clause);
-        String result = SysUtils.execCmd("z3 -smt2 " + Configs.tempZ3Script);
-        FileUtils.delete(Configs.tempZ3Script);
-        if (result != null) {
-            if (result.split("\n")[0].equalsIgnoreCase("sat")) {
-                Logs.infoLn("SAT");
-                return result;
+        try {
+            Logs.info("\t-> Checking path constrains by Z3", Logs.shorten(pathConstrain), "... ");
+            String fileSuffix = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            ArrayList<String> bvVars = new ArrayList<>(Mapping.regStrToChar.keySet());
+            ArrayList<String> boolVars = new ArrayList<>();
+            Field[] fields = Flags.class.getFields();
+            for (Field f : fields) {
+                boolVars.add(f.getName().toLowerCase());
             }
+
+            String declaration = declareEvalAndVars(eval, bvVars, boolVars);
+            String finalConstraint = pathConstrain.equals("") ? "" : "(assert " + pathConstrain + ")";
+            String z3Clause = getPredefinedFunctions() + declaration.replace("$mainAssert", finalConstraint);
+            File tempScript = File.createTempFile("z3_script_" + fileSuffix, ".smt");
+            String tempZ3Script = tempScript.getAbsolutePath();
+            FileUtils.write(tempZ3Script, z3Clause);
+            String result = SysUtils.execCmd("z3 -smt2 -T:1 " + tempZ3Script);
+            FileUtils.delete(tempZ3Script);
+
+            if (result != null) {
+                if (result.split("\n")[0].equalsIgnoreCase("sat")) {
+                    Logs.infoLn("SAT");
+                    return result;
+                }
+            }
+            Logs.infoLn("UNSAT");
+            return null;
+        } catch (Exception e) {
         }
-        Logs.infoLn("UNSAT");
+        //Logs.infoLn("UNSAT");
         return null;
     }
 }

@@ -24,6 +24,8 @@ public class FileUtils {
         while ((resource = br.readLine()) != null) {
             filenames.add(resource);
         }
+        br.close();
+        in.close();
         return filenames;
     }
 
@@ -88,8 +90,12 @@ public class FileUtils {
     public static void write(String path, String message) {
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8))) {
             bw.write(message);
+            bw.flush();
+            bw.close();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Error error) {
+            //
         }
     }
 

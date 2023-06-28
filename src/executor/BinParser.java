@@ -3,6 +3,7 @@ package executor;
 import capstone.Capstone;
 import elfutils.Elf;
 import elfutils.SectionHeader;
+import emulator.base.Emulator;
 import pojos.AsmNode;
 import utils.Arithmetic;
 import utils.Logs;
@@ -13,10 +14,74 @@ import java.io.File;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BinParser {
+    private static HashMap<String, String> symbolTable = new HashMap<>(); // <hex address, symbol name>
+    private static HashMap<String, String> dynamicLink; //hex address, functionPtr
+    public static long _init = 0;
+    public static long _start = 0;
+    public static long main = 0;
+    public static long end = -1;
 
+    public static long get_start() {
+        return main;
+    }
+    public static void set_start(long beginPC) { main=beginPC; }
+    public static void set_end(long endPC) { end=endPC; }
+    public static ArrayList<AsmNode> parseInstruction(byte[] bytes, long label) {
+        ArrayList<AsmNode> asmNodes = new ArrayList<>();
+
+        int i = 0;
+        Capstone cs = new Capstone(Capstone.CS_ARCH_ARM, Configs.executionMode);
+        int instrSize = 4;
+
+        while (i + instrSize-1 < bytes.length) {
+            byte[] bs;
+            cs.setMode(Capstone.CS_MODE_ARM);
+            bs = new byte[]{bytes[i], bytes[i + 1], bytes[i + 2], bytes[i + 3]};
+
+            Capstone.CsInsn[] insn = cs.disasm(bs, label);
+            if (insn.length == 0) {
+                label += instrSize;
+            } else {
+                // Else encode capstone inst as an asmNode
+                for (Capstone.CsInsn csInsn : insn) {
+                    String opcode = csInsn.mnemonic;
+                    String condSuffix = "";
+                    if (opcode.length() >= 3) {
+                        String temp = opcode.substring(opcode.length() - 2);
+                        List<String> opcodeList = Arrays.stream(Emulator.class.getMethods()).map(s -> s.getName()).collect(Collectors.toList());
+                        if (Mapping.condStrToChar.get(temp.toUpperCase()) != null) {
+                            condSuffix = temp;
+                            if (condSuffix.equals("ls") && !opcodeList.contains(opcode.substring(0, opcode.length() - 2))) {
+                                condSuffix = "";
+                                opcode = opcode;
+                            } else opcode = opcode.substring(0, opcode.length() - 2);
+                        }
+                    }
+                    boolean updateFlag = opcode.endsWith("s");
+                    if (updateFlag) opcode = opcode.substring(0, opcode.length() - 1);
+
+                    StringBuilder params = new StringBuilder();
+                    String[] paramsArr = csInsn.opStr.split("\\,");
+                    for (int p = 0; p < paramsArr.length; p++) {
+                        params.append(paramsArr[p].trim());
+                        if (p < paramsArr.length - 1) {
+                            params.append(",");
+                        }
+                    }
+                    AsmNode n = new AsmNode(String.valueOf(csInsn.address), opcode, condSuffix, params.toString(), updateFlag, Arithmetic.intToHex(csInsn.address));
+                    asmNodes.add(n);
+                    label += instrSize/insn.length;
+                }
+            }
+            i += instrSize;
+        }
+        return asmNodes;
+    }
     public static ArrayList<AsmNode> parse(String inp) {
         Logs.infoLn(" + Analyzing " + inp + " ...");
         try {
