@@ -1,20 +1,21 @@
 package emulator.base;
 
+import emulator.semantics.Memory;
 import executor.Configs;
 import emulator.semantics.EnvData;
 import emulator.semantics.EnvModel;
 import emulator.semantics.Environment;
 import enums.*;
-import javafx.util.Pair;
+
 import pojos.BitBool;
 import pojos.BitVec;
-import utils.Arithmetic;
-import utils.Logs;
-import utils.Mapping;
-import utils.Z3Solver;
+import utils.*;
 
 import java.util.BitSet;
+import java.util.Map;
 import java.util.Objects;
+
+import static java.lang.Character.isDigit;
 
 public class Emulator {
 
@@ -116,30 +117,32 @@ public class Emulator {
      * @param label: target
      * @return true branch and false branch, each is represented by a graph node
      */
-    public Pair<EnvModel, EnvModel> b(String preCond, Character cond, Object label) {
+    public Map.Entry<EnvModel, EnvModel> b(String preCond, Character cond, Object label) {
         if (label instanceof String) {
             String finalLabel = (String) label;
-            Logs.info("\t-> Direct Jump to", finalLabel, "if", Mapping.condCharToStr.get(cond), "\n");
+            if (cond != null) Logs.info("\t-> Direct Jump to", finalLabel, "if", Mapping.condCharToStr.get(cond), "\n");
+            else Logs.info("\t-> Direct Jump to", finalLabel, "\n");
             EnvModel modelTrue = checkPosCond(preCond, cond);
             EnvModel modelFalse = checkNegCond(preCond, cond);
-            return new Pair<>(modelTrue, modelFalse);
+            return Pair.of(modelTrue, modelFalse);
         } else if (label instanceof Character) {
             Character finalLabel = (Character) label;
-            Logs.info("\t-> Indirect Jump to", Mapping.regCharToStr.get(finalLabel), "if", Mapping.condCharToStr.get(cond), "\n");
+            if (cond != null)  Logs.info("\t-> Indirect Jump to", Mapping.regCharToStr.get(finalLabel), "if", Mapping.condCharToStr.get(cond), "\n");
+            else Logs.info("\t-> Indirect Jump to", Mapping.regCharToStr.get(finalLabel), "\n");
             EnvModel modelTrue = checkPosCond(preCond, cond, val(finalLabel).getSym());
             EnvModel modelFalse = checkNegCond(preCond, cond, val(finalLabel).getSym());
-            return new Pair<>(modelTrue, modelFalse);
+            return Pair.of(modelTrue, modelFalse);
         }
         Logs.infoLn("+ Wrong type of label!");
         return null;
     }
 
-    public Pair<EnvModel, EnvModel> bl(int nextLabel, String preCond, Character cond, Object label) {
+    public Map.Entry<EnvModel, EnvModel> bl(int nextLabel, String preCond, Character cond, Object label) {
         write('l', new BitVec(nextLabel));
         return b(preCond, cond, label);
     }
 
-    public Pair<EnvModel, EnvModel> bx(String preCond, Character cond, Object label) {
+    public Map.Entry<EnvModel, EnvModel> bx(String preCond, Character cond, Object label) {
         return b(preCond, cond, label);
     }
 
@@ -152,15 +155,21 @@ public class Emulator {
      * @return: an environment model (including eval if needed) satifying the post-condition
      */
     private EnvModel checkPosCond(String preCond, Character cond, String... evalValue) {
-        if (cond == null) return new EnvModel(preCond);
         String postCond;
-        if (preCond != null && preCond.length() > 0) {
-            postCond = String.format("(and %s %s)", preCond, getCondSuffixSMT(cond));
+        if (cond == null) {
+            postCond = preCond;
+            return new EnvModel(preCond);
         } else {
-            postCond = getCondSuffixSMT(cond);
+            if (preCond != null && preCond.length() > 0) {
+                postCond = String.format("(and %s %s)", preCond, getCondSuffixSMT(cond));
+            } else {
+                postCond = getCondSuffixSMT(cond);
+            }
         }
+
         String realEval = evalValue.length == 0 ? null : evalValue[0];
         String checkResult = Z3Solver.checkSAT(postCond, realEval);
+//        if (checkResult != null) postCond = Z3Solver.simplify(postCond);
         return new EnvModel(postCond, checkBaseCond(checkResult, realEval));
     }
 
@@ -178,7 +187,7 @@ public class Emulator {
         if (preCond != null && preCond.length() > 0) {
             postCond = String.format("(and %s (not %s))", preCond, getCondSuffixSMT(cond));
         } else {
-            postCond = getCondSuffixSMT(cond);
+            postCond = String.format("(not %s)", getCondSuffixSMT(cond));
         }
         String realEval = evalValue.length == 0 ? null : evalValue[0];
         String checkResult = Z3Solver.checkSAT(postCond, realEval);
@@ -345,10 +354,10 @@ public class Emulator {
                 return String.format("(not %s)", env.flags.Z.getSym());
             case CS:
             case HS:
-                return env.flags.C.getSym();
+                return env.flags.C.getSym();                                //C == 1
             case CC:
             case LO:
-                return String.format("(not %s)", env.flags.C.getSym());
+                return String.format("(not %s)", env.flags.C.getSym()); // C == 0
             case MI:
                 return env.flags.N.getSym();
             case PL:
@@ -361,7 +370,7 @@ public class Emulator {
                 return String.format("(and %s(not %s))",
                         env.flags.C.getSym(), env.flags.Z.getSym());
             case LS:
-                return String.format("(and %s(not %s))",
+                return String.format("(or %s(not %s))",
                         env.flags.Z.getSym(), env.flags.C.getSym());
             case GE:
                 return String.format("(= %s %s)",
@@ -373,7 +382,7 @@ public class Emulator {
                 return String.format("(and (not %s) (= %s %s))",
                         env.flags.Z.getSym(), env.flags.N.getSym(), env.flags.V.getSym());
             case LE:
-                return String.format("(and %s(not (= %s %s)))",
+                return String.format("(or %s (not (= %s %s)))",
                         env.flags.Z.getSym(), env.flags.N.getSym(), env.flags.V.getSym());
             default:
                 return "";
@@ -385,13 +394,33 @@ public class Emulator {
     }
 
     public void pop(char r) {
-        BitVec popValue = env.stacks.pop();
+        boolean isEmpty = env.stacks.stack.empty();
+        BitVec popValue = (!isEmpty) ? env.stacks.pop() : null;
+        BitVec popMem = env.memory.get(env.register.get('s'));
+        String sym = String.format("(bvadd %s #x00000004)", env.register.getFormula('s'));
+        BitSet concreteValue = Arithmetic.intToBitSet(Arithmetic.bitSetToInt(env.register.get('s').getVal()) + 4);
+        write('s', new BitVec(sym, concreteValue));
         if (popValue != null) {
             write(r, popValue);
+            if (popValue.getSym().contains("SYM")) {
+                write(r, popMem);
+            }
+        } else {
+            if (isEmpty) {
+                write(r, new BitVec(Configs.argc));
+            } else {
+                write(r, new BitVec("#x00000000"));
+            }
         }
     }
 
     public void push(char r) {
+        // write new sp
+        String sym = String.format("(bvadd %s (bvneg #x00000004))", env.register.getFormula('s'));
+        BitSet concreteValue = Arithmetic.intToBitSet(Arithmetic.bitSetToInt(env.register.get('s').getVal()) - 4);
+        write('s', new BitVec(sym, concreteValue));
+        // store in stack
+        Memory.set(env.register.get('s'), val(r));
         env.stacks.push(val(r));
     }
 
@@ -406,12 +435,25 @@ public class Emulator {
         }
     }
 
+    public void writeLower(char r, BitVec value) {
+        env.register.set(r, value);
+    }
+
+    public void writeUpper(char r, BitVec value) {
+        String upBin = Arithmetic.bitsetToStr(value.getVal());
+        String lowBin = Arithmetic.bitsetToStr(env.register.get(r).getVal());
+        String fullBin = upBin.substring(16, 32) + lowBin.substring(16, 32);
+        write(r, Arithmetic.fromString(fullBin));
+    }
+
     public void write(char r, BitVec value) {
         env.register.set(r, value);
     }
 
     public void str(BitVec xt, BitVec xn) {
         arithmeticMode = ArithmeticMode.BINARY;
+        xt.calculate();
+        xn.calculate();
         store(xn, xt);
     }
 
@@ -427,27 +469,31 @@ public class Emulator {
 
     public void ldr(Character xt, BitVec label) {
         arithmeticMode = ArithmeticMode.BINARY;
-        write(xt, env.memory.get(label));
+        //Check if the label is an address or arihmetic then get result of the bitvector arithmetic
+        String result = (label.getSym().matches("[01][01]+") || label.getSym().contains("#x") || label.getSym().contains("SYM") ) ?
+                label.getSym() : Z3Solver.solveBitVecArithmetic(label.getSym());
+        //String value = Memory.get(result);
+        write(xt, (result.equals("ERROR") ? Memory.get(label) : Memory.get(SysUtils.getAddressValue(result))));
     }
 
     public void ldrb(Character xt, BitVec label) {
         arithmeticMode = ArithmeticMode.BINARY;
-        write(xt, zeroExt(env.memory.get(label), 32));
+        write(xt, zeroExt(Memory.get(label), 32));
     }
 
     public void ldrb(Character xt, Character label) {
         arithmeticMode = ArithmeticMode.BINARY;
-        write(xt, zeroExt(env.memory.get(val(label)), 32));
+        write(xt, zeroExt(Memory.get(val(label)), 32));
     }
 
     public void ldrh(Character xt, BitVec label) {
         arithmeticMode = ArithmeticMode.BINARY;
-        write(xt, zeroExt(env.memory.get(label), 32));
+        write(xt, zeroExt(Memory.get(label), 32));
     }
 
     public void ldrh(Character xt, Character label) {
         arithmeticMode = ArithmeticMode.BINARY;
-        write(xt, zeroExt(env.memory.get(val(label)), 32));
+        write(xt, zeroExt(Memory.get(val(label)), 32));
     }
 
     protected BitVec div(BitVec a, BitVec b) {
@@ -460,6 +506,7 @@ public class Emulator {
     }
 
     protected BitVec zeroExt(BitVec b, int n) {
+        long c = b.getSym().chars().mapToObj(i -> (char) i).filter(Character::isDigit).count();
         String symbolicValue = String.format("((_ zero_extend %s) %s)", n, b.getSym());
         return new BitVec(symbolicValue, b.getVal());
     }
@@ -697,7 +744,7 @@ public class Emulator {
     }
 
     protected BitVec load(BitVec value) {
-        return env.memory.get(value);
+        return Memory.get(value);
     }
 
     protected BitVec cmp(BitVec a, BitVec b) {
@@ -858,16 +905,22 @@ public class Emulator {
         return new BitVec(symbolicValue, concreteValue);
     }
 
+    /**
+     * Perform bitwise complement - Fixed (old version used bvcomp)
+     * @param b
+     * @oldversion: //(bvcomp BitVec[m] BitVec[m] BitVec[1])
+     *              // bit comparator: equals bit1 iff all bits are equal
+     */
     protected BitVec comp(BitVec b) {
         BitVec val = new BitVec(b);
-        val.setSym("(bvcomp " + val.getSym() + ")");
+        val.setSym("(bvnot " + val.getSym() + ")");
         val.setVal(Arithmetic.intToBitSet(~Arithmetic.bitSetToInt(val.getVal())));
         return val;
     }
 
     protected void throwExc(String svc) {
         try {
-            throw new Exception("svc");
+            //throw new Exception("svc");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -879,15 +932,26 @@ public class Emulator {
     }
 
     public BitVec val(Character r) {
-        return env.value(r);
+        BitVec res = env.value(r);
+        // if the value is number in bitvec < 32 -> change to bitvec 32 (#x0 -> #x00000000)
+        String symValue = (res.getSym().charAt(0) == '#' && res.getSym().length() < 8 && !res.getSym().contains("SYM")) ? SysUtils.normalizeNumInHex(res.getSym().trim()) : res.getSym();
+        BitVec valBitVec = new BitVec(symValue, res.getVal());
+        return valBitVec;
     }
 
     protected void load(Character d, Character label) {
-        write(d, env.memory.get(val(label)));
+        BitVec res = val(label);
+        write(d, Memory.get(val(label)));
+        //  System.out.println("");
+    }
+
+    public void ldrAt(Character d, BitVec address) {
+        write(d, Memory.get(address.getSym()));
     }
 
     public void store(BitVec address, BitVec value) {
         env.memory.put(address, value);
+        Memory.set(address, value);
     }
 
     public void store(BitVec r, BitVec a, BitVec b) {
@@ -1091,5 +1155,9 @@ public class Emulator {
         BitSet val = Arithmetic.intToBitSet(result);
         return new BitVec(sym, val);
     }
+
+    
+
+
 
 }

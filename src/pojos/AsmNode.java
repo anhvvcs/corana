@@ -6,6 +6,7 @@ public class AsmNode {
     private String condSuffix;
     private String params;
     private boolean isUpdateFlag;
+    private String address;
 
     public AsmNode(String label, String opcode, String condSuffix, String params, boolean isUpdateFlag) {
         this.label = label;
@@ -13,6 +14,15 @@ public class AsmNode {
         this.condSuffix = condSuffix;
         this.params = params;
         this.isUpdateFlag = isUpdateFlag;
+    }
+
+    public AsmNode(String label, String opcode, String condSuffix, String params, boolean isUpdateFlag, String address) {
+        this.label = label;
+        this.opcode = opcode;
+        this.condSuffix = condSuffix;
+        this.params = params;
+        this.isUpdateFlag = isUpdateFlag;
+        this.address = address;
     }
 
     public AsmNode(AsmNode node) {
@@ -48,6 +58,12 @@ public class AsmNode {
 
     public void setOpcode(String opcode) {
         this.opcode = opcode;
+    }
+    public String getAddress() {
+        return this.address;
+    }
+    public void setAddress(String add) {
+        this.address = add;
     }
 
     public String getCondSuffix() {

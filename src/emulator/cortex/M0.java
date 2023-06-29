@@ -179,6 +179,34 @@ public class M0 extends Emulator {
         }
     }
 
+    /**
+     * Manually added
+     */
+    // Not copy to other emulators yet
+    public void movw(Character xd, Character xm, Integer im, Character suffix) {
+        arithmeticMode = ArithmeticMode.BINARY;
+        char[] flags = new char[]{'N', 'Z', 'C', 'V'};
+        BitVec result = val(xm, im);
+        writeLower(xd, result);
+        if (suffix != null && suffix == 's') {
+            if (result != null) {
+                updateFlags(flags, result);
+            }
+        }
+    }
+
+    public void movt(Character xd, Character xm, Integer im, Character suffix) {
+        arithmeticMode = ArithmeticMode.BINARY;
+        char[] flags = new char[]{'N', 'Z', 'C', 'V'};
+        BitVec result = val(xm, im);
+        writeUpper(xd, result);
+        if (suffix != null && suffix == 's') {
+            if (result != null) {
+                updateFlags(flags, result);
+            }
+        }
+    }
+
     public void muls(Character xd, Character xn, Character xm, Character suffix) {
         arithmeticMode = ArithmeticMode.BINARY;
         char[] flags = new char[]{'N','Z','C','V'};
