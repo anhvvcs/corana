@@ -39,7 +39,8 @@ If you want to specify an ARM variation, please append the variation name  (M0, 
 
 ## Contact
 Anh V. Vu - Project maintainer - [Email](mailto:anhvvcs@gmail.com)
-Nguyen Thi Van Anh - Project maintainer
+
+Nguyen Thi Van Anh (JAIST) - Project maintainer
 
 ## License
 This project is licensed under the [MIT License](http://www.opensource.org/licenses/mit-license.php).
